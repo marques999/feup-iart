@@ -19,8 +19,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class GUIMain extends javax.swing.JFrame {
 
    private final DefaultListModel<String> defaultListModel = new DefaultListModel<>();
-
-    public GUIMain() {
+   private final javax.swing.ImageIcon iconConnect = new javax.swing.ImageIcon(getClass().getResource("/iart/resources/connect.png"));
+   private final javax.swing.ImageIcon iconDisconnect = new javax.swing.ImageIcon(getClass().getResource("/iart/resources/disconnect.png"));
+  
+   public GUIMain() {
         initComponents();
     }
 
@@ -39,6 +41,7 @@ public class GUIMain extends javax.swing.JFrame {
         java.awt.GridBagConstraints gridBagConstraints;
 
         jToolBar1 = new javax.swing.JToolBar();
+        jButton7 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
@@ -67,6 +70,18 @@ public class GUIMain extends javax.swing.JFrame {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setAlignmentY(0.5F);
+
+        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iart/resources/connect.png"))); // NOI18N
+        jButton7.setText("Ligar");
+        jButton7.setFocusable(false);
+        jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton7);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iart/resources/application_xp_terminal.png"))); // NOI18N
         jButton1.setText("Carregar");
@@ -154,6 +169,7 @@ public class GUIMain extends javax.swing.JFrame {
         jPanel1.add(jTextField1, gridBagConstraints);
 
         jButton4.setText("Pesquisar");
+        jButton4.setEnabled(false);
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -370,6 +386,31 @@ public class GUIMain extends javax.swing.JFrame {
         jTextField1.setText((String)jList1.getSelectedValue());
     }//GEN-LAST:event_jList1ValueChanged
 
+    private boolean m_connected = false;
+    
+    protected void connect()
+    {
+        jButton7.setText("Desligar");
+        jButton7.setIcon(iconDisconnect);
+        jButton4.setEnabled(true);
+        m_connected = true;
+    }
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    if (!m_connected)
+    {
+        GUIConnect guiConnect = new GUIConnect(this, true);
+        guiConnect.setVisible(true);
+    }
+    else
+    {
+               jButton7.setText("Ligar");
+        jButton7.setIcon(iconConnect);
+        m_connected = false;
+        jButton4.setEnabled(false);
+    }
+        
+    }//GEN-LAST:event_jButton7ActionPerformed
+
     public static void main(String args[]) {
     	try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -390,6 +431,7 @@ public class GUIMain extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JList jList1;
     private javax.swing.JList jList2;
