@@ -1,6 +1,7 @@
 package iart;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
@@ -27,6 +28,7 @@ public class GUIConnect extends javax.swing.JDialog {
 		GridBagConstraints gridBagConstraints;
 
 		final ButtonGroup buttonGroup1 = new ButtonGroup();
+		final Dimension guiDimensions = new Dimension(290, 140);
 		final FlowLayout flowLayout1 = new FlowLayout();
 		final JPanel guiGrid = new JPanel();
 		final JLabel jLabel1 = new JLabel();
@@ -37,11 +39,10 @@ public class GUIConnect extends javax.swing.JDialog {
 
 		jTextField1 = new JTextField();
 		jTextField2 = new JTextField();
-
 		guiGrid.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 		guiGrid.setLayout(new GridBagLayout());
 		jLabel1.setFont(new Font("Tahoma", 1, 11));
-		jLabel1.setText("EndereÃ§o");
+		jLabel1.setText("Endereço");
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
 		gridBagConstraints.insets = new Insets(8, 0, 8, 0);
@@ -66,7 +67,6 @@ public class GUIConnect extends javax.swing.JDialog {
 		gridBagConstraints.gridy = 1;
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
 		guiGrid.add(jTextField2, gridBagConstraints);
-		getContentPane().add(guiGrid, BorderLayout.PAGE_START);
 		flowLayout1.setAlignOnBaseline(true);
 		guiFlow.setLayout(flowLayout1);
 		jButton1.setText("Ligar");
@@ -77,12 +77,14 @@ public class GUIConnect extends javax.swing.JDialog {
 		buttonGroup1.add(jButton2);
 		jButton2.addActionListener(this::jButton2ActionPerformed);
 		guiFlow.add(jButton2);
-		getContentPane().add(guiFlow, BorderLayout.CENTER);
 		setTitle("Ligar");
 		setResizable(false);
+		setMinimumSize(guiDimensions);
+		setPreferredSize(guiDimensions);
+		setLocationRelativeTo(getParent());
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setSize(new java.awt.Dimension(290, 145));
-		setLocationRelativeTo(null);
+		getContentPane().add(guiGrid, BorderLayout.PAGE_START);
+		getContentPane().add(guiFlow, BorderLayout.CENTER);
 	}
 
 	private void jButton2ActionPerformed(final ActionEvent evt) {

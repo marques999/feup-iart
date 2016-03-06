@@ -45,6 +45,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 @SuppressWarnings("serial")
 public class GUIMain extends javax.swing.JFrame {
 
+	private final String regexString = "\\[(\"(.+?)\")(,\".+?\")*\\]";
 	private final HTTPRequest httpServer = new HTTPRequest();
 	private final String msgFormat = "\nQ: %s\nA: %s\n";
 	private final String msgNotConnected = "N„o se encontra conectado a nenhum servidor!";
@@ -143,7 +144,7 @@ public class GUIMain extends javax.swing.JFrame {
 		guiSplit.setDividerSize(0);
 		guiSplit.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		guiQuery.setLayout(new GridBagLayout());
-		labelQuery.setText("Fa√ßa uma pergunta:");
+		labelQuery.setText("FaÁa uma pergunta:");
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
@@ -223,7 +224,7 @@ public class GUIMain extends javax.swing.JFrame {
 		guiTabs.addTab("Output", tabOutput);
 		textInformation.setEditable(false);
 		textInformation.setContentType("text/html");
-		textInformation.setText("<html>\n  <head>\n\n<style>\nhtml, body {\nmargin:0;\npadding:0;\n}\n</style>\n  </head>\n  <body>\n      \n<h2 syle=\"margin-top:0;text-align:center;\">Bibliogenie!</h2>\n<b>Autores:</b>\n<p style=\"margin-top:0\">&nbsp;&nbsp;&nbsp;&nbsp;Diogo Marques (<a href=\"mailto:up201305642@fe.up.pt\">up201305642@fe.up.pt</a>)</p>\n\t<p style=\"margin-top:0\">&nbsp;&nbsp;&nbsp;&nbsp;Pedro Melo (up201305618.fe.up.pt)</p>\n<b style=\"margin-bottom:0\">Instru√ß√µes:</b>\n\t<ul style=\"margin-left:16px\">\n\t<li><b>Read:</b> carrega uma lista de perguntas de um ficheiro de texto</li>\n\t<li><b>Save: </b> guarda hist√≥rico de perguntas num ficheiro de texto</li>\n\t<li><b>Execute:</b> executa todas as perguntas existentes no hist√≥rico</li>\n\t<li><b>Clear:</b> limpa todo o hist√≥rico das perguntas (se o utilizador estiver na tab \"History\"), limpa a consola de output (se o utilizador estiver na tab \"Output\"</li>\n\t<li><b>Exit:</b>abandona este programa sem confirma√ß√£o</li>\n\t</ul>\n<b><i>Descri√ß√£o</i></b>\n<p style=\"margin: 0 0 12px; text-align: justify;\">\nO programa deve interpretar e responder a frases&nbsp;escritas em linguagem natural, <span style=\"font-weight: bold;\">usando DCGs</span>.&nbsp;</span><span lang=\"PT\">O programa deve incluir informa√ß√£o sobre </span>escritores e respetivas obras liter√°rias<span lang=\"PT\"><span lang=\"pt\"></span> (pode\nincluir outra informa√ß√£o que considere relevante).\n</p>\n<p style=\"margin: 0pt 0cm 12px; text-align: justify;\">O programa deve respeitar os seguintes <span style=\"text-decoration: underline;\">requisitos</span>:</p>\n<ul style=\"margin-left:16px\">\n<li>Aceita√ß√£o de frases afirmativas</li>\n<li>Aceita√ß√£o de frases interrogativas</li>\n<li>Verifica√ß√£o da sintaxe da frase</li>\n<li>Verifica√ß√£o da sem√¢ntica da frase</li>\n<li>Inclus√£o de um ou mais comandos. A inclus√£o de mais que um comando numa mesma frase √© traduzida pelo uso da part√≠cula \"e\" nessa frase</li>\n<li>Aceita√ß√£o de frases iniciadas pela part√≠cula \"e\", devendo ser guardado o contexto da frase anterior para resposta a esta frase</li>\n<li>Uso de adjetivos e complementos (proposicionais, de modo, ...)</span></li>\n</ul>\n</body>\n</html>");
+		textInformation.setText("<html>\n  <head>\n\n<style>\nhtml, body {\nmargin:0;\npadding:0;\n}\n</style>\n  </head>\n  <body>\n      \n<h2 syle=\"margin-top:0;text-align:center;\">Bibliogenie!</h2>\n<b>Autores:</b>\n<p style=\"margin-top:0\">&nbsp;&nbsp;&nbsp;&nbsp;Diogo Marques (<a href=\"mailto:up201305642@fe.up.pt\">up201305642@fe.up.pt</a>)</p>\n\t<p style=\"margin-top:0\">&nbsp;&nbsp;&nbsp;&nbsp;Pedro Melo (up201305618.fe.up.pt)</p>\n<b style=\"margin-bottom:0\">InstruÁıes:</b>\n\t<ul style=\"margin-left:16px\">\n\t<li><b>Read:</b> carrega uma lista de perguntas de um ficheiro de texto</li>\n\t<li><b>Save: </b> guarda histÛrico de perguntas num ficheiro de texto</li>\n\t<li><b>Execute:</b> executa todas as perguntas existentes no histÛrico</li>\n\t<li><b>Clear:</b> limpa todo o histÛrico das perguntas (se o utilizador estiver na tab \"History\"), limpa a consola de output (se o utilizador estiver na tab \"Output\"</li>\n\t<li><b>Exit:</b>abandona este programa sem confirmaÁ„o</li>\n\t</ul>\n<b><i>DescriÁ„o</i></b>\n<p style=\"margin: 0 0 12px; text-align: justify;\">\nO programa deve interpretar e responder a frases&nbsp;escritas em linguagem natural, <span style=\"font-weight: bold;\">usando DCGs</span>.&nbsp;</span><span lang=\"PT\">O programa deve incluir informaÁ„o sobre </span>escritores e respetivas obras liter·rias<span lang=\"PT\"><span lang=\"pt\"></span> (pode\nincluir outra informaÁ„o que considere relevante).\n</p>\n<p style=\"margin: 0pt 0cm 12px; text-align: justify;\">O programa deve respeitar os seguintes <span style=\"text-decoration: underline;\">requisitos</span>:</p>\n<ul style=\"margin-left:16px\">\n<li>AceitaÁ„o de frases afirmativas</li>\n<li>AceitaÁ„o de frases interrogativas</li>\n<li>VerificaÁ„o da sintaxe da frase</li>\n<li>VerificaÁ„o da sem‚ntica da frase</li>\n<li>Inclus„o de um ou mais comandos. A inclus„o de mais que um comando numa mesma frase È traduzida pelo uso da partÌcula \"e\" nessa frase</li>\n<li>AceitaÁ„o de frases iniciadas pela partÌcula \"e\", devendo ser guardado o contexto da frase anterior para resposta a esta frase</li>\n<li>Uso de adjetivos e complementos (proposicionais, de modo, ...)</span></li>\n</ul>\n</body>\n</html>");
 		textInformation.setHighlighter(null);
 		textInformation.setKeymap(null);
 		tabInformation.setViewportView(textInformation);
@@ -276,10 +277,38 @@ public class GUIMain extends javax.swing.JFrame {
 
 		if (serverResponse == null) {
 			serverResponse = httpServer.getError();
+			textOutput.append(String.format(msgFormat, queryMessage, serverResponse));
 			onDisconnect();
 		}
+		else {
 
-		textOutput.append(String.format(msgFormat, queryMessage, serverResponse));
+			final int responseLength = serverResponse.length() - 1;
+
+			if (serverResponse.matches(regexString)) {
+
+				final String[] userOptions = serverResponse.trim().substring(1, responseLength).split(",\\ +");
+
+				for (int i = 0; i < userOptions.length; i++) {
+					userOptions[i] = userOptions[i].substring(1, userOptions[i].length() - 1);
+				}
+
+				final GUISelect guiSelect = new GUISelect(this, userOptions);
+
+				guiSelect.setVisible(true);
+
+				final String userChoice = guiSelect.getResult();
+
+				if (userChoice == null) {
+					textOutput.append(String.format(msgFormat, queryMessage, "cancelado pelo utilizador"));
+				}
+				else {
+					query(userChoice);
+				}
+			}
+			else {
+				textOutput.append(String.format(msgFormat, queryMessage, serverResponse));
+			}
+		}
 	}
 
 	private void searchList(final MouseEvent evt) {

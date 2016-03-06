@@ -38,7 +38,7 @@ public class HTTPRequest {
 
 		final String responseMessage = sendRequest("hello");
 
-		if (responseMessage != null && responseMessage.equals("hello")) {
+		if (responseMessage != null && responseMessage.equals("no")) {
 			m_connected = true;
 		}
 
@@ -70,13 +70,12 @@ public class HTTPRequest {
 		return sendRequest("query('" + s.toLowerCase() + "')");
 	}
 
-	private String sendRequest(final String paramMessage) {
+	private String sendRequest(final String myRequest) {
 
 		final URLConnection urlConnection;
 
 		try {
-			urlConnection = new URL(m_address + paramMessage).openConnection();
-			System.out.println(m_address + paramMessage);
+			urlConnection = new URL(m_address + myRequest).openConnection();
 			urlConnection.setDoOutput(true);
 			urlConnection.connect();
 		}
@@ -85,14 +84,14 @@ public class HTTPRequest {
 			return null;
 		}
 
-		final StringBuilder requestResponse = new StringBuilder();
+		final StringBuilder myResponse = new StringBuilder();
 
 		try (BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
 
 			String inputLine;
 
 			while ((inputLine = in.readLine()) != null) {
-				requestResponse.append(inputLine);
+				myResponse.append(inputLine);
 			}
 		}
 		catch (IOException ex) {
@@ -100,6 +99,6 @@ public class HTTPRequest {
 			return null;
 		}
 
-		return requestResponse.toString();
+		return myResponse.toString();
 	}
 }
