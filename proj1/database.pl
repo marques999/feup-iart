@@ -1,56 +1,56 @@
 autor(cacb, "Camilo", "Castelo-Branco", 1825, 1890, por, []).
-autor(juld, "J˙lio", "Diis", 1839, 1871, por, []).
-autor(qroz, "EÁa", "QueirÛz", 1845, 1900, por, []).
-autor(verf, "VergÌlo", "Ferreira", 1916, 1996, por, []).
-autor(lcam, "LuÌs", "Camıes", 1524, 1580, por, []).
+autor(juld, "J√∫lio", "Diis", 1839, 1871, por, []).
+autor(qroz, "E√ßa", "Queir√≥z", 1845, 1900, por, []).
+autor(verf, "Verg√≠lo", "Ferreira", 1916, 1996, por, []).
+autor(lcam, "Lu√≠s", "Cam√µes", 1524, 1580, por, []).
 
 livro(cacb-pund, 'Os Pundonores Desagravados', cacb, 1845, poesia, null).
 livro(cacb-aceu, 'Agostinho de Ceuta', cacb, 1847, teatro, null).
-livro(cacb-insp, 'InspiraÁıes', cacb, 1851, poesia, null).
-livro(cacb-mis1, 'MistÈrios de Lisboa - I', 1854, romance, cacb-misl).
-livro(cacb-mis2, 'MistÈrios de Lisboa - II', 1854, romance, cacb-misl).
-livro(cacb-mis3, 'MistÈrios de Lisboa - II', 1854, romance, cacb-misl).
+livro(cacb-insp, 'Inspira√ß√µes', cacb, 1851, poesia, null).
+livro(cacb-mis1, 'Mist√©rios de Lisboa - I', 1854, romance, cacb-misl).
+livro(cacb-mis2, 'Mist√©rios de Lisboa - II', 1854, romance, cacb-misl).
+livro(cacb-mis3, 'Mist√©rios de Lisboa - II', 1854, romance, cacb-misl).
 livro(cacb-esfu, 'Estrelas Funestas', cacb, 1862, romance, null).
-livro(cacb-espr, 'Estrelas PropÌcias', cacb, 1863, romance, null).
-livro(cacb-aper, 'Amor de PerdiÁ„o', cacb, 1862, romance, null).
-livro(cacb-asal, 'Amor de SalvaÁ„o', cacb, 1864, romance, null).
+livro(cacb-espr, 'Estrelas Prop√≠cias', cacb, 1863, romance, null).
+livro(cacb-aper, 'Amor de Perdi√ß√£o', cacb, 1862, romance, null).
+livro(cacb-asal, 'Amor de Salva√ß√£o', cacb, 1864, romance, null).
 livro(cacb-lnp1, 'Livro Negro de Padre Dinis - I', cacb, 1855, naosei, cacb-lnpd).
 livro(cacb-lnp2, 'Livro Negro de Padre Dinis - II', cacb, 185, naosei, cacb-lnpd).
-livro(cacb-labe, 'L·grimas AbenÁoadas', cacb, 1857, romance, null).
+livro(cacb-labe, 'L√°grimas Aben√ßoadas', cacb, 1857, romance, null).
 
 livro(juld-pupr, 'As Pupilas do Senhor Reitor', juld, 1867, romance, null).
-livro(juld-fing, 'Uma FamÌlia Inglesa', juld, 1868, romance, null).
+livro(juld-fing, 'Uma Fam√≠lia Inglesa', juld, 1868, romance, null).
 livro(juld-morg, 'A Morgadinha dos Canaviais', juld, 1868, romance, null).
 livro(juld-casm, 'Os Fidalgos da Casa Mourisca', juld, 1871, romance, null).
 livro(juld-poes, 'Poesias', juld, 1873, poesia, null).
 
 livro(qroz-pama, 'O Crime do Padro Amaro', qroz, 1875, romance, null).
 livro(qroz-mand, 'O Mandarim', qroz, 1880, novela, null).
-livro(qroz-pbas, 'O Primo BasÌlio', qroz, 1878, romance, null).
-livro(qroz-reli, 'A RelÌquia', qroz, 1887, romance, null).
+livro(qroz-pbas, 'O Primo Bas√≠lio', qroz, 1878, romance, null).
+livro(qroz-reli, 'A Rel√≠quia', qroz, 1887, romance, null).
 livro(qroz-maia, 'Os Maias', qroz, 1888, romance, null).
 livro(qroz-cram, 'A Ilustre Casa de Ramires', 1900, romance, null).
 
-livro(verf-muda, 'MudanÁa', verf, 1949, null, null).
-livro(verf-msub, 'Manh„ Submersa', verf, 1953, null, null).
-livro(verf-apar, 'ApariÁ„o', verf, 1959, null, null).
+livro(verf-muda, 'Mudan√ßa', verf, 1949, null, null).
+livro(verf-msub, 'Manh√£ Submersa', verf, 1953, null, null).
+livro(verf-apar, 'Apari√ß√£o', verf, 1959, null, null).
 livro(verf-epol, 'Estrela Polar', verf, 1960, null, null).
 
-livro(lcam-lusi, 'LusÌadas', lcam, 1572, poesia, null).
+livro(lcam-lusi, 'Lus√≠adas', lcam, 1572, poesia, null).
 livro(lcam-afil, 'Auto de Filodemo', lcam, 1587, teatro, null).
-livro(lcam-anfi, 'Anfitriıes', lcam, 1587, teatro, null).
+livro(lcam-anfi, 'Anfitri√µes', lcam, 1587, teatro, null).
 
 autor(mcou, "Mia", "Couto", 1955, -1, moz, []).
 
 livro(mcou-vnoi, "Vozes Anoitecidas", 1986, conto, null).
-livro(mcou-esto, "EstÛrias Abensonhadas", 1994, conto, null).
+livro(mcou-esto, "Est√≥rias Abensonhadas", 1994, conto, null).
 livro(mcou-cron, "Cronicando", 1988, cronica, null).
-livro(mcou-tson, "Terra Son‚mbula", 1992, romance, null).
+livro(mcou-tson, "Terra Son√¢mbula", 1992, romance, null).
 livro(mcou-mamq, "Mar Me Quer", 1998, romance, null).
 livro(mcou-freq, "Pensageiro Frequente", 2010, romance, null).
 
-autor(cbro, "Charlotte", "BrontÎ", 1816, 1855, gbr, []).
-autor(ebro, "Emily", "BrontÎ", 1818, 1848, gbr, []).
+autor(cbro, "Charlotte", "Bront√´", 1816, 1855, gbr, []).
+autor(ebro, "Emily", "Bront√´", 1818, 1848, gbr, []).
 
 livro(cbro-jeyr, 'Jane Eyre', cbro, 1847, romance, null).
 livro(ebro-wuth, 'Wuthering Heights', ebro, 1847, romance, null).
@@ -68,31 +68,27 @@ livro(ehem-icam, 'Indian Camp', ehem, 1926, null, null).
 livro(ehem-fare, 'A Farewell to Arms', ehem, 1929, null, null).
 
 autor(isal, "Isabel", "Allende", 1942, -1, chi, []).
-autor(gagm, "Gabriel", "Garcia M·rquez", 1927, 2014, col, []).
+autor(gagm, "Gabriel", "Garcia M√°rquez", 1927, 2014, col, []).
 
-livro(gagm-sole, "Cem Anos de Solid„o", gagm, 1967, romance, null).
+livro(gagm-sole, "Cem Anos de Solid√£o", gagm, 1967, romance, null).
 livro(gagm-oton, "O Outono do Patriarca", gagm, 1975, romance, null).
-livro(gagm-amor, "O Amor nos Tempos de CÛlera", gagm, 1985, romance, null).
+livro(gagm-amor, "O Amor nos Tempos de C√≥lera", gagm, 1985, romance, null).
 
-livro(isal-cesp, "A Casa dos EspÌritos", isal, 1982, romance, null).
+livro(isal-cesp, "A Casa dos Esp√≠ritos", isal, 1982, romance, null).
 
 % pais(id, nome, idioma_oficial, gentilico_m, gentilico_f)
-pais(ang, "Angola", lo-pt, "angolano", "angolana").
-pais(aus, "Austr·lia", lingua-en, "australiano", "australiana").
-pais(aut, "¡ustria", lingua-de, "austrÌaco", "austrÌaca").
-pais(bel, "BÈlgica", frances, "belga", "belga").
+pais(ang, "Angola", portugues, "angolano", "angolana").
+pais(aus, "Austr√°lia", ingles, "australiano", "australiana").
+pais(aut, "√Åustria", alemao, "austr√≠aco", "austr√≠aca").
+pais(bel, "B√©lgica", frances, "belga", "belga").
 pais(bra, "Brasil", portugues, "brasileiro", "brasileira").
-pais(col, "ColÙmbia", espanhol, "colombiano", "colombiana").
+pais(col, "Col√¥mbia", espanhol, "colombiano", "colombiana").
 pais(esp, "Espanha", espanhol, "espanhol", "espanhola").
-pais(fin, "Finl‚ndia", finlandes, "finlandÍs", "finlandesa").
-pais(fra, "FranÁa", frances, "francÍs", "francesa").
-pais(gbr, "Reino Unido", ingles, "inglÍs", "inglesa").
-pais(ger, "Alemanha",  alemao, "alem„o", "alem„").
-pais(ire, "Irlanda", ingles, "irlandÍs", "irlandesa").
-pais(moz, "MoÁambique", portugues, "moÁambicano", "moÁambicana").
-pais(nor, "Noruega", noruegues, "norueguÍs", "norueguesa").
-pais(por, "Portugal", portugues, "portuguÍs", "portuguesa").
-
-lingua_oficial(portugues, "portuguÍs", lo-pt).
-lingua_oficial(aus, lo-en).
-lingua_oficial(aut, lo-de).
+pais(fin, "Finl√¢ndia", finlandes, "finland√™s", "finlandesa").
+pais(fra, "Fran√ßa", frances, "franc√™s", "francesa").
+pais(gbr, "Reino Unido", ingles, "ingl√™s", "inglesa").
+pais(ger, "Alemanha",  alemao, "alem√£o", "alem√£").
+pais(ire, "Irlanda", ingles, "irland√™s", "irlandesa").
+pais(moz, "Mo√ßambique", portugues, "mo√ßambicano", "mo√ßambicana").
+pais(nor, "Noruega", noruegues, "noruegu√™s", "norueguesa").
+pais(por, "Portugal", portugues, "portugu√™s", "portuguesa").
