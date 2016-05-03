@@ -63,8 +63,8 @@ filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [colecc
 
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero=Genero |Tail]):-
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
-filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero=Genero ou Generos|Tail]):-
-	verificar_genero(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Genero ou Generos),
+filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero=Genero1 ou Generos|Tail]):-
+	verificar_genero(Genero, Genero1 ou Generos),
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [postumo|Tail]):-
@@ -170,10 +170,10 @@ livros_seculo_aux(Autor, [Seculo|TailSeculo], [Lista|TailLista]):-
 	livros_seculo_aux(Autor, TailSeculo, TailLista),
 	livros_publicados_entre(Autor, LimiteInferior, LimiteSuperior, Lista).
 
-verificar_genero(livro(_, _, _, _, Genero, _), Genero ou _).
-verificar_genero(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), _ ou Generos):-
-	verificar_genero(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Generos).
-verificar_genero(livro(_, _, _, _, Genero, _), Genero).
+verificar_genero(Genero, Genero ou _).
+verificar_genero(Genero, _ ou Generos):-
+	verificar_genero(Genero, Generos).
+verificar_genero(Genero, Genero).
 
 %-----------------------------------------------------------------------------%
 % -> Livros (de determinado autor) que são de determinado(s) Género(s)        %
