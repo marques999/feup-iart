@@ -1,4 +1,4 @@
-package iart;
+package iart.application;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -42,21 +42,20 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-@SuppressWarnings("serial")
 public class GUIMain extends javax.swing.JFrame {
 
-	private final String regexString = "\\[(\"(.+?)\")(,\".+?\")*\\]";
-	private final HTTPRequest httpServer = new HTTPRequest();
-	private final String msgFormat = "\nQ: %s\nA: %s\n";
-	private final String msgNotConnected = "Não se encontra conectado a nenhum servidor!";
-	private final String msgEmptyQuery = "Por favor escreva uma pergunta antes de iniciar a pesquisa.";
-	private final String msgHistoryEmpty = "Não adicionou nenhuma pesquisa ao histórico.";
-	private final FileNameExtensionFilter textExtensionFilter = new FileNameExtensionFilter("Ficheiros de texto (*.txt)", "txt");
+    private static final String programName = "Bibliogenie";
+    private static final String stringConnect = "Ligar";
+    private static final String msgFormat = "\nQ: %s\nA: %s\n";
+    private static final String msgNotConnected = "NÃ£o se encontra conectado a nenhum servidor!";
+
+    private final HTTPRequest httpServer = new HTTPRequest();
+    private final FileNameExtensionFilter textExtensionFilter = new FileNameExtensionFilter("Ficheiros de texto (*.txt)", "txt");
 	private final ImageIcon iconConnect = new ImageIcon(getClass().getResource("/iart/resources/connect.png"));
 	private final ImageIcon iconDisconnect = new ImageIcon(getClass().getResource("/iart/resources/disconnect.png"));
 	private final DefaultListModel<String> defaultListModel = new DefaultListModel<>();
 
-	public GUIMain() {
+	private GUIMain() {
 		initComponents();
 	}
 
@@ -87,11 +86,11 @@ public class GUIMain extends javax.swing.JFrame {
 		buttonConnect = new JButton();
 		inputQuery = new JTextField();
 		guiTabs = new JTabbedPane();
-		listExamples = new JList<String>();
-		listHistory = new JList<String>();
+		listExamples = new JList<>();
+		listHistory = new JList<>();
 		textOutput = new JTextArea();
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setTitle("Bibliogenie");
+		setTitle(programName);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/iart/resources/application.png")));
 		guiToolbar.setBorder(BorderFactory.createEmptyBorder(4, 4, 0, 4));
 		guiToolbar.setFloatable(false);
@@ -144,7 +143,7 @@ public class GUIMain extends javax.swing.JFrame {
 		guiSplit.setDividerSize(0);
 		guiSplit.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		guiQuery.setLayout(new GridBagLayout());
-		labelQuery.setText("Faça uma pergunta:");
+		labelQuery.setText("Faï¿½a uma pergunta:");
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.gridy = 0;
@@ -174,13 +173,13 @@ public class GUIMain extends javax.swing.JFrame {
 
 			final String[] strings = {
 				"Quem escreveu Os Maias?",
-				"Quais são os livros mais conhecidos de Fernando Pessoa?",
-				"Quem são os escritores africanos?",
+				"Quais sÃ£o os livros mais conhecidos de Fernando Pessoa?",
+				"Quem sÃ£o os escritores africanos?",
 				"E portugueses?",
-				"Quais os escritores portugueses e espanhóis do século XV?",
-				"Quantos livros de escritores africanos existem após o século XVI?",
-				"E qual é o mais recente?",
-				"Alberto Caeiro é heterónimo de Fernando Pessoa."
+				"Quais os escritores portugueses e espanhÃ³is do sÃ©culo XV?",
+				"Quantos livros de escritores africanos existem apÃ³s o sÃ©culo XVI?",
+				"E qual Ã© o mais recente?",
+				"Alberto Caeiro Ã© heterÃ³nimo de Fernando Pessoa."
 			};
 
 			public int getSize() {
@@ -213,7 +212,7 @@ public class GUIMain extends javax.swing.JFrame {
 		listHistory.addListSelectionListener(this::listHistoryValueChanged);
 		listHistory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tabHistory.setViewportView(listHistory);
-		guiTabs.addTab("Histórico", tabHistory);
+		guiTabs.addTab("HistÃ³rico", tabHistory);
 		textOutput.setEditable(false);
 		textOutput.setColumns(40);
 		textOutput.setFont(textOutput.getFont().deriveFont((float) 12));
@@ -224,11 +223,11 @@ public class GUIMain extends javax.swing.JFrame {
 		guiTabs.addTab("Output", tabOutput);
 		textInformation.setEditable(false);
 		textInformation.setContentType("text/html");
-		textInformation.setText("<html>\n  <head>\n\n<style>\nhtml, body {\nmargin:0;\npadding:0;\n}\n</style>\n  </head>\n  <body>\n      \n<h2 syle=\"margin-top:0;text-align:center;\">Bibliogenie!</h2>\n<b>Autores:</b>\n<p style=\"margin-top:0\">&nbsp;&nbsp;&nbsp;&nbsp;Diogo Marques (<a href=\"mailto:up201305642@fe.up.pt\">up201305642@fe.up.pt</a>)</p>\n\t<p style=\"margin-top:0\">&nbsp;&nbsp;&nbsp;&nbsp;Pedro Melo (up201305618.fe.up.pt)</p>\n<b style=\"margin-bottom:0\">Instruções:</b>\n\t<ul style=\"margin-left:16px\">\n\t<li><b>Read:</b> carrega uma lista de perguntas de um ficheiro de texto</li>\n\t<li><b>Save: </b> guarda histórico de perguntas num ficheiro de texto</li>\n\t<li><b>Execute:</b> executa todas as perguntas existentes no histórico</li>\n\t<li><b>Clear:</b> limpa todo o histórico das perguntas (se o utilizador estiver na tab \"History\"), limpa a consola de output (se o utilizador estiver na tab \"Output\"</li>\n\t<li><b>Exit:</b>abandona este programa sem confirmação</li>\n\t</ul>\n<b><i>Descrição</i></b>\n<p style=\"margin: 0 0 12px; text-align: justify;\">\nO programa deve interpretar e responder a frases&nbsp;escritas em linguagem natural, <span style=\"font-weight: bold;\">usando DCGs</span>.&nbsp;</span><span lang=\"PT\">O programa deve incluir informação sobre </span>escritores e respetivas obras literárias<span lang=\"PT\"><span lang=\"pt\"></span> (pode\nincluir outra informação que considere relevante).\n</p>\n<p style=\"margin: 0pt 0cm 12px; text-align: justify;\">O programa deve respeitar os seguintes <span style=\"text-decoration: underline;\">requisitos</span>:</p>\n<ul style=\"margin-left:16px\">\n<li>Aceitação de frases afirmativas</li>\n<li>Aceitação de frases interrogativas</li>\n<li>Verificação da sintaxe da frase</li>\n<li>Verificação da semântica da frase</li>\n<li>Inclusão de um ou mais comandos. A inclusão de mais que um comando numa mesma frase é traduzida pelo uso da partícula \"e\" nessa frase</li>\n<li>Aceitação de frases iniciadas pela partícula \"e\", devendo ser guardado o contexto da frase anterior para resposta a esta frase</li>\n<li>Uso de adjetivos e complementos (proposicionais, de modo, ...)</span></li>\n</ul>\n</body>\n</html>");
+		textInformation.setText("<html>\n  <head>\n\n<style>\nhtml, body {\nmargin:0;\npadding:0;\n}\n</style>\n  </head>\n  <body>\n      \n<h2 syle=\"margin-top:0;text-align:center;\">Bibliogenie!</h2>\n<b>Autores:</b>\n<p style=\"margin-top:0\">&nbsp;&nbsp;&nbsp;&nbsp;Diogo Marques (<a href=\"mailto:up201305642@fe.up.pt\">up201305642@fe.up.pt</a>)</p>\n\t<p style=\"margin-top:0\">&nbsp;&nbsp;&nbsp;&nbsp;Pedro Melo (up201305618.fe.up.pt)</p>\n<b style=\"margin-bottom:0\">Instruï¿½ï¿½es:</b>\n\t<ul style=\"margin-left:16px\">\n\t<li><b>Read:</b> carrega uma lista de perguntas de um ficheiro de texto</li>\n\t<li><b>Save: </b> guarda histï¿½rico de perguntas num ficheiro de texto</li>\n\t<li><b>Execute:</b> executa todas as perguntas existentes no histï¿½rico</li>\n\t<li><b>Clear:</b> limpa todo o histï¿½rico das perguntas (se o utilizador estiver na tab \"History\"), limpa a consola de output (se o utilizador estiver na tab \"Output\"</li>\n\t<li><b>Exit:</b>abandona este programa sem confirmaï¿½ï¿½o</li>\n\t</ul>\n<b><i>Descriï¿½ï¿½o</i></b>\n<p style=\"margin: 0 0 12px; text-align: justify;\">\nO programa deve interpretar e responder a frases&nbsp;escritas em linguagem natural, <span style=\"font-weight: bold;\">usando DCGs</span>.&nbsp;</span><span lang=\"PT\">O programa deve incluir informaï¿½ï¿½o sobre </span>escritores e respetivas obras literï¿½rias<span lang=\"PT\"><span lang=\"pt\"></span> (pode\nincluir outra informaï¿½ï¿½o que considere relevante).\n</p>\n<p style=\"margin: 0pt 0cm 12px; text-align: justify;\">O programa deve respeitar os seguintes <span style=\"text-decoration: underline;\">requisitos</span>:</p>\n<ul style=\"margin-left:16px\">\n<li>Aceitaï¿½ï¿½o de frases afirmativas</li>\n<li>Aceitaï¿½ï¿½o de frases interrogativas</li>\n<li>Verificaï¿½ï¿½o da sintaxe da frase</li>\n<li>Verificaï¿½ï¿½o da semï¿½ntica da frase</li>\n<li>Inclusï¿½o de um ou mais comandos. A inclusï¿½o de mais que um comando numa mesma frase ï¿½ traduzida pelo uso da partï¿½cula \"e\" nessa frase</li>\n<li>Aceitaï¿½ï¿½o de frases iniciadas pela partï¿½cula \"e\", devendo ser guardado o contexto da frase anterior para resposta a esta frase</li>\n<li>Uso de adjetivos e complementos (proposicionais, de modo, ...)</span></li>\n</ul>\n</body>\n</html>");
 		textInformation.setHighlighter(null);
 		textInformation.setKeymap(null);
 		tabInformation.setViewportView(textInformation);
-		guiTabs.addTab("Informações", tabInformation);
+		guiTabs.addTab("InformaÃ§Ãµes", tabInformation);
 		guiSplit.setBottomComponent(guiTabs);
 		getContentPane().add(guiSplit, BorderLayout.CENTER);
 		setSize(new Dimension(450, 340));
@@ -242,7 +241,7 @@ public class GUIMain extends javax.swing.JFrame {
 	private void search(final String queryMessage) {
 
 		if (queryMessage == null || queryMessage.isEmpty()) {
-			showWarning(msgEmptyQuery);
+			showWarning("Por favor escreva uma pergunta antes de iniciar a pesquisa.");
 		}
 		else {
 
@@ -284,7 +283,7 @@ public class GUIMain extends javax.swing.JFrame {
 
 			final int responseLength = serverResponse.length() - 1;
 
-			if (serverResponse.matches(regexString)) {
+            if (serverResponse.matches("\\[(\"(.+?)\")(,\".+?\")*\\]")) {
 
 				final String[] userOptions = serverResponse.trim().substring(1, responseLength).split(",\\ +");
 
@@ -361,11 +360,11 @@ public class GUIMain extends javax.swing.JFrame {
 
 		File buffer = new File(fileChooser.getSelectedFile() + ".txt");
 
-		try (BufferedWriter oout = new BufferedWriter(new FileWriter(buffer))) {
+		try (final BufferedWriter oout = new BufferedWriter(new FileWriter(buffer))) {
 
 			for (int i = 0; i < defaultListModel.getSize(); i++) {
 
-				oout.write((String) defaultListModel.elementAt(i));
+				oout.write(defaultListModel.elementAt(i));
 
 				if (i < defaultListModel.getSize() - 1) {
 					oout.newLine();
@@ -378,11 +377,11 @@ public class GUIMain extends javax.swing.JFrame {
 	}
 
 	private void showError(final String paramMessage) {
-		JOptionPane.showMessageDialog(this, paramMessage, "Bibliogenie", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(this, paramMessage, programName, JOptionPane.ERROR_MESSAGE);
 	}
 
 	private void showWarning(final String paramMessage) {
-		JOptionPane.showMessageDialog(this, paramMessage, "Bibliogenie", JOptionPane.WARNING_MESSAGE);
+		JOptionPane.showMessageDialog(this, paramMessage, programName, JOptionPane.WARNING_MESSAGE);
 	}
 
 	private void buttonClearActionPerformed(final ActionEvent evt) {
@@ -407,7 +406,7 @@ public class GUIMain extends javax.swing.JFrame {
 		if (httpServer.isConnected()) {
 
 			if (defaultListModel.isEmpty()) {
-				showWarning(msgHistoryEmpty);
+                showWarning("NÃ£o adicionou nenhuma pesquisa ao histÃ³rico.");
 			}
 			else {
 
@@ -459,7 +458,7 @@ public class GUIMain extends javax.swing.JFrame {
 		}
 
 		httpServer.disconnect(null);
-		buttonConnect.setText("Ligar");
+		buttonConnect.setText(stringConnect);
 		buttonConnect.setIcon(iconConnect);
 	}
 
@@ -475,16 +474,16 @@ public class GUIMain extends javax.swing.JFrame {
 
 	public static void main(String args[]) {
 
-		try {
+        ResponseParser.getInstance().parseLivroResponse("[livro(cacb-mis1,'MistÃ©rios de Lisboa - I',cacb,1854,romance,cacb-misl),livro(cacb-mis2,'MistÃ©rios de Lisboa - II',cacb,1854,romance,cacb-misl),livro(cacb-mis3,'MistÃ©rios de Lisboa - III',cacb,1854,romance,cacb-misl)]");
+
+        try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
 		catch (Exception ex) {
-			JOptionPane.showMessageDialog(null, ex.getLocalizedMessage(), "Bibliogenie", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, ex.getLocalizedMessage(), programName, JOptionPane.ERROR_MESSAGE);
 		}
 
-		EventQueue.invokeLater(() -> {
-			new GUIMain().setVisible(true);
-		});
+		EventQueue.invokeLater(() -> new GUIMain().setVisible(true));
 	}
 
 	private JButton buttonConnect;
