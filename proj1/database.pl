@@ -1,8 +1,8 @@
-autor(cacb, "Camilo", "Castelo-Branco", 1825, 1890, por, []).
-autor(juld, "Júlio", "Diis", 1839, 1871, por, []).
-autor(qroz, "Eça", "Queiróz", 1845, 1900, por, []).
-autor(verf, "Vergílo", "Ferreira", 1916, 1996, por, []).
-autor(lcam, "Luís", "Camões", 1524, 1580, por, []).
+autor(cacb, 'Camilo', 'Castelo-Branco', 1825, 1890, por, []).
+autor(juld, 'Júlio', 'Dinis', 1839, 1871, por, []).
+autor(qroz, 'Eça', 'Queiróz', 1845, 1900, por, []).
+autor(verf, 'Vergílo', 'Ferreira', 1916, 1996, por, []).
+autor(lcam, 'Luís', 'Camões', 1524, 1580, por, []).
 
 livro(cacb-pund, 'Os Pundonores Desagravados', cacb, 1845, poesia, null).
 livro(cacb-aceu, 'Agostinho de Ceuta', cacb, 1847, teatro, null).
@@ -40,25 +40,25 @@ livro(lcam-lusi, 'Lusíadas', lcam, 1572, poesia, null).
 livro(lcam-afil, 'Auto de Filodemo', lcam, 1587, teatro, null).
 livro(lcam-anfi, 'Anfitriões', lcam, 1587, teatro, null).
 
-autor(mcou, "Mia", "Couto", 1955, -1, moz, []).
+autor(mcou, 'Mia', 'Couto', 1955, -1, moz, []).
 
-livro(mcou-vnoi, "Vozes Anoitecidas", 1986, conto, null).
-livro(mcou-esto, "Estórias Abensonhadas", 1994, conto, null).
-livro(mcou-cron, "Cronicando", 1988, cronica, null).
-livro(mcou-tson, "Terra Sonâmbula", 1992, romance, null).
-livro(mcou-mamq, "Mar Me Quer", 1998, romance, null).
-livro(mcou-freq, "Pensageiro Frequente", 2010, romance, null).
+livro(mcou-vnoi, "Vozes Anoitecidas", mcou, 1986, conto, null).
+livro(mcou-esto, "Estórias Abensonhadas", mcou, 1994, conto, null).
+livro(mcou-cron, "Cronicando", mcou, 1988, cronica, null).
+livro(mcou-tson, "Terra Sonâmbula", mcou, 1992, romance, null).
+livro(mcou-mamq, "Mar Me Quer", mcou, 1998, romance, null).
+livro(mcou-freq, "Pensageiro Frequente", mcou, 2010, romance, null).
 
-autor(cbro, "Charlotte", "Brontë", 1816, 1855, gbr, []).
-autor(ebro, "Emily", "Brontë", 1818, 1848, gbr, []).
+autor(cbro, 'Charlotte', 'Brontë', 1816, 1855, gbr, []).
+autor(ebro, 'Emily', 'Brontë', 1818, 1848, gbr, []).
 
 livro(cbro-jeyr, 'Jane Eyre', cbro, 1847, romance, null).
 livro(ebro-wuth, 'Wuthering Heights', ebro, 1847, romance, null).
 
-autor(mtwn, "Mark", "Twain", 1835, 1910, usa, []).
-autor(owld, "Oscar", "Wilde", 1864, 1900, ire, []).
-autor(ehem, "Ernest", "Hemingway", 1899, 1961, usa, []).
-autor(ebla, "Eric", "Blair", 1903, 1950, ind, [gowr]).
+autor(mtwn, 'Mark', 'Twain', 1835, 1910, usa, []).
+autor(owld, 'Oscar', 'Wilde', 1864, 1900, ire, []).
+autor(ehem, 'Ernest', 'Hemingway', 1899, 1961, usa, []).
+autor(ebla, 'Eric', 'Blair', 1903, 1950, ind, [gowr]).
 
 pseudo(gowr, "George", "Orwell").
 
@@ -67,8 +67,8 @@ livro(ehem-gran, 'Fifty Grand', ehem, 1927, null, null).
 livro(ehem-icam, 'Indian Camp', ehem, 1926, null, null).
 livro(ehem-fare, 'A Farewell to Arms', ehem, 1929, null, null).
 
-autor(isal, "Isabel", "Allende", 1942, -1, chi, []).
-autor(gagm, "Gabriel", "Garcia Márquez", 1927, 2014, col, []).
+autor(isal, 'Isabel', 'Allende', 1942, -1, esp, []).
+autor(gagm, 'Gabriel', 'Garcia Márquez', 1927, 2014, col, []).
 
 livro(gagm-sole, "Cem Anos de Solidão", gagm, 1967, romance, null).
 livro(gagm-oton, "O Outono do Patriarca", gagm, 1975, romance, null).
@@ -92,3 +92,20 @@ pais(ire, "Irlanda", ingles, "irlandês", "irlandesa").
 pais(moz, "Moçambique", portugues, "moçambicano", "moçambicana").
 pais(nor, "Noruega", noruegues, "norueguês", "norueguesa").
 pais(por, "Portugal", portugues, "português", "portuguesa").
+pais(usa, "Estados Unidos", ingles, "norte-americano", "norte-americana").
+
+pais_continente(ang, africa).
+pais_continente(moz, africa).
+pais_continente(aut, europa).
+pais_continente(bel, europa).
+pais_continente(esp, europa).
+pais_continente(fin, europa).
+pais_continente(fra, europa).
+pais_continente(gbr, europa).
+pais_continente(ger, europa).
+pais_continente(ire, europa).
+pais_continente(nor, europa).
+pais_continente(por, europa).
+pais_continente(bra, america_sul).
+pais_continente(col, america_sul).
+pais_continente(aus, oceania).
