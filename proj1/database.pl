@@ -75,37 +75,3 @@ livro(gagm-oton, "O Outono do Patriarca", gagm, 1975, romance, null).
 livro(gagm-amor, "O Amor nos Tempos de Cólera", gagm, 1985, romance, null).
 
 livro(isal-cesp, "A Casa dos Espíritos", isal, 1982, romance, null).
-
-% pais(id, nome, idioma_oficial, gentilico_m, gentilico_f)
-pais(ang, "Angola", portugues, "angolano", "angolana").
-pais(aus, "Austrália", ingles, "australiano", "australiana").
-pais(aut, "Áustria", alemao, "austríaco", "austríaca").
-pais(bel, "Bélgica", frances, "belga", "belga").
-pais(bra, "Brasil", portugues, "brasileiro", "brasileira").
-pais(col, "Colômbia", espanhol, "colombiano", "colombiana").
-pais(esp, "Espanha", espanhol, "espanhol", "espanhola").
-pais(fin, "Finlândia", finlandes, "finlandês", "finlandesa").
-pais(fra, "França", frances, "francês", "francesa").
-pais(gbr, "Reino Unido", ingles, "inglês", "inglesa").
-pais(ger, "Alemanha",  alemao, "alemão", "alemã").
-pais(ire, "Irlanda", ingles, "irlandês", "irlandesa").
-pais(moz, "Moçambique", portugues, "moçambicano", "moçambicana").
-pais(nor, "Noruega", noruegues, "norueguês", "norueguesa").
-pais(por, "Portugal", portugues, "português", "portuguesa").
-pais(usa, "Estados Unidos", ingles, "norte-americano", "norte-americana").
-
-pais_continente(ang, africa).
-pais_continente(moz, africa).
-pais_continente(aut, europa).
-pais_continente(bel, europa).
-pais_continente(esp, europa).
-pais_continente(fin, europa).
-pais_continente(fra, europa).
-pais_continente(gbr, europa).
-pais_continente(ger, europa).
-pais_continente(ire, europa).
-pais_continente(nor, europa).
-pais_continente(por, europa).
-pais_continente(bra, america_sul).
-pais_continente(col, america_sul).
-pais_continente(aus, oceania).
