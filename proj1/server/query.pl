@@ -203,7 +203,7 @@ livros_nao_genero(Autor, ListaGeneros, Lista):-
 			livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
 			Autor1 = Autor
 		),
-		Genero^livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), 
+		Genero^livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
 		\+member(Genero, ListaGeneros)
 	), Lista).
 
@@ -227,7 +227,7 @@ livros_mais_antigos_aux(Numero, [_-Livro|Tail], [Livro|OutraTail]):-
 	livros_mais_antigos_aux(NovoNumero, Tail, OutraTail).
 
 livros_mais_antigos(Livros):-
-	setof(Ano-livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), 
+	setof(Ano-livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
     	Ano^livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
     	Livros).
 
@@ -251,7 +251,7 @@ livros_mais_recentes_aux(Numero, [_-Livro|Tail], [Livro|OutraTail]):-
 	livros_mais_antigos_aux(NovoNumero, Tail, OutraTail).
 
 livros_mais_recentes(Livros):-
-    setof(NovoAno-livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), 
+    setof(NovoAno-livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
     	Ano^(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), NovoAno is -Ano),
     	Livros).
 
@@ -398,25 +398,25 @@ filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoM
 
 %-----------------------------------------------------------------------------%
 % -> Lista de autores com pelo menos N pseudónimos                            %
-%-----------------------------------------------------------------------------%	
+%-----------------------------------------------------------------------------%
 autores_minimo_pseudonimos(Number, Lista):-
 	filtrar_autores([pseudonimos>Number], Lista).
 
 %-----------------------------------------------------------------------------%
 % -> Lista de autores com exatamente N pseudónimos                            %
-%-----------------------------------------------------------------------------%	
+%-----------------------------------------------------------------------------%
 autores_n_pseudonimos(Number, Lista):-
 	filtrar_autores([pseudonimos=Number], Lista).
 
 %-----------------------------------------------------------------------------%
 % -> Lista de autores com pseudónimos                                         %
-%-----------------------------------------------------------------------------%	
+%-----------------------------------------------------------------------------%
 autores_com_pseudonimos(Lista):-
 	filtrar_autores([pseudonimos>0], Lista).
 
 %-----------------------------------------------------------------------------%
 % -> Lista de autores sem qualquer pseudónimo                                 %
-%-----------------------------------------------------------------------------%	
+%-----------------------------------------------------------------------------%
 autores_sem_pseudonimos(Lista):-
 	filtrar_autores([pseudonimos=0], Lista).
 
@@ -470,11 +470,11 @@ autores_nacionalidade(Nacionalidade, Lista):-
 
 %-----------------------------------------------------------------------------%
 % -> Lista de autores de determinado(s) continente(s)                         %
-%-----------------------------------------------------------------------------%	
+%-----------------------------------------------------------------------------%
 autores_continente(ListaContinentes, Filtros, Lista):-
 	findall(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos),
 	(
-		autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), 
+		autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos),
 		pais_continente(Nacionalidade, Continente),
 		member(Continente, ListaContinentes),
 		filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Filtros)
@@ -482,7 +482,7 @@ autores_continente(ListaContinentes, Filtros, Lista):-
 
 %-----------------------------------------------------------------------------%
 % -> Lista de autores que falam determinado(s) idioma(s)                      %
-%-----------------------------------------------------------------------------%	
+%-----------------------------------------------------------------------------%
 autores_idioma(Idioma ou Idiomas, Lista):-
 	filtrar_autores([idioma=Idioma ou Idiomas], Lista).
 autores_idioma(Idioma, Lista):-
@@ -496,11 +496,11 @@ comparar_autores_velho(Autor1, Autor2, Autor):-
 	autor(Autor1, PrimeiroNome1, UltimoNome1, AnoNascimento1, AnoMorte1, Nacionalidade1, Pseudonimos1),
 	autor(Autor2, PrimeiroNome2, UltimoNome2, AnoNascimento2, AnoMorte2, Nacionalidade2, Pseudonimos2),
 	(
-		AnoNascimento1 > AnoNascimento2, 
+		AnoNascimento1 > AnoNascimento2,
 		Autor = autor(Autor1, PrimeiroNome1, UltimoNome1, AnoNascimento1, AnoMorte1, Nacionalidade1, Pseudonimos1)
 		;
 		(
-			AnoNascimento1 < AnoNascimento2, 
+			AnoNascimento1 < AnoNascimento2,
 			Autor = autor(Autor2, PrimeiroNome2, UltimoNome2, AnoNascimento2, AnoMorte2, Nacionalidade2, Pseudonimos2)
 			;
 			Autor = null
