@@ -1,6 +1,31 @@
 :- op(400,xfx,\).
 :- op(900,xfy,ou).
 
+roman("M", 1000).
+roman("CM", 900).
+roman("D", 500).
+roman("CD", 400).
+roman("C", 100).
+roman("XC", 90).
+roman("L", 50).
+roman("XL", 40).
+roman("X", 10).
+roman("IX", 9).
+roman("V", 5).
+roman("IV", 4).
+roman("I", 1).
+
+roman_to_decimal(R, D) :-
+	roman_to_decimal(R, 0, D).
+
+roman_to_decimal([], D, D).
+roman_to_decimal(R , T, D) :-
+  roman(P, V),
+  append(P, S, R),
+  !,
+  T1 is T+V ,
+  roman_to_decimal(S, T1, D).
+
 flatten(S,F) :-
   flatten_dl(S,F\[]).
 
@@ -46,19 +71,22 @@ filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [ano=Li
 
 % seleccionar livros que foram publicados antes de um determinado século
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [seculo<Seculo|Tail]):-
-	LimiteInferior is (Seculo * 100) - 99,
+	roman_to_decimal(Seculo, SeculoArabe),
+	LimiteInferior is (SeculoArabe * 100) - 99,
 	Ano < LimiteInferior,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
 % seleccionar livros que foram publicados depois de um determinado século
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [seculo>Seculo|Tail]):-
-	LimiteSuperior is (Seculo * 100),
+	roman_to_decimal(Seculo, SeculoArabe),
+	LimiteSuperior is (SeculoArabe * 100),
 	Ano > LimiteSuperior,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
 % seleccionar livros que foram publicados num determinado século
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [seculo=Seculo|Tail]):-
-	LimiteSuperior is (Seculo * 100),
+	roman_to_decimal(Seculo, SeculoArabe),
+	LimiteSuperior is (SeculoArabe * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	Ano >= LimiteInferior,
 	Ano =< LimiteSuperior,
@@ -466,7 +494,8 @@ autores_nascidos_entre(LimiteInferior, LimiteSuperior, Lista):-
 % -> Lista de autores que nasceram no século Seculo                           %
 %-----------------------------------------------------------------------------%
 autores_nascidos_seculo(Seculo, Lista):-
-	LimiteSuperior is (Seculo * 100),
+	roman_to_decimal(Seculo, SeculoArabe),
+	LimiteSuperior is (SeculoArabe * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	filtrar_autores([nasceu=LimiteInferior-LimiteSuperior], Lista).
 
@@ -480,7 +509,8 @@ autores_vivos_entre(LimiteInferior, LimiteSuperior, Lista):-
 % -> Lista de autores que viveram no século Seculo                            %
 %-----------------------------------------------------------------------------%
 autores_vivos_seculo(Seculo, Lista):-
-	LimiteSuperior is (Seculo * 100),
+	roman_to_decimal(Seculo, SeculoArabe),
+	LimiteSuperior is (SeculoArabe * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	filtrar_autores([viveu=LimiteInferior-LimiteSuperior], Lista).
 

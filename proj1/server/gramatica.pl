@@ -67,6 +67,10 @@ substantivo_autor(s-f) --> [escritora].
 substantivo_autor(p-m) --> [escritores].
 substantivo_autor(p-f) --> [escritoras].
 
+substantivo_volume(s-m) --> [colecção].
+substantivo_volume(p-m) --> [coleções].
+substantivo_volume(s-f) --> [saga].
+substantivo_volume(p-f) --> [sagas].
 substantivo_volume(s-f) --> [trilogia].
 substantivo_volume(p-f) --> [trilogias].
 substantivo_volume(s-m) --> [volume].
@@ -74,38 +78,65 @@ substantivo_volume(p-m) --> [volumes].
 
 nome(s-_) --> [morte].
 nome(s-_) --> [nascimento].
+nome(s-_) --> [falecimento].
+
 nome(s-_) --> [heterónimo].
 nome(p-_) --> [heterónimos].
+nome(s-_) --> [pseudónimo].
+nome(p-_) --> [pseudónimos].
 
-nacionalidade(por, s-m) --> [portugues].
-nacionalidade(por, s-f) --> [portuguesa].
-nacionalidade(por, p-m) --> [portugueses].
-nacionalidade(por, p-f) --> [portuguesas].
+adverbio_antes(s-_) -> [antes];
+adverbio_antes(s-_) -> [anterior];
 
-nacionalidade(esp, s-m) --> [espanhol].
-nacionalidade(esp, s-f) --> [espanhola].
-nacionalidade(esp, p-m) --> [espanhóis].
-nacionalidade(esp, p-f) --> [espanholas].
+adverbio_depois(s-_) -> [posterior];
+adverbio_depois(s-_) -> [depois];
+adverbio_depois(s-_) -> [após];
 
-nacionalidade(fra, s-m) --> [francês].
-nacionalidade(fra, s-f) --> [francesa].
-nacionalidade(fra, p-m) --> [franceses].
-nacionalidade(fra, p-f) --> [francesas].
+substantivo(s-_) --> [seculo];
+substantivo(p-_) --> [seculos];
+substantivo(s-_) --> [idioma];
+substantivo(p-_) --> [idiomas];
+substantivo(s-_) --> [nacionalidade];
+substantivo(p-_) --> [nacionalidades];
+substantivo(s-_) --> [idade];
+substantivo(p-_) --> [idades];
 
-nacionalidade(ger, s-m) --> [alemão].
-nacionalidade(ger, s-f) --> [alemã].
-nacionalidade(ger, p-m) --> [alemães].
-nacionalidade(ger, p-f) --> [alemãs].
+substantivo_nacionalidade(por, s-m) --> [portugues].
+substantivo_nacionalidade(por, s-f) --> [portuguesa].
+substantivo_nacionalidade(por, p-m) --> [portugueses].
+substantivo_nacionalidade(por, p-f) --> [portuguesas].
 
-nacionalidade(col, s-m) --> [colombiano].
-nacionalidade(col, s-f) --> [colombiana].
-nacionalidade(col, p-m) --> [colombianos].
-nacionalidade(col, p-f) --> [colombianas].
+substantivo_nacionalidade(esp, s-m) --> [espanhol].
+substantivo_nacionalidade(esp, s-f) --> [espanhola].
+substantivo_nacionalidade(esp, p-m) --> [espanhóis].
+substantivo_nacionalidade(esp, p-f) --> [espanholas].
 
-nacionalidade(moz, s-m) --> [moçambicano].
-nacionalidade(moz, s-f) --> [moçambicana].
-nacionalidade(moz, p-m) --> [moçambicanos].
-nacionalidade(moz, p-f) --> [moçambicanas].
+substantivo_nacionalidade(fra, s-m) --> [francês].
+substantivo_nacionalidade(fra, s-f) --> [francesa].
+substantivo_nacionalidade(fra, p-m) --> [franceses].
+substantivo_nacionalidade(fra, p-f) --> [francesas].
+
+substantivo_nacionalidade(ger, s-m) --> [alemão].
+substantivo_nacionalidade(ger, s-f) --> [alemã].
+substantivo_nacionalidade(ger, p-m) --> [alemães].
+substantivo_nacionalidade(ger, p-f) --> [alemãs].
+
+substantivo_nacionalidade(col, s-m) --> [colombiano].
+substantivo_nacionalidade(col, s-f) --> [colombiana].
+substantivo_nacionalidade(col, p-m) --> [colombianos].
+substantivo_nacionalidade(col, p-f) --> [colombianas].
+
+substantivo_nacionalidade(moz, s-m) --> [moçambicano].
+substantivo_nacionalidade(moz, s-f) --> [moçambicana].
+substantivo_nacionalidade(moz, p-m) --> [moçambicanos].
+substantivo_nacionalidade(moz, p-f) --> [moçambicanas].
+
+substantivo_idioma(ingles, s-m) --> [inglês];
+substantivo_idioma(ingles, s-f) --> [inglesa];
+substantivo_idioma(frances, s-m) --> [francês];
+substantivo_idioma(frances, s-f) --> [francesa];
+substantivo_idioma(japones, s-m) --> [japonês];
+substantivo_idioma(japones, s-f) --> [japonesa];
 
 continente(africa, s) --> [africano].
 continente(africa, p) --> [africanos].
@@ -125,8 +156,14 @@ verbo(p) --> [foi].
 verbo(s) --> [foram].
 
 verbo(s) --> [escreveu].
+verbo(p) --> [escreveram].
+verbo(s) --> [publicou].
+verbo(p) --> [publicaram].
+
 verbo(s) --> [morreu].
+verbo(p) --> [morreram].
 verbo(s) --> [nasceu].
+verbo(p) --> [nasceram].
 
 verbo(s) --> [gosta].
 verbo(p) --> [gostam].
