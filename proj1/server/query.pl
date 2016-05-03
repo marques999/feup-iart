@@ -19,34 +19,44 @@ filtrar_livros(Selector, Lista):-
 
 filtrar_livros_aux(_, []).
 
+% seleccionar livros de um determinado autor
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [autor=Autor|Tail]):-
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
-filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [autor=null|Tail]):-
-	Autor = null,
-	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
+% seleccionar livros que foram publicados antes do ano AnoLimite
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [ano<AnoLimite|Tail]):-
 	Ano < AnoLimite,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
+
+% seleccionar livros que foram publicados depois do ano AnoLimite
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [ano>AnoLimite|Tail]):-
 	Ano > AnoLimite,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
+
+% seleccionar livros que foram publicados no ano AnoLimite
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [ano=AnoLimite|Tail]):-
 	Ano = AnoLimite,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
+
+% seleccionar livros que foram publicados entre [LimiteInferior, LimiteSuperior]
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [ano=LimiteInferior-LimiteSuperior|Tail]):-
 	Ano >= LimiteInferior,
 	Ano =< LimiteSuperior,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
+% seleccionar livros que foram publicados antes de um determinado século
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [seculo<Seculo|Tail]):-
 	LimiteInferior is (Seculo * 100) - 99,
 	Ano < LimiteInferior,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
+
+% seleccionar livros que foram publicados depois de um determinado século
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [seculo>Seculo|Tail]):-
 	LimiteSuperior is (Seculo * 100),
 	Ano > LimiteSuperior,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
+
+% seleccionar livros que foram publicados num determinado século
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [seculo=Seculo|Tail]):-
 	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
@@ -54,21 +64,42 @@ filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [seculo
 	Ano =< LimiteSuperior,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
-filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [coleccao=null|Tail]):-
+% seleccionar livros que não pertencem a nenhuma colecção
+filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [sem_coleccao|Tail]):-
 	Coleccao = null,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
-filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [coleccao\=null|Tail]):-
+
+% seleccionar livros que pertencem a uma colecção
+filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [com_coleccao|Tail]):-
 	Coleccao \= null,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
-filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero=Genero |Tail]):-
+% seleccionar livros que pertencem a determinada colecção
+filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [coleccao=Coleccao|Tail]):-
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
+
+% seleccionar livros que pertencem a determinado género literário
+filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero=Genero|Tail]):-
+	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
+
+% seleccionar livros que pertencem a um dos géneros literários
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero=Genero1 ou Generos|Tail]):-
 	verificar_genero(Genero, Genero1 ou Generos),
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
+% seleccionar livros que não pertencem a determinado género literário
+filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero\=Genero1|Tail]):-
+	Genero \= Genero1,
+	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
+
+% seleccionar livros que não pertencem a nenhum dos géneros literários
+filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero\=Genero1 ou Generos|Tail]):-
+	\+verificar_genero(Genero, Genero1 ou Generos),
+	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
+
+% seleccionar livros que foram publicados depois da morte do autor
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [postumo|Tail]):-
-	autor(Autor, _, _, AnoNascimento, AnoMorte, _, _),
+	autor(Autor, _, _, AnoNascimento, AnoMorte, _, _, _),
 	AnoMorte > AnoNascimento, AnoMorte < Ano,
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
@@ -85,10 +116,22 @@ livros_publicados(Autor, Lista):-
 	filtrar_livros([autor=Autor], Lista).
 
 %-----------------------------------------------------------------------------%
+% -> Livros publicados em determinada colecção                                %
+%-----------------------------------------------------------------------------%
+livros_coleccao(Coleccao, Lista):-
+	filtrar_livros([coleccao=Coleccao], Lista).
+
+%-----------------------------------------------------------------------------%
+% -> Livros sem colecção                                                      %
+%-----------------------------------------------------------------------------%
+livros_publicados_coleccoes(Lista):-
+	filtrar_livros([sem_coleccao], Lista).
+
+%-----------------------------------------------------------------------------%
 % -> Livros publicados em colecções                                           %
 %-----------------------------------------------------------------------------%
 livros_publicados_coleccoes(Lista):-
-	filtrar_livros([coleccao\=null], Lista).
+	filtrar_livros([com_coleccao], Lista).
 
 %-----------------------------------------------------------------------------%
 % -> Livros de determinado autor publicados em colecções                      %
@@ -175,37 +218,30 @@ verificar_genero(Genero, _ ou Generos):-
 	verificar_genero(Genero, Generos).
 verificar_genero(Genero, Genero).
 
+livros_autor(ListaAutores, ListaLivros):-
+	livros_autor_aux(ListaAutores, ListaTemporaria),
+	flatten(ListaTemporaria, ListaLivros).
+
+livros_autor_aux([], []).
+livros_autor_aux([autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)|ListaAutores], [Livros|Tail]):-
+	livros_autor_aux(ListaAutores, Tail),
+	filtrar_livros([autor=IdAutor], Livros).
+
 %-----------------------------------------------------------------------------%
 % -> Livros (de determinado autor) que são de determinado(s) Género(s)        %
 %-----------------------------------------------------------------------------%
-livros_genero(Autor, ListaGeneros, Lista):-
-	findall(livro(IdLivro, Titulo, Autor1, Ano, Genero, Coleccao),
-	(
-		(Autor = null,
-			Autor1^livro(IdLivro, Titulo, Autor1, Ano, Genero, Coleccao)
-			;
-			livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
-			Autor1 = Autor
-		),
-		livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
-		member(Genero, ListaGeneros)
-	), Lista).
+livros_genero(Genero ou Generos, Lista):-
+	filtrar_livros([genero=Genero ou Generos], Lista).
+livros_genero(Genero, Lista):-
+	filtrar_livros([genero=Genero], Lista).
 
 %-----------------------------------------------------------------------------%
 % -> Livros (de determinado autor) que não são de determinado Género          %
 %-----------------------------------------------------------------------------%
-livros_nao_genero(Autor, ListaGeneros, Lista):-
-	findall(livro(IdLivro, Titulo, Autor1, Ano, Genero, Coleccao),
-	(
-		(Autor = null,
-			Autor1^livro(IdLivro, Titulo, Autor1, Ano, Genero, Coleccao)
-			;
-			livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
-			Autor1 = Autor
-		),
-		Genero^livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
-		\+member(Genero, ListaGeneros)
-	), Lista).
+livros_nao_genero(Genero ou Generos, Lista):-
+	filtrar_livros([genero\=Genero ou Generos], Lista).
+livros_nao_genero(Genero, Lista):-
+	filtrar_livros([genero\=Genero], Lista).
 
 %-----------------------------------------------------------------------------%
 % -> Livro mais antigo presente na base de dados                              %
@@ -275,8 +311,8 @@ autores_mais_velhos_aux(Numero, [_-Autor|Tail], [Autor|OutraTail]):-
 	autores_mais_velhos_aux(NovoNumero, Tail, OutraTail).
 
 autores_mais_velhos(Autores):-
-  setof(AnoNascimento-autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos),
-  	AnoNascimento^autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos),
+  setof(AnoNascimento-autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
+  	AnoNascimento^autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
  	Autores).
 
 %-----------------------------------------------------------------------------%
@@ -299,102 +335,102 @@ autores_mais_novos_aux(Numero, [_-Autor|Tail], [Autor|OutraTail]):-
 	autores_mais_novos_aux(NovoNumero, Tail, OutraTail).
 
 autores_mais_novos(Autores):-
-  setof(NovoAno-autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos),
-  	AnoNascimento^(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), NovoAno is -AnoNascimento),
+  setof(NovoAno-autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
+  	AnoNascimento^(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), NovoAno is -AnoNascimento),
  	Autores).
 
 filtrar_autores(Selector, Lista):-
-	findall(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos),
+	findall(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
 	(
-		autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos),
-		filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Selector)
+		autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
+		filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Selector)
 	), Lista).
 
 filtrar_autores_aux(_, []).
 
 % selecciona autores com determinada nacionalidade
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [nacionalidade=Nacionalidade|Tail]):-
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [nacionalidade=Nacionalidade|Tail]):-
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores com uma das nacionalidades de várias
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [nacionalidade=Nacionalidade1 ou Nacionalidades|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [nacionalidade=Nacionalidade1 ou Nacionalidades|Tail]):-
 	verificar_nacionalidade(Nacionalidade, Nacionalidade1 ou Nacionalidades),
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que não são de determinada nacionalidade
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [nacionalidade\=Nacionalidade1|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [nacionalidade\=Nacionalidade1|Tail]):-
 	Nacionalidade \= Nacionalidade1,
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que falam determinado idioma
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [idioma=Idioma|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [idioma=Idioma|Tail]):-
 	pais(Nacionalidade, _, Idioma, _, _),
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que falam determinado idioma de vários
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [idioma=Idioma ou Idiomas|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [idioma=Idioma ou Idiomas|Tail]):-
 	verificar_idioma(Nacionalidade, Idioma ou Idiomas),
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que não falam determinado idioma
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [idioma\=Idioma|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [idioma\=Idioma|Tail]):-
 	pais(Nacionalidade, _, Idioma1, _, _),
 	Idioma1 \= Idioma,
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores com exatamente Count psuedónimos
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [pseudonimos=Count|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [pseudonimos=Count|Tail]):-
 	length(Pseudonimos, Count),
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores com pelo menos Count psuedónimos
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [pseudonimos>Count|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [pseudonimos>Count|Tail]):-
 	length(Pseudonimos, PseudonimosCount),
 	PseudonimosCount >= Count,
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que nasceram antes de AnoLimite
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [nasceu<AnoLimite|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [nasceu<AnoLimite|Tail]):-
 	AnoNascimento < AnoLimite,
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que nasceram depois de AnoLimite
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [nasceu>AnoLimite|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [nasceu>AnoLimite|Tail]):-
 	AnoNascimento > AnoLimite,
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que nasceram exatamente no ano AnoLimite
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [nasceu=AnoLimite|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [nasceu=AnoLimite|Tail]):-
 	AnoNascimento = AnoLimite,
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que nasceram entre [LimiteInferior, LimiteSuperior]
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [nasceu=LimiteInferior-LimiteSuperior|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [nasceu=LimiteInferior-LimiteSuperior|Tail]):-
 	AnoNascimento >= LimiteInferior,
 	AnoNascimento =< LimiteSuperior,
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que estiveram vivos antes de AnoLimite
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [viveu<AnoLimite|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [viveu<AnoLimite|Tail]):-
 	AnoMorte < AnoLimite,
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que estavam vivos depois de AnoLimite
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [viveu>AnoLimite|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [viveu>AnoLimite|Tail]):-
 	AnoMorte > AnoLimite,
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que estavam vivos no ano AnoLimite
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [viveu=AnoLimite|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [viveu=AnoLimite|Tail]):-
 	AnoMorte >= AnoLimite,
 	AnoNascimento =< AnoLimite,
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que viveram no intervalo de tempo compreendido entre [LimiteInferior, LimiteSuperior]
-filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), [viveu=LimiteInferior-LimiteSuperior|Tail]):-
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [viveu=LimiteInferior-LimiteSuperior|Tail]):-
 	(AnoMorte < AnoNascimento ; LimiteInferior < AnoMorte),
 	AnoNascimento < LimiteSuperior,
-	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Tail).
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 %-----------------------------------------------------------------------------%
 % -> Lista de autores com pelo menos N pseudónimos                            %
@@ -472,12 +508,12 @@ autores_nacionalidade(Nacionalidade, Lista):-
 % -> Lista de autores de determinado(s) continente(s)                         %
 %-----------------------------------------------------------------------------%
 autores_continente(ListaContinentes, Filtros, Lista):-
-	findall(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos),
+	findall(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
 	(
-		autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos),
+		autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
 		pais_continente(Nacionalidade, Continente),
 		member(Continente, ListaContinentes),
-		filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Nacionalidade, Pseudonimos), Filtros)
+		filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Filtros)
 	), Lista).
 
 %-----------------------------------------------------------------------------%
@@ -493,15 +529,15 @@ autores_idioma(Idioma, Lista):-
 %-----------------------------------------------------------------------------%
 comparar_autores_velho(Autor1, Autor2, Autor):-
 	Autor1 \= Autor2, !,
-	autor(Autor1, PrimeiroNome1, UltimoNome1, AnoNascimento1, AnoMorte1, Nacionalidade1, Pseudonimos1),
-	autor(Autor2, PrimeiroNome2, UltimoNome2, AnoNascimento2, AnoMorte2, Nacionalidade2, Pseudonimos2),
+	autor(Autor1, PrimeiroNome1, UltimoNome1, AnoNascimento1, AnoMorte1, Sexo1, Nacionalidade1, Pseudonimos1),
+	autor(Autor2, PrimeiroNome2, UltimoNome2, AnoNascimento2, AnoMorte2, Sexo2, Nacionalidade2, Pseudonimos2),
 	(
 		AnoNascimento1 > AnoNascimento2,
-		Autor = autor(Autor1, PrimeiroNome1, UltimoNome1, AnoNascimento1, AnoMorte1, Nacionalidade1, Pseudonimos1)
+		Autor = autor(Autor1, PrimeiroNome1, UltimoNome1, AnoNascimento1, AnoMorte1, Sexo1, Nacionalidade1, Pseudonimos1)
 		;
 		(
 			AnoNascimento1 < AnoNascimento2,
-			Autor = autor(Autor2, PrimeiroNome2, UltimoNome2, AnoNascimento2, AnoMorte2, Nacionalidade2, Pseudonimos2)
+			Autor = autor(Autor2, PrimeiroNome2, UltimoNome2, AnoNascimento2, AnoMorte2, Sexo2, Nacionalidade2, Pseudonimos2)
 			;
 			Autor = null
 		)
@@ -518,8 +554,8 @@ comparar_autores_novo(Autor1, Autor2, Autor):-
 %-----------------------------------------------------------------------------%
 autores_mesma_idade(Autor1, Autor2):-
 	Autor1 \= Autor2, !,
-	autor(Autor1, _, _, AnoNascimento, _, _, _),
-	autor(Autor2, _, _, AnoNascimento, _, _, _).
+	autor(Autor1, _, _, AnoNascimento, _, _, _, _),
+	autor(Autor2, _, _, AnoNascimento, _, _, _, _).
 
 %-----------------------------------------------------------------------------%
 % -> Verificar se dois autores Autor1, Autor2 nasceram em anos diferentes     %
@@ -532,9 +568,9 @@ autores_anos_diferentes(Autor1, Autor2):-
 %-----------------------------------------------------------------------------%
 autores_mesmo_seculo(Autor1, Autor2):-
 	Autor1 \= Autor2, !,
-	autor(Autor1, _, _, AnoNascimento1, _, _, _),
+	autor(Autor1, _, _, AnoNascimento1, _, _, _, _),
 	Seculo1 is (AnoNascimento1 + 99) div 100,
-	autor(Autor2, _, _, AnoNascimento2, _, _, _),
+	autor(Autor2, _, _, AnoNascimento2, _, _, _, _),
 	Seculo2 is (AnoNascimento2 + 99) div 100,
 	Seculo1 = Seculo2.
 
@@ -549,8 +585,8 @@ autores_seculos_diferentes(Autor1, Autor2):-
 %-----------------------------------------------------------------------------%
 autores_mesma_nacionalidade(Autor1, Autor2):-
 	Autor1 \= Autor2, !,
-	autor(Autor1, _, _, _, _, Nacionalidade, _),
-	autor(Autor2, _, _, _, _, Nacionalidade, _).
+	autor(Autor1, _, _, _, _, _, Nacionalidade, _),
+	autor(Autor2, _, _, _, _, _, Nacionalidade, _).
 
 %-----------------------------------------------------------------------------%
 % -> Verificar se dois autores Autor1, Autor2 têm nacionalidades diferentes   %
@@ -563,8 +599,8 @@ autores_nacionalidades_diferentes(Autor1, Autor2):-
 %-----------------------------------------------------------------------------%
 autores_mesmo_continente(Autor1, Autor2):-
 	Autor1 \= Autor2, !,
-	autor(Autor1, _, _, _, _, Nacionalidade1, _),
-	autor(Autor2, _, _, _, _, Nacionalidade2, _),
+	autor(Autor1, _, _, _, _, _, Nacionalidade1, _),
+	autor(Autor2, _, _, _, _, _, Nacionalidade2, _),
 	pais_continente(Nacionalidade1, Continente),
 	pais_continente(Nacionalidade2, Continente).
 
@@ -578,7 +614,7 @@ autores_continentes_diferentes(Autor1, Autor2):-
 % -> Verificar se determinado Psuedónimo pertence a determinado Autor         %
 %-----------------------------------------------------------------------------%
 verificar_psuedonimo(Pseudonimo, Autor):-
-	autor(Autor, _, _, _, _, _, Pseudonimos),
+	autor(Autor, _, _, _, _, _, _, Pseudonimos),
 	member(Pseudonimo, Pseudonimos).
 
 %-----------------------------------------------------------------------------%
