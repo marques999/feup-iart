@@ -16,11 +16,11 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 
-public class GUISelect extends JDialog {
+class GuiSelect extends JDialog {
 
     private final JList<String> guiList;
 
-    public GUISelect(Frame parent, String[] valueList) {
+    GuiSelect(Frame parent, String[] valueList) {
 
         super(parent, true);
 
@@ -57,7 +57,7 @@ public class GUISelect extends JDialog {
 
     private String dialogResult = null;
 
-    public String getResult() {
+    final String getResult() {
         return dialogResult;
     }
 

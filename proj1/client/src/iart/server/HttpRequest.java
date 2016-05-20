@@ -1,4 +1,4 @@
-package iart.application;
+package iart.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,11 +7,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.Normalizer;
 
-public class HTTPRequest {
+public class HttpRequest{
 
 	private boolean m_connected;
 
-	public HTTPRequest() {
+	public HttpRequest() {
 		m_connected = false;
 		m_address = null;
 		m_error = null;

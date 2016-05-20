@@ -1,5 +1,9 @@
 package iart.application;
 
+import iart.model.LivroTable;
+import iart.server.HttpRequest;
+import iart.server.ResponseParser;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -42,20 +46,20 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class GUIMain extends javax.swing.JFrame {
+public class GuiMain extends javax.swing.JFrame {
 
     private static final String programName = "Bibliogenie";
     private static final String stringConnect = "Ligar";
     private static final String msgFormat = "\nQ: %s\nA: %s\n";
     private static final String msgNotConnected = "Não se encontra conectado a nenhum servidor!";
 
-    private final HTTPRequest httpServer = new HTTPRequest();
+    private final HttpRequest httpServer = new HttpRequest();
     private final FileNameExtensionFilter textExtensionFilter = new FileNameExtensionFilter("Ficheiros de texto (*.txt)", "txt");
 	private final ImageIcon iconConnect = new ImageIcon(getClass().getResource("/iart/resources/connect.png"));
 	private final ImageIcon iconDisconnect = new ImageIcon(getClass().getResource("/iart/resources/disconnect.png"));
 	private final DefaultListModel<String> defaultListModel = new DefaultListModel<>();
 
-	private GUIMain() {
+	private GuiMain() {
 		initComponents();
 	}
 
@@ -291,7 +295,7 @@ public class GUIMain extends javax.swing.JFrame {
 					userOptions[i] = userOptions[i].substring(1, userOptions[i].length() - 1);
 				}
 
-				final GUISelect guiSelect = new GUISelect(this, userOptions);
+				final GuiSelect guiSelect = new GuiSelect(this, userOptions);
 
 				guiSelect.setVisible(true);
 
@@ -468,13 +472,13 @@ public class GUIMain extends javax.swing.JFrame {
 			onDisconnect();
 		}
 		else {
-			new GUIConnect(this, true).setVisible(true);
+			new GuiConnect(this, true).setVisible(true);
 		}
 	}
 
 	public static void main(String args[]) {
 
-        ResponseParser.getInstance().parseLivroResponse("[livro(cacb-mis1,'Mistérios de Lisboa - I',cacb,1854,romance,cacb-misl),livro(cacb-mis2,'Mistérios de Lisboa - II',cacb,1854,romance,cacb-misl),livro(cacb-mis3,'Mistérios de Lisboa - III',cacb,1854,romance,cacb-misl)]");
+        new LivroTable("[livro(cacb-mis1,'Mistérios de Lisboa - I',cacb,1854,romance,cacb-misl),livro(cacb-mis2,'Mistérios de Lisboa - II',cacb,1854,romance,cacb-misl),livro(cacb-mis3,'Mistérios de Lisboa - III',cacb,1854,romance,cacb-misl)]");
 
         try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -483,7 +487,7 @@ public class GUIMain extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(null, ex.getLocalizedMessage(), programName, JOptionPane.ERROR_MESSAGE);
 		}
 
-		EventQueue.invokeLater(() -> new GUIMain().setVisible(true));
+		EventQueue.invokeLater(() -> new GuiMain().setVisible(true));
 	}
 
 	private JButton buttonConnect;

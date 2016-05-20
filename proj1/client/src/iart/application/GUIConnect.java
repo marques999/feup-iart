@@ -12,11 +12,11 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 
-public class GUIConnect extends JDialog {
+class GuiConnect extends JDialog {
 
-    public GUIConnect(Frame parent, boolean modal) {
+    GuiConnect(final Frame paramParent, boolean paramModal) {
 
-        super(parent, modal);
+        super(paramParent, paramModal);
 
         GridBagConstraints gridBagConstraints;
 
@@ -85,7 +85,7 @@ public class GUIConnect extends JDialog {
     }
 
     private void jButton1ActionPerformed(final ActionEvent evt) {
-        ((GUIMain) getParent()).connect(jTextField1.getText(), Integer.parseInt(jTextField2.getText()));
+        ((GuiMain) getParent()).connect(jTextField1.getText(), Integer.parseInt(jTextField2.getText()));
         dispose();
     }
 
