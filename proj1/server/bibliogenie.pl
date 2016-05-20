@@ -9,11 +9,11 @@ autor(cbro, 'Charlotte', 'Brontë', 1816, 1855, f, gbr, []).
 autor(qroz, 'Eça', 'de Queiróz', 1845, 1900, m, por, []).
 autor(eiou, 'Eiichirou', 'Oda', 1975, -1, m, jpn, []).
 autor(ebro, 'Emily', 'Brontë', 1818, 1848, f, gbr, []).
-autor(ebla, 'Eric', 'Blair', 1903, 1950, m, ind-col, [gowr]).
+autor(ebla, 'Eric', 'Blair', 1903, 1950, m, ind, [gowr]).
 autor(ehem, 'Ernest', 'Hemingway', 1899, 1961, m, usa, []).
-autor(pess, 'Fernando', 'Pessoa', 1888, 1935, m, prt, [soar]).
+autor(pess, 'Fernando', 'Pessoa', 1888, 1935, m, por, [soar]).
 autor(dost, 'Fiódor', 'Dostoiévski', 1821, 1881, m, rus, []).
-autor(niet, 'Friedrich', 'Nietzsche', 1844, 1900, m, deu, []).
+autor(niet, 'Friedrich', 'Nietzsche', 1844, 1900, m, ger, []).
 autor(gagm, 'Gabriel', 'Garcia Márquez', 1927, 2014, m, col, []).
 autor(mura, 'Haruki', 'Murakami', 1949, -1, m, jpn, []).
 autor(hiro, 'Hiroshi ', 'Fujimoto', 1933, 1996, m, jpn, []).
@@ -66,7 +66,7 @@ livro(verf-epol, 'Estrela Polar', verf, 1960, conto, null).
 livro(cacb-esfu, 'Estrelas Funestas', cacb, 1862, romance, null).
 livro(cacb-espr, 'Estrelas Propícias', cacb, 1863, romance, null).
 livro(shak-haml, 'Hamlet', shak, 1601, tragedia, null).
-livro(shak-henr, 'Henrique VIII', shak, 1612, drama-historico, null).
+livro(shak-henr, 'Henrique VIII', shak, 1612, drama, null).
 livro(dost-humi, 'Humilhados e Ofendidos', dost, 1861, romance, null).
 livro(cacb-insp, 'Inspirações', cacb, 1851, poesia, null).
 livro(cbro-jeyr, 'Jane Eyre', cbro, 1847, romance, null).
@@ -159,12 +159,12 @@ pais(usa, 'Estados Unidos', ingles, 'americano', 'americana').
 %---------------------------------------------------------%
 %                   LISTA DE CONTINENTES                  %
 %---------------------------------------------------------%
-continente(africa, 'Africa').
-continente(america_sul, 'América do Sul').
-continente(america_norte, 'América do Norte').
-continente(asia, 'Asia').
-continente(europa, 'Europa').
-continente(oceania, 'Oceânia').
+continente(africa).
+continente(america_sul).
+continente(america_norte).
+continente(asia).
+continente(europa).
+continente(oceania).
 
 %---------------------------------------------------------%
 %               ASSOCIAÇÃO PAÍS-CONTINENTE                %
