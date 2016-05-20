@@ -56,7 +56,7 @@ sucessor_baldes(b(X, Y), b(0, Y1), Y1):-
 % [X-Xf] + [Y-Yf] não é uma função admissível
 % se max é admissível, então min também será
 % das duas, escolher aquela que melhor se aproxima da solução
-h(b(X, Y), H):-	
+h(b(X, Y), H):-
 	baldes_estado_final(b(Xf, Yf)),
 	H is max(abs(X - Xf), abs(Y - Yf)).
 
