@@ -6,6 +6,10 @@
 :- use_module(library(lists)).
 :- use_module(library(codesio)).
 
+?- ensure_loaded('bibliogenie.pl').
+?- ensure_loaded('gramatica.pl').
+?- ensure_loaded('query.pl').
+
 %---------------------------------------------------------%
 %                         PREDICADOS                      %
 %---------------------------------------------------------%
