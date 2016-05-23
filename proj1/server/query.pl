@@ -251,7 +251,7 @@ livros_autor(ListaAutores, ListaLivros):-
 	flatten(ListaTemporaria, ListaLivros).
 
 livros_autor_aux([], []).
-livros_autor_aux([autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)|ListaAutores], [Livros|Tail]):-
+livros_autor_aux([autor(IdAutor, _, _, _, _, _, _, _)|ListaAutores], [Livros|Tail]):-
 	livros_autor_aux(ListaAutores, Tail),
 	filtrar_livros([autor=IdAutor], Livros).
 
