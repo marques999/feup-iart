@@ -1,31 +1,52 @@
+% consult(['~/Desktop/feup-iart-master/proj1/server/gramatica.pl']).
+
 %---------------------------------------------------------%
 %                          INCLUDES                       %
 %---------------------------------------------------------%
 
-?- ensure_loaded('lexico.pl').
+?- ensure_loaded('bibliogenie.pl').
+%?- ensure_loaded('lexico.pl').
+?- ensure_loaded('query.pl').
+?- ensure_loaded('server.pl').
 
-% |-------------------------------------------------------- SINTAGMA INTERROGATIVO --------------------------------------------------------|
+/*
+% atributo(N-G, Adj, _) --> adjetivo(N-G, Adj).                                 % ... portugueses ...
+% atributo(N-G, Adj, GrAdj) --> adjetivo_super(Gr), adjetivo(N-G, Adj).         % ... mais antigos ...
+% nom(N-G,_,_,Nom) --> substantivo(N-G,Nom).                                    % ... livros ...
+% nom(N-G,Adj,GrAdj,Nom) --> substantivo(N-G,Nom), atributo(N-G, Adj, GrAdj).   % ... livros mais antigos ...
+% com_deter(N-G,Adj,GrAdj,Nom) --> preposicao(N-G), substantivo(N-G,Nom),       % ... dos escritores ingleses ...
+                                   atributo(N-G, Adj, GrAdj).
+% com_deter(N-G,Adj,GrAdj,Nom) --> preposicao(N-G), substantivo(N-G,Nom).       % ... do livro  ...
+% sint_nom_int(N-G,Adj,_,GrAdj,_,Nom,_) --> pron_int(N-_,ql),                   % Quais os escritores [portugueses] que ...
+                                             art_def(N-G),
+                                             nom(N-G,Adj,GrAdj,Nom),
+                                             pron_rel(_-_).
+% sint_nom_int(N-G,Adj1,Adj2,GrAdj1,GrAdj2,Nom1,Nom2) --> pron_int(N-_,ql),     % Quais os livros dos escritores portugueses que ...
+                                              art_def(N-G),
+                                              nom(N-G,Adj1,GrAdj1,Nom1),
+                                              com_deter(N-G,Adj2,GrAdj2,Nom2),
+                                              pronome_relativo(_-_).
+% sint_nom_int(N-G,Adj,_,GrAdj,_,Nom,_) --> pron_int(_-_,ql),                   % Que escritores portugueses ...
+                                       nom(N-G,Adj,GrAdj,Nom).
+% sint_nom_int(_-_,_,_,_,_,_,_) --> pron_int(_-_,ql).                           % Quem\Quando ...
+% sint_nom_int(N-G,Adj1,Adj2,GrAdj1,GrAdj2,Nom1,Nom2) --> pron_int(N-G,qn),     % Quantos livros de escritores portugueses ...
+                                              substantivo(N-G,Nom1),
+                                              com_deter(N-G,Adj2,GrAdj2,Nom2).
+% sint_nom_int(N-G,Adj,_,GrAdj,_,Nom,_,_) --> pron_int(N-G,qn),                 % Quantos livros ...
+                                               nom(N-G,Adj,GrAdj,Nom).
+% sint_verb(N-G,Nom, Ver, Temp) --> verbo(N, Ver, Temp), nom(N-G,Nom).          % encontram
 
-%                          |------ SINTAGMA NOMINAL INTER -----|    |---------------------------- SINTAGMA VERBAL -------------------------|
+% query -->   % "Quais\Que\Quem\Quantos\Quantas" .... ?
+% query -->   % "O\..." ... .
 
-%                                                                                                |----------- SINTAGMA  NOMINAL -----------|
-
-% [Pronome Interrogativo + ([(Determinante) + Nome + (Pronome)])] + [Verbo + (Preposicao, Nome | [(Determinante) + Nome + ])]
+% -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 % Quem escreveu 'Os Maias'?
 % Quem são os escritores africanos?
-% Quais são os escritores africanos? E portugueses?
+% Quais são os escritores africanos? [E portugueses?]
+% Quais os livros de escritores portugueses escritos após 1823?
 % Quais os escritores portugueses e espanhóis do século XV?
-% Quantos livros de escritores europeus existem após o século XVI? E qual é o mais recente?
+% Quais os livros publicados no século XV?
+% Quantos livros de escritores europeus existem após o século XVI? [E qual é o mais recente?]
 % Quantos livros escreveu Camilo Castelo Branco?
-
-frase_i(Q,A,At,O) --> sintagma_inter(N-_,At,Q), sintagma_verbal(N,A,_,O).
-sintagma_interrogativo(N-_,At,Q) --> pronome_interrogativo(N-_, Q), sintagma_nominal_interrogativo(N-_, At).
-sintagma_interrogativo(N-_,_,Q) --> pronome_interrogativo(N-_, Q).
-sintagma_nominal_interrogativo(N-G, At) --> determinante(N-G), nome(N-G,At), pronome(_).
-sintagma_nominal_interrogativo(N-G, At) --> nome(N-G,At).
-sintagma_nominal(N,S) --> determinante(N-G), nome(N-G,S).
-sintagma_nominal(N,S) --> nome(N-_,S).
-sintagma_verbal(N,gostar,S,O) --> verbo(N, gostar,S,O), preposicao(N1-G1), nome(N1-G1,O).
-sintagma_verbal(N,A,S,O) --> verbo(N,A,S,O), sintagma_nominal(_,O).
 */
