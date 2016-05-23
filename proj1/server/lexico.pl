@@ -83,27 +83,27 @@ adjetivo(s-f, antigo) --> [antiga].
 adjetivo(p-m, antigo) --> [antigos].
 adjetivo(p-f, antigo) --> [antigas].
 
-adjetivo(_) -> [mais].
-adjetivo(_) -> [menos].
+adjetivo(_) --> [mais].
+adjetivo(_) --> [menos].
 
-adverbio(inclusao) -> [ainda];
-adverbio(inclusao) -> [ate];
-adverbio(inclusao) -> [tambem];
+adverbio(inclusao) --> [ainda].
+adverbio(inclusao) --> [ate].
+adverbio(inclusao) --> [tambem].
 
-adverbio(s-m, algum) -> [algum];
-adverbio(s-f, algum) -> [alguma];
-adverbio(p-m, algum) -> [alguns];
-adverbio(p-f, algum) -> [algumas];
+adverbio(s-m, algum) --> [algum].
+adverbio(s-f, algum) --> [alguma].
+adverbio(p-m, algum) --> [alguns].
+adverbio(p-f, algum) --> [algumas].
 
-adverbio(s-m, muito) -> [muito];
-adverbio(s-f, muito) -> [muita];
-adverbio(p-m, muito) -> [muitos];
-adverbio(p-f, muito) -> [muitas];
+adverbio(s-m, muito) --> [muito].
+adverbio(s-f, muito) --> [muita].
+adverbio(p-m, muito) --> [muitos].
+adverbio(p-f, muito) --> [muitas].
 
-adverbio(s-m, pouco) -> [pouco];
-adverbio(s-f, pouco) -> [pouca];
-adverbio(p-m, pouco) -> [poucos];
-adverbio(p-f, pouco) -> [poucas];
+adverbio(s-m, pouco) --> [pouco].
+adverbio(s-f, pouco) --> [pouca].
+adverbio(p-m, pouco) --> [poucos].
+adverbio(p-f, pouco) --> [poucas].
 
 %---------------------------------------------------------%
 % Substantivos: Autores                                   %
@@ -149,32 +149,32 @@ substantivo(s-_, morte) --> [morte].
 substantivo(s-_, morte) --> [falecimento].
 substantivo(s-_, nascimento) --> [nascimento].
 
-adverbio(s, antes) -> [antes];
-adverbio(s, depois) -> [depois];
+adverbio(s, antes) --> [antes].
+adverbio(s, depois) --> [depois].
 
-adverbio(s, anterior) -> [anterior];
-adverbio(p, anterior) -> [anteriores];
+adverbio(s, anterior) --> [anterior].
+adverbio(p, anterior) --> [anteriores].
 
-adverbio(s, posterior) -> [posterior];
-adverbio(p, posterior) -> [posteriores];
-adverbio(s, posterior) -> [após];
+adverbio(s, posterior) --> [posterior].
+adverbio(p, posterior) --> [posteriores].
+adverbio(s, posterior) --> [após].
 
-substantivo(s-m, ano) --> [ano];
-substantivo(p-m, ano) --> [anos];
+substantivo(s-m, ano) --> [ano].
+substantivo(p-m, ano) --> [anos].
 
-substantivo(s-m, seculo) --> [seculo];
-substantivo(p-m, seculo) --> [seculos];
+substantivo(s-m, seculo) --> [seculo].
+substantivo(p-m, seculo) --> [seculos].
 
-substantivo(s-m, idioma) --> [idioma];
-substantivo(p-m, idioma) --> [idiomas];
-substantivo(s-f, idioma) --> [lingua];
-substantivo(p-f, idioma) --> [linguas];
+substantivo(s-m, idioma) --> [idioma].
+substantivo(p-m, idioma) --> [idiomas].
+substantivo(s-f, idioma) --> [lingua].
+substantivo(p-f, idioma) --> [linguas].
 
-substantivo(s-f, nacionalidade) --> [nacionalidade];
-substantivo(p-f, nacionalidade) --> [nacionalidades];
+substantivo(s-f, nacionalidade) --> [nacionalidade].
+substantivo(p-f, nacionalidade) --> [nacionalidades].
 
-substantivo(s-f, idade) --> [idade];
-substantivo(p-f, idade) --> [idades];
+substantivo(s-f, idade) --> [idade].
+substantivo(p-f, idade) --> [idades].
 
 %---------------------------------------------------------%
 % Substantivos: Géneros                                   %
@@ -290,7 +290,7 @@ substantivo_nacionalidade(usa, p-f) --> [americanas].
 %---------------------------------------------------------%
 
 substantivo_idioma(alemao, s-m) --> [alemao].
-substantivo_idioma(alemao, s-f) --> [alema]
+substantivo_idioma(alemao, s-f) --> [alemã].
 
 substantivo_idioma(espanhol, s-m) --> [espahol].
 substantivo_idioma(espanhol, s-f) --> [espanhola].
