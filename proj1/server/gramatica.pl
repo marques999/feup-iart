@@ -4,32 +4,48 @@
 %                      PILHA DE TESTES                    %
 %---------------------------------------------------------%
 
-% atributo(N-G, Adj, GrAdj, Nac, Cont, [mais,recente], []).
-% atributo(N-G, Adj, GrAdj, Nac, Cont, [antigo], []).
-% atributo(N-G, Adj, GrAdj, Nac, Cont, [portugueses], []).
-% atributo(N-G, Adj, GrAdj, Nac, Cont, [sul-americano], []).
-% --
-% atributo(N-G, Adj, GrAdj, Nac, Cont, [mais, bonito], []).
-% atributo(N-G, Adj, GrAdj, Nac, Cont, [o, mais, bonito], []).
-% atributo(N-G, Adj, GrAdj, Nac, Cont, [marciano], []).
+% cont(N-G,Nac,[e,portugueses,e,ingleses],[]).
 
-% nom(N-G,Adj,GrAdj,Nom, Nac, Cont, Gen, [livros],[]).
-% nom(N-G,Adj,GrAdj,Nom, Nac, Cont, Gen, [escritores, europeus],[]).
-% nom(N-G,Adj,GrAdj,Nom, Nac, Cont, Gen, [autor, portugues],[]).
-% nom(N-G,Adj,GrAdj,Nom, Nac, Cont, Gen, [dramas, mais, recentes],[]).
-% --
-% nom(N-G,Adj,GrAdj,Nom, Nac, Cont, Gen, [as, comedias, mais, antigas],[]).
+% atributo(N-G, Adj, Nac, Cont, [mais,recente], []).
+% atributo(N-G, Adj, Nac, Cont, [antigo], []).
+% atributo(N-G, Adj, Nac, Cont, [portugueses], []).
 
-% com_deter(N-G,Adj,GrAdj,Nom,Nac,Cont,Gen,[de,autores,ingleses],[]).
-% com_deter(N-G,Adj,GrAdj,Nom,Nac,Cont,Gen,[das,comedias,mais,antigas],[]).
-% --
-% com_deter(N-G,Adj,GrAdj,Nom,Nac,Cont,Gen,[da,comedias,mais,antigas],[]).
+% atributo(N-G, Adj, Nac, Cont, [portugueses, e, americanos], []).
+% atributo(N-G, Adj, Nac, Cont, [europeus, e, africanos], []).
 
-% sint_nom_int(N-G,Adj,GrAdj,Nom,Nac,Cont,Gen,[quais, as, escritoras, que],[]).
-% sint_nom_int(N-G,Adj,GrAdj,Nom,Nac,Cont,Gen,[quais, os, escritores, portugueses, que],[]).
-% sint_nom_int(N-G,Adj,GrAdj,Nom,Nac,Cont,Gen,[quais, as, comedias, mais, recentes, de, escritoras, inglesas, que],[]).
+% atributo(N-G, Adj, Nac, Cont, [sul-americano], []).
 % --
-% sint_nom_int(N-G,Adj,GrAdj,Nom,Nac,Cont,Gen,[quando, as, comedias, mais, recentes, de, escritoras, inglesas, que],[]).
+% atributo(N-G, Adj, Nac, Cont, [mais, bonito], []).
+% atributo(N-G, Adj, Nac, Cont, [o, mais, bonito], []).
+% atributo(N-G, Adj, Nac, Cont, [marciano], []).
+
+% nom(N-G,Adj,Nom, Nac, Cont, Gen, [livros],[]).
+% nom(N-G,Adj,Nom, Nac, Cont, Gen, [livros,mais,recentes],[]).
+% nom(N-G,Adj,Nom, Nac, Cont, Gen, [escritores, europeus],[]).
+% nom(N-G,Adj,Nom, Nac, Cont, Gen, [autor, portugues],[]).
+% nom(N-G,Adj,Nom, Nac, Cont, Gen, [dramas, mais, recentes],[]).
+% --
+% nom(N-G,Adj,Nom, Nac, Cont, Gen, [as, comedias, mais, antigas],[]).
+
+% com_deter(N-G,Adj,Nom,Nac,Cont,Gen,[de,autores,ingleses],[]).
+% com_deter(N-G,Adj,Nom,Nac,Cont,Gen,[das,comedias,mais,antigas],[]).
+% --
+% com_deter(N-G,Adj,Nom,Nac,Cont,Gen,[da,comedias,mais,antigas],[]).
+
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [quais, as, escritoras, que],[]).
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [quais, os, escritores, portugueses, que],[]).
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [quais, as, comedias, mais, recentes, das, escritoras, inglesas, que],[]).
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [quais, os, livros, mais, recentes, das, escritoras, inglesas, que],[]).
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [que,escritoras,inglesas],[]).
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [que, dramas, de, escritoras, portuguesas],[]).
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [quantas, comedias],[]).
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [quando],[]).
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [quem],[]).
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [quantos, livros, de, escritores, portugueses],[]).
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [que,livros,mais,antigas],[]).
+% --
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [quando, as, comedias, mais, recentes, de, escritoras, inglesas, que],[]).
+% sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen, [quais, os, escritores, mais, recentes, das, escritoras, inglesas, que],[]).
 
 clear :- write('\33\[2J').
 
@@ -42,61 +58,56 @@ clear :- write('\33\[2J').
 %?- ensure_loaded('query.pl').
 %?- ensure_loaded('server.pl').
 
-atributo(N-G, Adj, GrAdj, _, _) --> adjetivo_super(GrAdj), adjetivo(N-G, Adj).                    % ... mais recente ...
-atributo(N-G, Adj, _, _, _) --> adjetivo(N-G, Adj).
-                                                                                                  % ... antigo ...
-atributo(N-G, _, _,Nac, _) --> subst_nac(Nac,N-G).                                                % ... portugueses ....
-atributo(N-G, _, _, _, Cont) --> subst_cont(N-G,Cont).                                            % ... sul-americano ...
+contx_cont(N-G,[H|T]) --> [e], subst_cont(N-G,H), (contx_cont(N-G,T);[]).                                     % ... e europeus e africanos ...
+contx_cont(_-_,[]) --> [].
 
-nom(N-G,Adj,GrAdj,Nom, Nac, Cont, _) --> subst(N-G,Nom), atributo(N-G, Adj, GrAdj, Nac, Cont).        % ... escritores europeus ...
-nom(N-G,Adj,GrAdj,_, Nac, Cont, Gen) --> subst_gen(Gen,N-G), atributo(N-G, Adj, GrAdj, Nac, Cont).    % ... livros mais recentes ...
-nom(N-G,_,_,Nom,_,_,_) --> subst(N-G,Nom).                                                            % ... escritores
-nom(N-G,_,_,_,_,_,Gen) --> subst_gen(Gen,N-G).                                                        % ... livros ...
+contx_nac(N-G,[H|T]) --> [e], subst_nac(H,N-G), (contx_nac(N-G,T);[]).                                        % ... e portugueses e franceses ...
+contx_nac(_-_,[]) --> [].
 
-com_deter(N-G,Adj,GrAdj,Nom,Nac,Cont,Gen) --> preposicao(N-G),                                        % ... dos autores ingleses ...
-                                            nom(N-G, Adj, GrAdj, Nom, Nac, Cont, Gen).
+contx_gen(N-_,[H|T]) --> [e], subst_gen(H,N-_), (contx_gen(N-_,T);[]).                                        % ... e dramas e romances ...
+contx_gen(_-_,[]) --> [].
 
-sint_nom_int(N-G,Adj,GrAdj,Nom,Nac,Cont,Gen) --> [quais],              % "Quais" os escritores [portugueses] que ...
+atributo(N-G, AdjComp, _, _) --> adjetivo_super(GrAdj), adjetivo(N-G, Adj), {adj_comp(GrAdj,Adj,AdjComp)}.    % ... mais recente ...
+atributo(N-G, Adj, _, _) --> adjetivo(N-G, Adj).                                                              % ... antigo ...
+atributo(N-G, _, [Nac|T], _) --> subst_nac(Nac,N-G), (contx_nac(N-G,T);[]).                                   % ... portugueses ....
+atributo(N-G, _, _, [Cont|T]) --> subst_cont(N-G,Cont), (contx_cont(N-G,T);[]).                               % ... sul-americano ...
+
+nom(N-G,Adj,Nom, Nac, Cont, _) --> subst(N-G,Nom), atributo(N-G, Adj, Nac, Cont).                             % ... escritores europeus ...
+nom(N-G,Adj,_, Nac, Cont, Gen) --> subst_gen(Gen,N-G), atributo(N-G, Adj, Nac, Cont).                         % ... livros mais recentes ...
+nom(N-G,_,Nom,_,_,_) --> subst(N-G,Nom).                                                                      % ... escritores ...
+nom(N-G,_,_,_,_,[Gen|T]) --> subst_gen(Gen,N-G), (contx_gen(N-G,T);[]).                                       % ... livros ...
+
+com_deter(N-G,Adj,Nom,Nac,Cont,Gen) --> preposicao(N-G),                                                      % ... dos autores ingleses ...
+                                            nom(N-G, Adj, Nom, Nac, Cont, Gen).
+
+sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen) --> [quais],                                                           % "Quais" os escritores [portugueses] que ...
                                                    art_def(N-G),
-                                                   nom(N-G,Adj,GrAdj,Nom, Nac,Cont, Gen),
+                                                   nom(N-G,Adj,Nom, Nac,Cont, Gen),
                                                    pron_rel(_-_).
 
-sint_nom_int(N-G,Adj,GrAdj,Nom,Nac,Cont,Gen) --> [quais],              % "Quais" as comédias mais recentes de escritoras inglesas que ...
+sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen) --> [quais],                                                           % "Quais" as comédias mais recentes de escritoras inglesas que ...
                                                   art_def(N-G),
-                                                  nom(N-G,Adj,GrAdj,Nom, Nac,Cont,Gen),
-                                                  com_deter(N-G,Adj,GrAdj,Nom,Nac,Cont,Gen),
+                                                  nom(N-G,Adj,Nom, _,_,_),
+                                                  com_deter(_-_,Adj,Nom,Nac,Cont,Gen),
                                                   pron_rel(_-_).
 
-/*
-% ESTA SECÇÃO AQUI NÃO ESTÁ COMPLETA FALTA ACRESCENTAR 'Nac' E 'Cont' NAS CHAMADAS NECESSÁRIAS!!!
+sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen) --> [que],                                                             % "Que" escritoras inglesas ...
+                                           nom(N-G,Adj,Nom,Nac,Cont,Gen).
 
-% sint_nom_int(N-G,Adj1,Adj2,GrAdj1,GrAdj2,Nom1,Nom2) --> pron_int(N-_,ql),     % "Quais" os livros dos escritores portugueses que ...
-                                              art_def(N-G),
-                                              nom(N-G,Adj1,GrAdj1,Nom1),
-                                              com_deter(N-G,Adj2,GrAdj2,Nom2),
-                                              pronome_relativo(_-_).
-% sint_nom_int(N-G,Adj,_,GrAdj,_,Nom,_) --> pron_int(_-_,ql),                        % "Que" escritores portugueses ...
-                                       nom(N-G,Adj,GrAdj,Nom).
-% sint_nom_int(_-_,_,_,_,_,_,_) --> pron_int(_-_,ql).                           % "Quem"\"Quando" ...
-% sint_nom_int(N-G,Adj1,Adj2,GrAdj1,GrAdj2,Nom1,Nom2) --> pron_int(N-G,qn),     % "Quantos" livros de escritores portugueses ...
-                                              subst(N-G,Nom1),
-                                              com_deter(N-G,Adj2,GrAdj2,Nom2).
-% sint_nom_int(N-G,Adj,_,GrAdj,_,Nom,_,_) --> pron_int(N-G,qn),                 % "Quantos" livros ...
-                                               nom(N-G,Adj,GrAdj,Nom).
-% sint_verb(N-G,Nom, Ver, Temp) --> verbo(N, Ver, Temp), nom(N-G,Nom).          % encontram
+sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen) --> [que],                                                             % "Que" dramas de escritores portugueses ...
+                                           nom(N-G,Adj,Nom,_,_,_),
+                                           com_deter(_-_,Adj,Nom,Nac,Cont,Gen).
 
+sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen) --> pron_int(N-G,qn),                                                  % "Quantas" comédias ...
+                                            nom(N-G,Adj,Nom,Nac,Cont,Gen).
 
-% query -->   % "Quais" .... ?
-% query -->   % "O" ... .
+sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen) --> pron_int(N-G,qn),                                                  % "Quantos" livros de escritores portugueses ...
+                                           nom(N-G,Adj,Nom,_,_,_),
+                                           com_deter(_-_,Adj,Nom,Nac,Cont,Gen).
 
-% -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+sint_nom_int(_-_,_,_,_,_,_) --> [quem].                                                                       % "Quem" ...
+sint_nom_int(_-_,_,_,_,_,_) --> [quando].                                                                     % "Quando" ...
 
-% Quem escreveu 'Os Maias'?
-% Quem são os escritores africanos?
-% Quais são os escritores africanos? [E portugueses?]
-% Quais os livros de escritores portugueses escritos após 1823?
-% Quais os escritores portugueses e espanhóis do século XV?
-% Quais os livros publicados no século XV?
-% Quantos livros de escritores europeus existem após o século XVI? [E qual é o mais recente?]
-% Quantos livros escreveu Camilo Castelo Branco?
-*/
+% sint_verb(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,[escreveu, o, livro],[]).
+
+sint_verb(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem) --> verbo(N,Act,Tem),(art_def(N-G);[]), nom(N-G,Adj,Nom,Nac,Cont,Gen).
