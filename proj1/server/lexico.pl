@@ -66,11 +66,6 @@ pronome_pessoal(p-f) --> [suas].
 % Pronomes Interrogativos                                 %
 %---------------------------------------------------------%
 
-pron_int(s-_, ql) --> [quais].
-pron_int(p-_, ql) --> [quais].
-pron_int(_-_, ql) --> [que].
-pron_int(_-_, ql) --> [quem].
-pron_int(_-_, ql) --> [quando].
 pron_int(p-m, qn) --> [quantos].
 pron_int(p-f, qn) --> [quantas].
 
@@ -87,7 +82,10 @@ adjetivo(p-f, antigo) --> [antigas].
 adjetivo_super(mais) --> [mais].
 adjetivo_super(menos) --> [menos].
 
+adj_comp(mais, recente, maisrecente).
+adj_comp(menos, recente, menosrecente).
 adj_comp(mais,antigo, maisantigo).
+adj_comp(menos,atigo, menosantigo).
 adj_comp(_,Adj,Adj).
 
 adverbio(inclusao) --> [ainda].
@@ -110,7 +108,7 @@ adverbio(p-m, pouco) --> [poucos].
 adverbio(p-f, pouco) --> [poucas].
 
 %---------------------------------------------------------%
-% Substantivos: Autores                                   %
+% antivos: Autores                                   %
 %---------------------------------------------------------%
 
 subst(s-m, autor) --> [autor].
@@ -140,14 +138,14 @@ subst(p-m, colecao) --> [volumes].
 % Substantivos: Pseudónimos                               %
 %---------------------------------------------------------%
 
-% subst(s-_, pseudonimo) --> [criptónimos].
-% subst(p-_, pseudonimo) --> [criptónimoss].
-% subst(s-_, pseudonimo) --> [heterónimo].
-% subst(p-_, pseudonimo) --> [heterónimos].
-% subst(s-_, pseudonimo) --> [ortónimo].
-% subst(p-_, pseudonimo) --> [ortónimos].
-% subst(s-_, pseudonimo) --> [pseudónimo].
-% subst(p-_, pseudonimo) --> [pseudónimos].
+subst(s-_, pseudonimo) --> [criptonimos].
+subst(p-_, pseudonimo) --> [criptonimoss].
+subst(s-_, pseudonimo) --> [heteronimo].
+subst(p-_, pseudonimo) --> [heteronimos].
+subst(s-_, pseudonimo) --> [ortonimo].
+subst(p-_, pseudonimo) --> [ortonimos].
+subst(s-_, pseudonimo) --> [pseudonimo].
+subst(p-_, pseudonimo) --> [pseudonimos].
 
 subst(s-_, morte) --> [morte].
 subst(s-_, morte) --> [falecimento].
@@ -176,17 +174,17 @@ subst(s-f, nacionalidade) --> [nacionalidade].
 subst(p-f, nacionalidade) --> [nacionalidades].
 
 subst(s-f, idade) --> [idade].
-substantivo(p-f, idade) --> [idades].
+subst(p-f, idade) --> [idades].
 
 %---------------------------------------------------------%
 % Substantivos: Géneros                                   %
 %---------------------------------------------------------%
 
-subst_gen(_,s-m) --> [livro].
-subst_gen(_,p-m) --> [livros].
+subst_gen(livro,s-m) --> [livro].
+subst_gen(livro,p-m) --> [livros].
 
-subst_gen(_,s-f) --> [obra].
-subst_gen(_,p-f) --> [obras].
+subst_gen(obra,s-f) --> [obra].
+subst_gen(obra,p-f) --> [obras].
 
 subst_gen(comedia, s-f) --> [comedia].
 subst_gen(comedia, p-f) --> [comedias].
@@ -291,23 +289,23 @@ subst_nac(usa, p-f) --> [americanas].
 % Substantivos: Idiomas                                   %
 %---------------------------------------------------------%
 
-substantivo_idioma(alemao, s-m) --> [alemao].
-substantivo_idioma(alemao, s-f) --> [alema].
+subst_idi(alemao, s-m) --> [alemao].
+subst_idi(alemao, s-f) --> [alema].
 
-substantivo_idioma(espanhol, s-m) --> [espahol].
-substantivo_idioma(espanhol, s-f) --> [espanhola].
+subst_idi(espanhol, s-m) --> [espahol].
+subst_idi(espanhol, s-f) --> [espanhola].
 
-substantivo_idioma(frances, s-m) --> [frances].
-substantivo_idioma(frances, s-f) --> [francesa].
+subst_idi(frances, s-m) --> [frances].
+subst_idi(frances, s-f) --> [francesa].
 
-substantivo_idioma(ingles, s-m) --> [ingles].
-substantivo_idioma(ingles, s-f) --> [inglesa].
+subst_idi(ingles, s-m) --> [ingles].
+subst_idi(ingles, s-f) --> [inglesa].
 
-substantivo_idioma(japones, s-m) --> [japones].
-substantivo_idioma(japones, s-f) --> [japonesa].
+subst_idi(japones, s-m) --> [japones].
+subst_idi(japones, s-f) --> [japonesa].
 
-substantivo_idioma(russo, s-m) --> [russo].
-substantivo_idioma(russo, s-f) --> [russa].
+subst_idi(russo, s-m) --> [russo].
+subst_idi(russo, s-f) --> [russa].
 
 %---------------------------------------------------------%
 % Substantivos: Continentes                               %
