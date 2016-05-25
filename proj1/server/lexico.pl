@@ -1,5 +1,7 @@
 % consult(['~/Desktop/feup-iart-master/proj1/server/lexico.pl']).
 
+seculo('XX', 20).
+
 numero_ordinal(s-m, 1) --> [primeiro].
 numero_ordinal(s-f, 1) --> [primeira].
 numero_ordinal(p-m, 1) --> [primeiros].
@@ -151,13 +153,8 @@ subst(s-_, morte) --> [morte].
 subst(s-_, morte) --> [falecimento].
 subst(s-_, nascimento) --> [nascimento].
 
-adverbio(s, antes) --> [antes].
-adverbio(s, depois) --> [depois].
-adverbio(s, anterior) --> [anterior].
-adverbio(p, anterior) --> [anteriores].
-adverbio(s, posterior) --> [posterior].
-adverbio(p, posterior) --> [posteriores].
-% adverbio(s, posterior) --> [após].
+adverbio(antes) --> [antes].
+adverbio(depois) --> [depois].
 
 subst(s-m, ano) --> [ano].
 subst(p-m, ano) --> [anos].
@@ -343,8 +340,8 @@ subst_cont(p-f, america_sul) --> [sul-americanas].
 % verbo(s, ser, presente) --> [é].
 % verbo(p, ser, presente) --> [são].
 
-verbo(s, encontrar, presente) --> [encontra].
-verbo(p, encontrar, presente) --> [encontram].
+verbo(s, viver, presente) --> [vive].
+verbo(p, viver, presente) --> [vivem].
 
 verbo(s, estar, presente) --> [esta].
 verbo(p, estar, presente) --> [estao].
@@ -361,18 +358,10 @@ verbo(s, ser, passado) --> [eram].
 verbo(p, ser, passado) --> [foi].
 verbo(s, ser, passado) --> [foram].
 
-verbo(s, estar, passado) --> [estava].
-verbo(p, estar, passado) --> [estavam].
-verbo(s, estar, passado) --> [esteve].
-verbo(p, estar, passado) --> [estiveram].
-
-verbo(s, encontrar, passado) --> [encontrava].
-verbo(p, encontrar, passado) --> [encontravam].
-
-verbo(s, existir, passado) --> [existia].
-verbo(s, existir, passado) --> [existiu].
-verbo(p, existir, passado) --> [existiam].
-verbo(p, existir, passado) --> [existiram].
+verbo(s, viver, passado) --> [viveu].
+verbo(p, viver, passado) --> [viveram].
+verbo(s, viver, passado) --> [vivia].
+verbo(p, viver, passado) --> [viviam].
 
 verbo(s, escrever, passado) --> [escreveu].
 verbo(p, escrever, passado) --> [escreveram].
@@ -395,7 +384,7 @@ verbo(p, nascer, passado) --> [nasciam].
 % Verbos: Particípio Passado                              %
 %---------------------------------------------------------%
 
-verbo_passiva(s-m, escrever) --> [escrito].
+ssiva(s-m, escrever) --> [escrito].
 verbo_passiva(s-f, escrever) --> [escrita].
 verbo_passiva(p-m, escrever) --> [escritos].
 verbo_passiva(p-f, escrever) --> [escritas].
@@ -419,3 +408,13 @@ verbo_passiva(s-m, morrer) --> [falecido].
 verbo_passiva(s-f, morrer) --> [falecida].
 verbo_passiva(p-m, morrer) --> [falecidos].
 verbo_passiva(p-f, morrer) --> [falecidas].
+
+verbo_passiva(s-m, viver) --> [vivo].
+verbo_passiva(p-m, viver) --> [vivos].
+verbo_passiva(s-f, viver) --> [viva].
+verbo_passiva(p-f, viver) --> [vivas].
+
+verbo_passiva(s-f, morrer) --> [morta].
+verbo_passiva(p-f, morrer) --> [mortas].
+verbo_passiva(s-m, morrer) --> [morto].
+verbo_passiva(p-m, morrer) --> [mortos].
