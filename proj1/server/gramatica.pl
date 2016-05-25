@@ -1,5 +1,12 @@
 % consult(['~/Desktop/feup-iart-master/proj1/server/gramatica.pl']).
 
+
+
+
+nascer_autor([seculo=SecNum]) --> [no], [seculo], [Sec], {seculo(Sec, SecNum)}.
+nascer_autor([ano=Ano]) --> [no], [ano], [Ano], {integer(Ano)}.
+
+
 %---------------------------------------------------------%
 %                      PILHA DE TESTES                    %
 %---------------------------------------------------------%
@@ -108,71 +115,89 @@ sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen) --> pron_int(N-G,qn),                    
 sint_nom_int(_-_,_,_,_,_,_) --> [quem].                                                                       % "Quem" ...
 sint_nom_int(_-_,_,_,_,_,_) --> [quando].                                                                     % "Quando" ...
 
-% ESCREVER (ATIVA)
+                                                  %---------------------------------------------------------%
+                                                  %                   FRASES INTERROGATIVAS                 %
+                                                  %---------------------------------------------------------%
+
+                                                  %---------------------------------------------------------%
+                                                  %                          ESCREVER                       %
+                                                  %---------------------------------------------------------%
+
 % frase_int_autor(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Titulo,[quem, escreveu, 'A Morgadinha dos Canaviais',?],[]).
 % frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[que, escritor, escreveu, 'A Morgadinha dos Canaviais',?],[]).
 % frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[que, comedias, e, dramas, escreveu, 'Camilo','Castelo Branco',?],[]).
+% frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[que, comedias, e, dramas, foram, escritas, por,'Camilo',?],[]).
+% frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[que, livros, foram, escritos, por, 'Camilo','Castelo Branco',?],[]).
+% frase_int_livro_ano(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Titulo,Ano,[quando, foi, escrita, 'A Morgadinha dos Canaviais',?],[]).
 
+frase_int_livro_ano(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, Titulo, Ano) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(_,ser,Temp), verbo_passiva(_-_,escrever), [Titulo], {livro(_, Titulo, _, Ano,_,_)}, [?].
 frase_int_autor(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp,Titulo) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(N,escrever,Temp), [Titulo], {livro(_,Titulo,_,_,_,_)}, [?].
 frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, Prim, _) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,escrever,Temp), [Prim], {autor(_, Prim, _, _, _, _, _, _)}, [?].
 frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp,_, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,escrever,Temp), [Ultim], {autor(_,_, Ultim, _, _, _, _, _)}, [?].
 frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp,Prim, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,escrever,Temp), [Prim], [Ultim], {autor(_, Prim, Ultim, _, _, _, _, _)}, [?].
-
-% ESCREVER (PASSIVA)
-% frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[que, comedias, e, dramas, foram, escritas, por,'Camilo',?],[]).
-% frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[que, livros, foram, escritos, por, 'Camilo','Castelo Branco',?],[]).
 frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, Prim, _) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(_,ser,Temp), verbo_passiva(_-_,escrever), [por], [Prim], {autor(_, Prim, _, _, _, _, _, _)}, [?].
 frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, _, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(_,ser,Temp), verbo_passiva(_-_,escrever), [por], [Ultim], {autor(_, _, Ultim, _, _, _, _, _)}, [?].
 frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, Prim, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(_,ser,Temp), verbo_passiva(_-_,escrever), [por], [Prim], [Ultim], {autor(_, Prim, Ultim, _, _, _, _, _)}, [?].
 
-% VIVER (ATIVA)
-% frase_int_viver(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, no, seculo, 'XX', ?],[]).
-% frase_int_viver(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, antes, do, seculo, 'XX', ?],[]).
-% frase_int_viver(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, depois, do, seculo, 'XX', ?],[]).
-frase_int_viver(N-G,Adj,_,Nac,Cont,Gen,viver,Temp,SecNum,_) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,viver,Temp), [no], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
-frase_int_viver(N-G,Adj,_,Nac,Cont,Gen,viver,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,viver,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
-frase_int_viver(N-G,Adj,_,Nac,Cont,Gen,viver,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,viver,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
+                                                  %---------------------------------------------------------%
+                                                  %                          VIVER                          %
+                                                  %---------------------------------------------------------%
 
-% VIVER (PASSIVA)
-% frase_int_viver(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,[quais, os, escritores, que, estao, vivos,?],[]).
-frase_int_viver(N-G,Adj,Nom,Nac,Cont,Gen,viver,Temp,_) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(N,estar,Temp), verbo_passiva(N-G, viver), [?].
+% frase_int_viver_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[que, escritores, viveram, no, seculo, 'XX', ?],[]).
+% frase_int_viver_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, no, seculo, 'XX', ?],[]).
+% frase_int_viver_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, antes, do, seculo, 'XX', ?],[]).
+% frase_int_viver_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, depois, do, seculo, 'XX', ?],[]).
+% frase_int_vivos(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,[que, escritores, estao, vivos, ?],[]).
+% frase_int_vivos(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,[quais, os, escritores, que, estao, vivos,?],[]).
 
-% NASCER (ATIVA)
-% frase_int_nascer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, nasceu, 'Camilo',?],[]).
-% frase_int_nascer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, nasceu, 'Castelo Branco',?],[]).
-% frase_int_nascer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, nasceu, 'Camilo', 'Castelo Branco',?],[]).
+frase_int_vivos(N-G,Adj,Nom,Nac,Cont,Gen,viver,Temp,SecNum) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(N,estar,Temp), verbo_passiva(N-G, viver), [?].
 
-frase_int_nascer(N-G,Adj,Nom,Nac,Cont,Gen,nascer,Temp,Prim, _) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,nascer,Temp), [Prim], {autor(_, Prim, _, _, _, _, _, _)}, [?].
-frase_int_nascer(N-G,Adj,Nom,Nac,Cont,Gen,nascer,Temp,_, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,nascer,Temp), [Ultim], {autor(_, _, Ultim, _, _, _, _, _)}, [?].
-frase_int_nascer(N-G,Adj,Nom,Nac,Cont,Gen,nascer,Temp,Prim, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,nascer,Temp), [Prim], [Ultim], {autor(_, Prim, Ultim, _, _, _, _, _)}, [?].
+frase_int_viver_sec(N-G,Adj,_,Nac,Cont,Gen,viver,Temp,SecNum,_) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,viver,Temp), [no], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
+frase_int_viver_sec(N-G,Adj,_,Nac,Cont,Gen,viver,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,viver,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
+frase_int_viver_sec(N-G,Adj,_,Nac,Cont,Gen,viver,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,viver,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
+frase_int_vivos(N-G,Adj,Nom,Nac,Cont,Gen,viver,Temp,_) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(N,estar,Temp), verbo_passiva(N-G, viver), [?].
 
 
-% frase_int_nascer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, no, seculo, 'XX', ?],[]).
-% frase_int_nascer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, antes, do, seculo, 'XX', ?],[]).
-% frase_int_nascer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, depois, do, seculo, 'XX', ?],[]).
-frase_int_nascer(N-G,Adj,_,Nac,Cont,Gen,viver,Temp,SecNum,_) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,viver,Temp), [no], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
-frase_int_nascer(N-G,Adj,_,Nac,Cont,Gen,viver,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,viver,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
-frase_int_nascer(N-G,Adj,_,Nac,Cont,Gen,viver,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,viver,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
+                                                  %---------------------------------------------------------%
+                                                  %                          NASCER                         %
+                                                  %---------------------------------------------------------%
 
-nascer_autor([seculo=SecNum]) --> [no], [seculo], [Sec], {seculo(Sec, SecNum)}.
-nascer_autor([ano=Ano]) --> [no], [ano], [Ano], {integer(Ano)}.
+% frase_int_nascer_autor(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, nasceu, 'Camilo',?],[]).
+% frase_int_nascer_autor(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, nasceu, 'Castelo Branco',?],[]).
+% frase_int_nascer_autor(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, nasceu, 'Camilo', 'Castelo Branco',?],[]).
+% frase_int_nascer_ano(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,Ano,[quem, nasceu, em, 1917,?],[]).
+% frase_int_nascer_ano(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,Ano,[que, escritores, nasceram, em, 1917,?],[]).
+% frase_int_nascer_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, nasceram, no, seculo, 'XX', ?],[]).
+% frase_int_nascer_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, nasceram, antes, do, seculo, 'XX', ?],[]).
+% frase_int_nascer_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, nasceram, depois, do, seculo, 'XX', ?],[]).
 
+frase_int_nascer_autor(N-G,Adj,Nom,Nac,Cont,Gen,nascer,Temp,Prim, _) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,nascer,Temp), [Prim], {autor(_, Prim, _, _, _, _, _, _)}, [?].
+frase_int_nascer_autor(N-G,Adj,Nom,Nac,Cont,Gen,nascer,Temp,_, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,nascer,Temp), [Ultim], {autor(_, _, Ultim, _, _, _, _, _)}, [?].
+frase_int_nascer_autor(N-G,Adj,Nom,Nac,Cont,Gen,nascer,Temp,Prim, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,nascer,Temp), [Prim], [Ultim], {autor(_, Prim, Ultim, _, _, _, _, _)}, [?].
+frase_int_nascer_ano(N-G,Adj,Nom,Nac,Cont,Gen,nascer,Temp,_,_,Ano) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(N,nascer,Temp), [em], [Ano], {integer(Ano)},[?].
+frase_int_nascer_sec(N-G,Adj,_,Nac,Cont,Gen,nascer,Temp,SecNum,_) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,nascer,Temp), [no], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
+frase_int_nascer_sec(N-G,Adj,_,Nac,Cont,Gen,nascer,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,nascer,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
+frase_int_nascer_sec(N-G,Adj,_,Nac,Cont,Gen,nascer,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,nascer,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
 
-% MORRER (ATIVA)
-% frase_int_morrer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, morreu, 'Camilo',?],[]).
-% frase_int_morrer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, morreu, 'Castelo Branco',?],[]).
-% frase_int_morrer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, faleceu, 'Camilo', 'Castelo Branco',?],[]).
+                                                  %---------------------------------------------------------%
+                                                  %                          MORRER                         %
+                                                  %---------------------------------------------------------%
 
-frase_int_morrer(N-G,Adj,Nom,Nac,Cont,Gen,morrer,Temp,Prim, _) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,morrer,Temp), [Prim], {autor(_, Prim, _, _, _, _, _, _)}, [?].
-frase_int_morrer(N-G,Adj,Nom,Nac,Cont,Gen,morrer,Temp,_, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,morrer,Temp), [Ultim], {autor(_, _, Ultim, _, _, _, _, _)}, [?].
-frase_int_morrer(N-G,Adj,Nom,Nac,Cont,Gen,morrer,Temp,Prim, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,morrer,Temp), [Prim], [Ultim], {autor(_, Prim, Ultim, _, _, _, _, _)}, [?].
+% frase_int_morrer_ano(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, morreu, 'Camilo',?],[]).
+% frase_int_morrer_ano(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, morreu, 'Castelo Branco',?],[]).
+% frase_int_morrer_ano(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[quando, faleceu, 'Camilo', 'Castelo Branco',?],[]).
+% frase_int_mortos(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,Prim,Ultim,[quais, as, escritoras, que, estao, mortas,?],[]).
+% frase_int_morrer_nesse_ano(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,Ano,[quem, morreu, em, 1917,?],[]).
+% frase_int_morrer_nesse_ano(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,Ano,[que, escritores, morreram, em, 1917,?],[]).
+% frase_int_morrer_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, morreram, no, seculo, 'XX', ?],[]).
+% frase_int_morrer_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, morreram, antes, do, seculo, 'XX', ?],[]).
+% frase_int_morrer_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, morreram, depois, do, seculo, 'XX', ?],[]).
 
-% MORRER (PASSIVA)
-% frase_int_morrer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,Prim,Ultim,[quais, as, escritoras, que, estao, mortas,?],[]).
-% frase_int_morrer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, morreram, no, seculo, 'XX', ?],[]).
-% frase_int_morrer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, morreram, antes, do, seculo, 'XX', ?],[]).
-% frase_int_morrer(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, morreram, depois, do, seculo, 'XX', ?],[]).
-frase_int_morrer(N-G,Adj,Nom,Nac,Cont,Gen,morrer,Temp,_,_) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(N,estar,Temp), verbo_passiva(N-G, morrer), [?].
-frase_int_morrer(N-G,Adj,_,Nac,Cont,Gen,morrer,Temp,SecNum,_) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,morrer,Temp), [no], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
-frase_int_morrer(N-G,Adj,_,Nac,Cont,Gen,morrer,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,morrer,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
-frase_int_morrer(N-G,Adj,_,Nac,Cont,Gen,morrer,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,morrer,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
+frase_int_morrer_nesse_ano(N-G,Adj,Nom,Nac,Cont,Gen,morrer,Temp,_,_,Ano) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(N,morrer,Temp), [em], [Ano], {integer(Ano)},[?].
+frase_int_morrer_ano(N-G,Adj,Nom,Nac,Cont,Gen,morrer,Temp,Prim, _) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,morrer,Temp), [Prim], {autor(_, Prim, _, _, _, _, _, _)}, [?].
+frase_int_morrer_ano(N-G,Adj,Nom,Nac,Cont,Gen,morrer,Temp,_, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,morrer,Temp), [Ultim], {autor(_, _, Ultim, _, _, _, _, _)}, [?].
+frase_int_morrer_ano(N-G,Adj,Nom,Nac,Cont,Gen,morrer,Temp,Prim, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,morrer,Temp), [Prim], [Ultim], {autor(_, Prim, Ultim, _, _, _, _, _)}, [?].
+frase_int_mortos(N-G,Adj,Nom,Nac,Cont,Gen,morrer,Temp,_,_) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(N,estar,Temp), verbo_passiva(N-G, morrer), [?].
+frase_int_morrer_sec(N-G,Adj,_,Nac,Cont,Gen,morrer,Temp,SecNum,_) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,morrer,Temp), [no], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
+frase_int_morrer_sec(N-G,Adj,_,Nac,Cont,Gen,morrer,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,morrer,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
+frase_int_morrer_sec(N-G,Adj,_,Nac,Cont,Gen,morrer,Temp,SecNum,Adv) --> sint_nom_int(N-G,Adj,autor,Nac,Cont,Gen), verbo(N,morrer,Temp), adverbio(Adv), [do], [seculo], [Sec], {seculo(Sec,SecNum)}, [?].
