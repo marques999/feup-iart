@@ -1,6 +1,26 @@
 % consult(['~/Desktop/feup-iart-master/proj1/server/lexico.pl']).
 
+seculo('I', 1).
+seculo('II', 2).
+seculo('III', 3).
+seculo('IV', 4).
+seculo('V', 5).
+seculo('VI', 6).
+seculo('VII', 7).
+seculo('VIII', 8).
+seculo('IX', 9).
+seculo('X', 10).
+seculo('XI', 11).
+seculo('XII', 12).
+seculo('XIII', 13).
+seculo('XIV', 14).
+seculo('XV', 15).
+seculo('XVI', 16).
+seculo('XVII', 17).
+seculo('XVIII', 18).
+seculo('XIX', 19).
 seculo('XX', 20).
+seculo('XXI', 21).
 
 numero_ordinal(s-m, 1) --> [primeiro].
 numero_ordinal(s-f, 1) --> [primeira].

@@ -41,6 +41,14 @@ filtrar_livros(Selector, Lista):-
 		livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
 		filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Selector)
 	), Lista).
+	
+filtrar_livros_ano(Selector, AnoLimite, Lista):-
+	findall(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
+	(
+		livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
+		call(Selector, Ano, AnoLimite)
+	), Lista).
+
 
 filtrar_livros_aux(_, []).
 
@@ -376,6 +384,40 @@ filtrar_autores(Selector, Lista):-
 
 filtrar_autores_aux(_, []).
 
+%-----------------------------------------------------------------------------%
+% -> Filtrar autores por ano de nascimento                                    %
+%-----------------------------------------------------------------------------%
+
+filtrar_autores_nascidos(Selector, AnoLimite, Lista):-
+	findall(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
+	(
+		autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
+		call(Selector, AnoNascimento, AnoLimite)
+	), Lista).
+
+%-----------------------------------------------------------------------------%
+% -> Filtrar autores por ano de morte                                         %
+%-----------------------------------------------------------------------------%
+
+filtrar_autores_mortos(Selector, AnoLimite, Lista):-
+	findall(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
+	(
+		autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
+		(AnoLimite < 0 ; AnoMorte > 0,
+		call(Selector, AnoMorte, AnoLimite))
+	), Lista).
+
+%-----------------------------------------------------------------------------%
+% -> Filtrar autores por ano de vida                                          %
+%-----------------------------------------------------------------------------%
+
+filtrar_autores_vivos(=, AnoLimite, Lista):-
+	filtrar_autores([viveu=AnoLimite], Lista).
+filtrar_autores_vivos(<, AnoLimite, Lista):-
+	filtrar_autores([viveu<AnoLimite], Lista).
+filtrar_autores_vivos(>, AnoLimite, Lista):-
+	filtrar_autores([viveu>AnoLimite], Lista).
+
 % selecciona autores com determinada nacionalidade
 filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [nacionalidade=Nacionalidade|Tail]):-
 	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
@@ -437,6 +479,31 @@ filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoM
 	AnoNascimento >= LimiteInferior,
 	AnoNascimento =< LimiteSuperior,
 	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
+	
+% selecciona autores que morreram antes de AnoLimite
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [morreu<AnoLimite|Tail]):-
+	AnoMorte > 0,
+	AnoMorte < AnoLimite,
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
+
+% selecciona autores que morreram depois de AnoLimite
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [morreu>AnoLimite|Tail]):-
+	AnoMorte > 0,
+	AnoMorte > AnoLimite,
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
+
+% selecciona autores que morreram exatamente no ano AnoLimite
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [morreu=AnoLimite|Tail]):-
+	AnoMorte > 0,
+	AnoMorte = AnoLimite,
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
+
+% selecciona autores que morreram entre [LimiteInferior, LimiteSuperior]
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [morreu=LimiteInferior-LimiteSuperior|Tail]):-
+	AnoMorte > 0,
+	AnoMorte >= LimiteInferior,
+	AnoMorte =< LimiteSuperior,
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
 % selecciona autores que estiveram vivos antes de AnoLimite
 filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [viveu<AnoLimite|Tail]):-
@@ -460,6 +527,15 @@ filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoM
 	AnoNascimento < LimiteSuperior,
 	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 
+% selecciona autores que estão vivos
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [vivo|Tail]):-
+	AnoMorte = -1,
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
+
+	% selecciona autores que estão vivos
+filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [morto|Tail]):-
+	AnoMorte \= -1,
+	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
 %-----------------------------------------------------------------------------%
 % -> Lista de autores com pelo menos N pseudónimos                            %
 %-----------------------------------------------------------------------------%
@@ -485,34 +561,73 @@ autores_sem_pseudonimos(Lista):-
 	filtrar_autores([pseudonimos=0], Lista).
 
 %-----------------------------------------------------------------------------%
-% -> Lista de autores nascidos entre [LimiteInferior, LimiteSuperior]         %
-%-----------------------------------------------------------------------------%
-autores_nascidos_entre(LimiteInferior, LimiteSuperior, Lista):-
-	filtrar_autores([nasceu=LimiteInferior-LimiteSuperior], Lista).
-
-%-----------------------------------------------------------------------------%
 % -> Lista de autores que nasceram no século Seculo                           %
 %-----------------------------------------------------------------------------%
-autores_nascidos_seculo(Seculo, Lista):-
-	roman_to_decimal(Seculo, SeculoArabe),
-	LimiteSuperior is (SeculoArabe * 100),
+autores_nascidos_seculo(=, Seculo, Lista):-
+	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	filtrar_autores([nasceu=LimiteInferior-LimiteSuperior], Lista).
-
+	
 %-----------------------------------------------------------------------------%
-% -> Lista de autores que viveram entre [LimiteInferior, LimiteSuperior]      %
+% -> Lista de autores que nasceram antes do século Seculo                     %
 %-----------------------------------------------------------------------------%
-autores_vivos_entre(LimiteInferior, LimiteSuperior, Lista):-
-	filtrar_autores([viveu=LimiteInferior-LimiteSuperior], Lista).
+autores_nascidos_seculo(<, Seculo, Lista):-
+	LimiteSuperior is (Seculo * 100),
+	LimiteInferior is LimiteSuperior - 99,
+	filtrar_autores([nasceu<LimiteInferior], Lista).
+	
+%-----------------------------------------------------------------------------%
+% -> Lista de autores que nasceram depois do século Seculo                    %
+%-----------------------------------------------------------------------------%
+autores_nascidos_seculo(>, Seculo, Lista):-
+	LimiteSuperior is (Seculo * 100),
+	filtrar_autores([nasceu>LimiteSuperior], Lista).
+	
+%-----------------------------------------------------------------------------%
+% -> Lista de autores que morreram no século Seculo                           %
+%-----------------------------------------------------------------------------%
+autores_mortos_seculo(=, Seculo, Lista):-
+	LimiteSuperior is (Seculo * 100),
+	LimiteInferior is LimiteSuperior - 99,
+	filtrar_autores([morreu=LimiteInferior-LimiteSuperior], Lista).
+	
+%-----------------------------------------------------------------------------%
+% -> Lista de autores que morreram antes do século Seculo                     %
+%-----------------------------------------------------------------------------%
+autores_mortos_seculo(<, Seculo, Lista):-
+	LimiteSuperior is (Seculo * 100),
+	LimiteInferior is LimiteSuperior - 99,
+	filtrar_autores([morreu<LimiteInferior], Lista).
+	
+%-----------------------------------------------------------------------------%
+% -> Lista de autores que morreram depois do século Seculo                    %
+%-----------------------------------------------------------------------------%
+autores_mortos_seculo(>, Seculo, Lista):-
+	LimiteSuperior is (Seculo * 100),
+	filtrar_autores([morreu>LimiteSuperior], Lista).
 
 %-----------------------------------------------------------------------------%
 % -> Lista de autores que viveram no século Seculo                            %
 %-----------------------------------------------------------------------------%
 autores_vivos_seculo(Seculo, Lista):-
-	roman_to_decimal(Seculo, SeculoArabe),
-	LimiteSuperior is (SeculoArabe * 100),
+	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	filtrar_autores([viveu=LimiteInferior-LimiteSuperior], Lista).
+
+%-----------------------------------------------------------------------------%
+% -> Lista de autores que morreram antes do século Seculo                     %
+%-----------------------------------------------------------------------------%
+autores_vivos_seculo(<, Seculo, Lista):-
+	LimiteSuperior is (Seculo * 100),
+	LimiteInferior is LimiteSuperior - 99,
+	filtrar_autores([viveu<LimiteInferior], Lista).
+	
+%-----------------------------------------------------------------------------%
+% -> Lista de autores que morreram depois do século Seculo                    %
+%-----------------------------------------------------------------------------%
+autores_vivos_seculo(>, Seculo, Lista):-
+	LimiteSuperior is (Seculo * 100),
+	filtrar_autores([viveu>LimiteSuperior], Lista).
 
 verificar_nacionalidade(Nacionalidade, Nacionalidade ou _).
 verificar_nacionalidade(Nacionalidade, _ ou Nacionalidades):-

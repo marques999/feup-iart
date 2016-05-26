@@ -92,7 +92,7 @@ livro(dost-dup, "O Duplo", dost, 1846, romance, null).
 livro(dost-ete, "O Eterno Marido", dost, 1870, romance, null).
 livro(dost-idi, "O Idiota", dost, 1869, romance, null).
 livro(dost-jog, "O Jogador", dost, 1867, romance, null).
-livro(soar-des, "O Livro do Desassossego", soar, _19xx, prosa, null).
+livro(soar-des, "O Livro do Desassossego", soar, 1928, prosa, null).
 livro(qroz-mand, "O Mandarim", qroz, 1880, novela, null).
 livro(shak-mer, "O Mercador de Veneza", shak, 1598, comedia, null).
 livro(ebro-wuth, "O Monte dos Vendavais", ebro, 1847, romance, null).
