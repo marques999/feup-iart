@@ -5,29 +5,29 @@ autor(adum, 'Alexandre', 'Dumas', 1802, 1870, m, fra, []).
 autor(dujr, 'Alexandre', 'Dumas', 1824, 1895, m, fra, []).
 autor(clrk, 'Arthur', 'Clarke', 1917, 2008, m, usa, []).
 autor(cacb, 'Camilo', 'Castelo Branco', 1825, 1890, m, por, []).
-autor(cbro, 'Charlotte', 'Brontë', 1816, 1855, f, gbr, []).
-autor(qroz, 'Eça', 'de Queiróz', 1845, 1900, m, por, []).
+autor(cbro, 'Charlotte', 'Bronte', 1816, 1855, f, gbr, []).
+autor(qroz, 'Eca', 'de Queiroz', 1845, 1900, m, por, []).
 autor(eiou, 'Eiichirou', 'Oda', 1975, -1, m, jpn, []).
 autor(ebro, 'Emily', 'Brontë', 1818, 1848, f, gbr, []).
 autor(ebla, 'Eric', 'Blair', 1903, 1950, m, ind, [gowr]).
 autor(ehem, 'Ernest', 'Hemingway', 1899, 1961, m, usa, []).
 autor(pess, 'Fernando', 'Pessoa', 1888, 1935, m, por, [soar]).
-autor(dost, 'Fiódor', 'Dostoiévski', 1821, 1881, m, rus, []).
+autor(dost, 'Fiodor', 'Dostoiévski', 1821, 1881, m, rus, []).
 autor(niet, 'Friedrich', 'Nietzsche', 1844, 1900, m, ger, []).
-autor(gagm, 'Gabriel', 'Garcia Márquez', 1927, 2014, m, col, []).
+autor(gagm, 'Gabriel', 'Garcia Marquez', 1927, 2014, m, col, []).
 autor(mura, 'Haruki', 'Murakami', 1949, -1, m, jpn, []).
 autor(hiro, 'Hiroshi ', 'Fujimoto', 1933, 1996, m, jpn, []).
 autor(isal, 'Isabel', 'Allende', 1942, -1, f, chi, []).
 autor(aust, 'Jane', 'Austen', 1775, 1817, f, gbr, []).
 autor(juld, 'Júlio', 'Dinis', 1839, 1871, m, por, []).
 autor(kazu, 'Kiyohiko', 'Azuma', 1968, -1, m, jpn, []).
-autor(tols, 'Leão', 'Tolstói', 1828, 1910, m, rus, []).
-autor(lcam, 'Luís', 'de Camões', 1524, 1580, m, por, []).
+autor(tols, 'Leo', 'Tolstoi', 1828, 1910, m, rus, []).
+autor(lcam, 'Luis', 'de Camões', 1524, 1580, m, por, []).
 autor(mtwn, 'Mark', 'Twain', 1835, 1910, m, usa, []).
 autor(mcou, 'Mia', 'Couto', 1955, -1, m, moz, []).
 autor(mabi, 'Motou', 'Abiko', 1934, -1, m, jpn, []).
 autor(owld, 'Oscar', 'Wilde', 1864, 1900, m, ire, []).
-autor(verf, 'Vergílo', 'Ferreira', 1916, 1996, m, por, []).
+autor(verf, 'Vergilio', 'Ferreira', 1916, 1996, m, por, []).
 autor(shak, 'William', 'Shakespeare', 1564, 1616, m, gbr, []).
 autor(yuma, 'Yuusei', 'Matsui', 1979, -1, m, jpn, []).
 

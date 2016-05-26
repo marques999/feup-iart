@@ -567,7 +567,23 @@ autores_nascidos_seculo(=, Seculo, Lista):-
 	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	filtrar_autores([nasceu=LimiteInferior-LimiteSuperior], Lista).
-	
+
+autor_verificar_seculo(=, Ano, Seculo):-
+	LimiteSuperior is (Seculo * 100),
+	LimiteInferior is LimiteSuperior - 99,
+	Ano >= LimiteInferior,
+	Ano =< LimiteSuperior.
+
+autor_verificar_seculo(<, Ano, Seculo):-
+	LimiteSuperior is (Seculo * 100),
+	LimiteInferior is LimiteSuperior - 99,
+	Ano < LimiteInferior.
+
+autor_verificar_seculo(>, Ano, Seculo):-
+	LimiteSuperior is (Seculo * 100),
+	LimiteInferior is LimiteSuperior - 99,
+	Ano > LimiteSuperior.
+
 %-----------------------------------------------------------------------------%
 % -> Lista de autores que nasceram antes do século Seculo                     %
 %-----------------------------------------------------------------------------%
@@ -590,7 +606,7 @@ autores_mortos_seculo(=, Seculo, Lista):-
 	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	filtrar_autores([morreu=LimiteInferior-LimiteSuperior], Lista).
-	
+
 %-----------------------------------------------------------------------------%
 % -> Lista de autores que morreram antes do século Seculo                     %
 %-----------------------------------------------------------------------------%
@@ -598,7 +614,7 @@ autores_mortos_seculo(<, Seculo, Lista):-
 	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	filtrar_autores([morreu<LimiteInferior], Lista).
-	
+
 %-----------------------------------------------------------------------------%
 % -> Lista de autores que morreram depois do século Seculo                    %
 %-----------------------------------------------------------------------------%
@@ -609,13 +625,13 @@ autores_mortos_seculo(>, Seculo, Lista):-
 %-----------------------------------------------------------------------------%
 % -> Lista de autores que viveram no século Seculo                            %
 %-----------------------------------------------------------------------------%
-autores_vivos_seculo(Seculo, Lista):-
+autores_vivos_seculo(=, Seculo, Lista):-
 	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	filtrar_autores([viveu=LimiteInferior-LimiteSuperior], Lista).
 
 %-----------------------------------------------------------------------------%
-% -> Lista de autores que morreram antes do século Seculo                     %
+% -> Lista de autores que viveram antes do século Seculo                      %
 %-----------------------------------------------------------------------------%
 autores_vivos_seculo(<, Seculo, Lista):-
 	LimiteSuperior is (Seculo * 100),
@@ -623,7 +639,7 @@ autores_vivos_seculo(<, Seculo, Lista):-
 	filtrar_autores([viveu<LimiteInferior], Lista).
 	
 %-----------------------------------------------------------------------------%
-% -> Lista de autores que morreram depois do século Seculo                    %
+% -> Lista de autores que viveram depois do século Seculo                     %
 %-----------------------------------------------------------------------------%
 autores_vivos_seculo(>, Seculo, Lista):-
 	LimiteSuperior is (Seculo * 100),
@@ -711,13 +727,10 @@ autores_anos_diferentes(Autor1, Autor2):-
 %-----------------------------------------------------------------------------%
 % -> Verificar se dois autores Autor1, Autor2 nasceram no mesmo século        %
 %-----------------------------------------------------------------------------%
-autores_mesmo_seculo(Autor1, Autor2):-
-	Autor1 \= Autor2, !,
-	autor(Autor1, _, _, AnoNascimento1, _, _, _, _),
+autores_mesmo_seculo(AnoNascimento1, AnoNascimento2):-
 	Seculo1 is (AnoNascimento1 + 99) div 100,
-	autor(Autor2, _, _, AnoNascimento2, _, _, _, _),
 	Seculo2 is (AnoNascimento2 + 99) div 100,
-	Seculo1 = Seculo2.
+	Seculo1 = Seculo.
 
 %-----------------------------------------------------------------------------%
 % -> Verificar se dois autores Autor1, Autor2 nasceram em séculos diferentes  %

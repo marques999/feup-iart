@@ -108,6 +108,7 @@ sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen) --> pron_int(N-G,qn),                    
 sint_nom_int(_-_,_,_,_,_,_) --> [quem].                                                                       % "Quem" ...
 sint_nom_int(_-_,_,_,_,_,_) --> [quando].                                                                     % "Quando" ...
 
+
                                                   %---------------------------------------------------------%
                                                   %  **********       FRASES INTERROGATIVAS      *********  %
                                                   %---------------------------------------------------------%
@@ -138,6 +139,7 @@ frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, Prim, _) --> sint_nom_in
 frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, _, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(_,ser,Temp), verbo_passiva(_-_,escrever), [por], [Ultim], {autor(_, _, Ultim, _, _, _, _, _)}, [?].
 frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, Prim, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(_,ser,Temp), verbo_passiva(_-_,escrever), [por], [Prim], [Ultim], {autor(_, Prim, Ultim, _, _, _, _, _)}, [?].
 
+
                                                   %---------------------------------------------------------%
                                                   %                          VIVER                          %
                                                   %---------------------------------------------------------%
@@ -148,7 +150,6 @@ procurar_autor(autor(IdAutor, Prim, UltimoNome, AnoNascimento, AnoMorte, Sexo, N
 	[Prim], {autor(IdAutor, Prim, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}.
 procurar_autor(autor(IdAutor, PrimeiroNome, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)) -->
 	[Ultim], {autor(IdAutor, PrimeiroNome, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}.
-
 
 locucao_ano(Selector, Ano) --> locucao_ano1(Selector), [Ano], {integer(Ano)}.
 locucao_ano1(=) --> [em].
@@ -165,6 +166,12 @@ locucao_seculo(Selector, Seculo) --> locucao_seculo1(Selector), [seculo], [Sec],
 locucao_seculo1(<) --> [antes], [do].
 locucao_seculo1(>) --> [depois], [do].
 locucao_seculo1(=) --> [no].
+
+comparar_idade_autores(<) --> [antes], comparar_idade_autores1.
+comparar_idade_autores(>) --> [depois], comparar_idade_autores1.
+comparar_idade_autores(>) --> [apos].
+comparar_idade_autores(=) --> [no], [mesmo], [ano].
+comparar_idade_autores1 --> [de].
 
 % frase_int_viver(Lista, [que, escritores, viveram, no, seculo, 'XX', ?], []).
 % frase_int_viver(Lista, [quais, os, escritores, que, viveram, no, seculo, 'XX', ?], []).
@@ -278,11 +285,57 @@ frase_int_morrer3(N, Lista) -->
                                                   %                          ESCREVER                       %
                                                   %---------------------------------------------------------%
 
-% frase_dec_autor(['Camilo', escreveu, 'A Morgadinha dos Canaviais'],[]).
-% frase_dec_autor(['Castelo Branco', escreveu, 'A Morgadinha dos Canaviais'],[]).
-% frase_dec_autor(['Camilo', 'Castelo Branco', escreveu, 'A Morgadinha dos Canaviais'],[]).
-% frase_dec_autor_gen(['Castelo Branco', escreveu, romances],[]).
-% frase_dec_autor_gen(['Castelo Branco', escreveu, ficcoes-cientificas],[]).
+interrogacao_opcional --> [?].
+interrogacao_opcional --> [].
+
+% declarativa_autor(['Camilo', escreveu, 'A Morgadinha dos Canaviais'], []).
+% declarativa_autor(['Dinis', escreveu, 'A Morgadinha dos Canaviais'], []).
+% declarativa_autor(['Julio', 'Castelo Branco', escreveu, 'A Morgadinha dos Canaviais'], []).
+
+% ?- declarativa_autor(['Castelo Branco', escreveu, romances], []).
+% yes
+% ?- declarativa_autor(['Castelo Branco', escreveu, ficcoes-cientificas], []).
+% no
+% ?- declarativa_autor(['Camilo','Castelo Branco', e, portugues],[]).
+% yes
+% ?- declarativa_autor(['Camilo','Castelo Branco', e, ingles],[]).
+% no
+% ?- declarativa_autor(['Jane','Austen', e, europeia], []).
+% yes
+% ?- declarativa_autor(['Jane','Austen', e, africana], []).
+% no
+% ?- declarativa_autor(['Camilo','Castelo Branco', e, europeu], []).
+% yes
+% ?- declarativa_autor(['Camilo','Castelo Branco', e, africano], []).
+% no
+
+declarativa_autor -->
+	procurar_autor(autor(IdAutor, _, _, _, _, Genero, Pais, _)), !,
+	declarativa_autor1(IdAutor, Genero, Pais),
+	interrogacao_opcional.
+
+declarativa_autor1(_, Genero, Pais) -->
+	verbo(s, ser, presente),
+	declarativa_autor2(Genero, Pais).
+declarativa_autor1(IdAutor, _, _) -->
+	verbo(s, escrever, passado),
+	declarativa_autor3(IdAutor).
+
+declarativa_autor2(Genero, Pais) -->
+	subst_nac(Pais, s-Genero),
+	interrogacao_opcional.
+declarativa_autor2(Genero, Pais) -->
+	{nac_to_cont(Pais, Cont)},
+	subst_cont(s-Genero, Cont),
+	interrogacao_opcional.
+
+declarativa_autor3(IdAutor) -->
+	subst_gen(Genero, p-_),
+	{livro(_, _, IdAutor, _, Genero, _)}.
+declarativa_autor3(IdAutor)  -->
+	[Titulo], 
+	{livro(_, Titulo, IdAutor, _, _, _)}.
+
 % frase_dec_livro_lingua(['A Morgadinha dos Canaviais', foi, escrita, em, portugues],[]).
 % frase_dec_livro_lingua(['A Morgadinha dos Canaviais', foi, publicada, em, russo],[]).
 % frase_dec_livro_sec(['A Morgadinha dos Canaviais', foi, escrita, no, seculo, 'XX'],[]).
@@ -293,36 +346,6 @@ frase_int_morrer3(N, Lista) -->
 % frase_dec_livro_ano(['A Morgadinha dos Canaviais', foi, publicada, depois, de, 1800],[]).
 % frase_dec_livro_gen(['A Morgadinha dos Canaviais', e, um, romance],[]).
 % frase_dec_livro_gen(['A Morgadinha dos Canaviais', e, um, drama],[]).
-% frase_dec_autor_nac(['Camilo','Castelo Branco', e, portugues],[]).
-% frase_dec_autor_nac(['Camilo','Castelo Branco', e, ingles],[]).
-% frase_dec_autor_cont(['Jane','Austen', e, europeia],[]).
-% frase_dec_autor_cont(['Jane','Austen', e, africana],[]).
-% frase_dec_autor_cont(['Camilo','Castelo Branco', e, europeu],[]).
-% frase_dec_autor_cont(['Camilo','Castelo Branco', e, africano],[]).
-
-frase_dec_autor -->
-	[Primeiro],
-	{autor(IdAutor, Primeiro, _, _, _, _, _, _)},
-	verbo(s,escrever,_),
-	[Titulo],
-	{livro(_, Titulo, IdAutor, _, _, _)}.
-
-frase_dec_autor -->
-	[Ultimo],
-	{autor(IdAutor, _, Ultimo, _, _, _, _, _)},
-	verbo(s,escrever,_),
-	[Titulo],
-	{livro(_, Titulo, IdAutor, _, _, _)}.
-
-frase_dec_autor -->
-	[Primeiro], [Ultimo],
-	{autor(IdAutor, Primeiro, Ultimo, _, _, _, _, _)},
-	verbo(s,escrever,_),
-	[Titulo],
-	{livro(_, Titulo, IdAutor, _, _, _)}.
-
-interrogacao_opcional --> [?].
-interrogacao_opcional --> [].
 
 frase_dec_livro_lingua --> [Titulo], {livro(_, Titulo, IdAutor, _, _, _)}, verbo(s,ser,passado), verbo_passiva(s-_, escrever) , [em], subst_nac(Codigo, s-m), {autor(IdAutor,_,_,_,_,_,Codigo,_)}.
 frase_dec_livro_sec --> [Titulo], {livro(_, Titulo, _, Ano, _, _)}, verbo(s,ser,passado), verbo_passiva(s-_, escrever) , [depois], [do], [seculo], [Sec], {seculo_lim(Sec, _, Last)}, !, {Ano > Last}.
@@ -333,156 +356,167 @@ frase_dec_livro_ano --> [Titulo], {livro(_, Titulo, _, Ano, _, _)}, verbo(s,ser,
 frase_dec_livro_ano --> [Titulo], {livro(_, Titulo, _, Ano, _, _)}, verbo(s,ser,passado), verbo_passiva(s-_, escrever) , [em], [Data], !, {Ano =:= Data}.
 frase_dec_livro_gen --> [Titulo], verbo(s,ser,presente), [um], [Genero],  {livro(_, Titulo, _, _, Genero, _)}.
 
-frase_dec_autor_gen -->
-	procurar_autor(autor(IdAutor, _, _, _, _, _, _, _)),
-	verbo(s,escrever,passado),
-	subst_gen(Genero, p-_),
+
+			%---------------------------------------------------------%
+			%                          NASCER                         %
+			%---------------------------------------------------------%
+                                                  
+% ?- declarativa_nascer(['Camilo', nasceu, em, 1825],[]).
+% yes
+% ?- declarativa_nascer(['Camilo', nasceu, em, 1891],[]).
+% no
+% ?- declarativa_nascer(['Castelo Branco', nasceu, em, 1825],[]).
+% yes
+% ?- declarativa_nascer(['Castelo Branco', nasceu, em, 1891],[]).
+% no
+% ?- declarativa_nascer(['Camilo','Castelo Branco', nasceu, em, 1825],[]).
+% yes
+% ?- declarativa_nascer(['Camilo','Castelo Branco', nasceu, em, 1890],[]).
+% no
+% ?- declarativa_nascer(['Camilo', nasceu, depois, de, 1700], []).
+% yes
+% ?- declarativa_nascer(['Camilo', nasceu, depois, do, ano, de, 1825],[]).
+% no
+% ?- declarativa_nascer(['Camilo', nasceu, antes, de, 1825],[]).   
+% no
+% ?- declarativa_nascer(['Camilo', nasceu, antes, de, 1826],[]).
+% yes
+% ?- declarativa_nascer(['Camilo', nasceu, no, seculo, 'XX'],[]).
+% no
+% ?- declarativa_nascer(['Castelo Branco', nasceu, no, seculo, 'XIX'],[]).
+% yes
+% ?- declarativa_nascer(['Camilo','Castelo Branco', nasceu, antes, do, seculo, 'XX'],[]).
+% yes
+% ?- declarativa_nascer(['Camilo','Castelo Branco', nasceu, depois, do, seculo, 'XX'],[]).
+% no
+% ?- declarativa_nascer(['Camilo','Castelo Branco', nasceu, antes, de, 'Jane', 'Austen'],[]).
+% no
+% ?- declarativa_nascer(['Camilo','Castelo Branco', nasceu, depois, de, 'Jane', 'Austen'],[]).
+% yes
+
+declarativa_nascer --> 
+	procurar_autor(autor(_, _, _, AnoNascimento, _, _, _, _)), !,
+	verbo(s, nascer, passado),
+	declarativa_nascer1(AnoNascimento),
+	interrogacao_opcional.
+
+declarativa_nascer1(AnoNascimento) -->
+	locucao_ano(Selector, Ano),
+	{call(Selector, AnoNascimento, Ano)}.
+declarativa_nascer1(AnoNascimento) --> 
+	locucao_seculo(Selector, Seculo),
+	{autor_verificar_seculo(Selector, AnoNascimento, Seculo)}.
+declarativa_nascer1(AnoNascimento) -->
+	comparar_idade_autores(Selector),
+	procurar_autor(autor(_,_,_,AnoNascimento1,_,_,_,_)),
+	{call(Selector, AnoNascimento, AnoNascimento1)}.
+
+
+			%---------------------------------------------------------%
+			%                          VIVER                          %
+			%---------------------------------------------------------%
+
+% frase_dec_vivos(['Camilo', 'Castelo Branco', esta, vivo],[]).
+% frase_dec_vivos(['Isabel', 'Allende', esta, viva],[]).
+
+frase_dec_vivos --> 
+	procurar_autor(autor(_, _, _, AnoNascimento, _, Genero, _, _)),
+	verbo(s, estar, presente),
+	verbo_passiva(s-Genero, morrer),
 	interrogacao_opcional, !,
-	{livro(_, _, IdAutor, _, Genero, _)}.
+	{AnoNascimento < 0}.
 
-frase_dec_autor_nac -->
-	procurar_autor(autor(_, _, _, _, _, Genero, Pais, _)),
-	verbo(s, ser, presente),
-	subst_nac(Pais, s-Genero),
-	interrogacao_opcional.
-
-frase_dec_autor_cont -->
-	procurar_autor(autor(_, _, _, _, _, Genero, Pais, _)),
-	verbo(s,ser,presente),
-	{nac_to_cont(Pais, Cont)},
-	subst_cont(s-Genero, Cont),
-	interrogacao_opcional.
-
-                                                  %---------------------------------------------------------%
-                                                  %                          NASCER                         %
-                                                  %---------------------------------------------------------%
-
-% frase_dec_nascer_ano(['Camilo', nasceu, em, 1825],[]).
-% frase_dec_nascer_ano(['Camilo', nasceu, em, 1891],[]).
-% frase_dec_nascer_ano(['Castelo Branco', nasceu, em, 1825],[]).
-% frase_dec_nascer_ano(['Castelo Branco', nasceu, em, 1891],[]).
-% frase_dec_nascer_ano(['Camilo','Castelo Branco', nasceu, em, 1825],[]).
-% frase_dec_nascer_ano(['Camilo','Castelo Branco', nasceu, em, 1890],[]).
-% frase_dec_nascer_sec(['Camilo', nasceu, no, seculo, 'XX'],[]).
-% frase_dec_nascer_sec(['Castelo Branco', nasceu, no, seculo, 'XIX'],[]).
-% frase_dec_nascer_sec(['Camilo','Castelo Branco', nasceu, antes, do, seculo, 'XX'],[]).
-% frase_dec_nascer_sec(['Camilo','Castelo Branco', nasceu, depois, do, seculo, 'XX'],[]).
-% frase_dec_nascer_ord(['Camilo','Castelo Branco', nasceu, antes, de, 'Jane', 'Austen'],[]).
-% frase_dec_nascer_ord(['Camilo','Castelo Branco', nasceu, depois, de, 'Jane', 'Austen'],[]).
-
-frase_dec_nascer_ano --> [Primeiro], verbo(s, nascer,passado), [em], [Ano], {integer(Ano)},  {autor(_,Primeiro,_,Ano,_,_,_,_)}.
-frase_dec_nascer_ano --> [Ultimo], verbo(s, nascer,passado), [em], [Ano], {integer(Ano)},  {autor(_,_,Ultimo,Ano,_,_,_,_)}.
-frase_dec_nascer_ano --> [Primeiro], [Ultimo], verbo(s, nascer,passado), [em], [Ano], {integer(Ano)},  {autor(_,Primeiro,Ultimo,Ano,_,_,_,_)}.
-frase_dec_nascer_sec --> [Primeiro], {autor(_,Primeiro,_,Ano,_,_,_,_)}, verbo(s,nascer,passado), [depois], [do], [seculo], [Sec], {seculo_lim(Sec, _, Last)}, !, {Ano > Last}.
-frase_dec_nascer_sec --> [Primeiro], {autor(_,Primeiro,_,Ano,_,_,_,_)}, verbo(s,nascer,passado), [antes], [do], [seculo], [Sec], {seculo_lim(Sec, First, _)}, !, {Ano < First}.
-frase_dec_nascer_sec --> [Primeiro], {autor(_,Primeiro,_,Ano,_,_,_,_)}, verbo(s,nascer,passado), [no], [seculo], [Sec], {seculo_lim(Sec, First, Last)}, !, {Ano >= First}, {Ano =< Last}.
-frase_dec_nascer_sec --> [Ultimo], {autor(_,_,Ultimo,Ano,_,_,_,_)}, verbo(s,nascer,passado), [depois], [do], [seculo], [Sec], {seculo_lim(Sec, _, Last)}, !, {Ano > Last}.
-frase_dec_nascer_sec --> [Ultimo], {autor(_,_,Ultimo,Ano,_,_,_,_)}, verbo(s,nascer,passado), [antes], [do], [seculo], [Sec], {seculo_lim(Sec, First, _)}, !, {Ano < First}.
-frase_dec_nascer_sec --> [Ultimo], {autor(_,_,Ultimo,Ano,_,_,_,_)}, verbo(s,nascer,passado), [no], [seculo], [Sec], {seculo_lim(Sec, First, Last)}, !, {Ano >= First}, {Ano =< Last}.
-frase_dec_nascer_sec --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,Ano,_,_,_,_)}, verbo(s,nascer,passado), [depois], [do], [seculo], [Sec], {seculo_lim(Sec, _, Last)}, !, {Ano > Last}.
-frase_dec_nascer_sec --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,Ano,_,_,_,_)}, verbo(s,nascer,passado), [antes], [do], [seculo], [Sec], {seculo_lim(Sec, First, _)}, !, {Ano < First}.
-frase_dec_nascer_sec --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,Ano,_,_,_,_)}, verbo(s,nascer,passado), [no], [seculo], [Sec], {seculo_lim(Sec, First, Last)}, !, {Ano >= First}, {Ano =< Last}.
-frase_dec_nascer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [antes], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,Ano2,_,_,_,_)}, {Ano1 < Ano2}.
-frase_dec_nascer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [antes], [de], [Primeiro2], {autor(_,Primeiro2,_,Ano2,_,_,_,_)}, {Ano1 < Ano2}.
-frase_dec_nascer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [antes], [de], [Ultimo2], {autor(_,_,Ultimo2,Ano2,_,_,_,_)}, {Ano1 < Ano2}.
-frase_dec_nascer_ord --> [Primeiro1], {autor(_,Primeiro1,_,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [antes], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,Ano2,_,_,_,_)}, {Ano1 < Ano2}.
-frase_dec_nascer_ord --> [Primeiro1], {autor(_,Primeiro1,_,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [antes], [de], [Primeiro2], {autor(_,Primeiro2,_,Ano2,_,_,_,_)}, {Ano1 < Ano2}.
-frase_dec_nascer_ord --> [Primeiro1], {autor(_,Primeiro1,_,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [antes], [de], [Ultimo2], {autor(_,_,Ultimo2,Ano2,_,_,_,_)}, {Ano1 < Ano2}.
-frase_dec_nascer_ord --> [Ultimo1], {autor(_,_,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [antes], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,Ano2,_,_,_,_)}, {Ano1 < Ano2}.
-frase_dec_nascer_ord --> [Ultimo1], {autor(_,_,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [antes], [de], [Primeiro2], {autor(_,Primeiro2,_,Ano2,_,_,_,_)}, {Ano1 < Ano2}.
-frase_dec_nascer_ord --> [Ultimo1], {autor(_,_,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [antes], [de], [Ultimo2], {autor(_,_,Ultimo2,Ano2,_,_,_,_)}, {Ano1 < Ano2}.
-frase_dec_nascer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [depois], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,Ano2,_,_,_,_)}, {Ano1 > Ano2}.
-frase_dec_nascer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [depois], [de], [Primeiro2], {autor(_,Primeiro2,_,Ano2,_,_,_,_)}, {Ano1 > Ano2}.
-frase_dec_nascer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [depois], [de], [Ultimo2], {autor(_,_,Ultimo2,Ano2,_,_,_,_)}, {Ano1 > Ano2}.
-frase_dec_nascer_ord --> [Primeiro1], {autor(_,Primeiro1,_,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [depois], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,Ano2,_,_,_,_)}, {Ano1 > Ano2}.
-frase_dec_nascer_ord --> [Primeiro1], {autor(_,Primeiro1,_,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [depois], [de], [Primeiro2], {autor(_,Primeiro2,_,Ano2,_,_,_,_)}, {Ano1 > Ano2}.
-frase_dec_nascer_ord --> [Primeiro1], {autor(_,Primeiro1,_,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [depois], [de], [Ultimo2], {autor(_,_,Ultimo2,Ano2,_,_,_,_)}, {Ano1 > Ano2}.
-frase_dec_nascer_ord --> [Ultimo1], {autor(_,_,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [depois], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,Ano2,_,_,_,_)}, {Ano1 > Ano2}.
-frase_dec_nascer_ord --> [Ultimo1], {autor(_,_,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [depois], [de], [Primeiro2], {autor(_,Primeiro2,_,Ano2,_,_,_,_)}, {Ano1 > Ano2}.
-frase_dec_nascer_ord --> [Ultimo1], {autor(_,_,Ultimo1,Ano1,_,_,_,_)}, verbo(s,nascer,passado), [depois], [de], [Ultimo2], {autor(_,_,Ultimo2,Ano2,_,_,_,_)}, {Ano1 > Ano2}.
-
-                                                  %---------------------------------------------------------%
-                                                  %                          VIVER                          %
-                                                  %---------------------------------------------------------%
-
-% frase_int_viver_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, no, seculo, 'XX', ?],[]).
-% frase_int_viver_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, antes, do, seculo, 'XX', ?],[]).
-% frase_int_viver_sec(N-G,Adj,Nom,Nac,Cont,Gen,Act,Temp,SecNum,Adv,[quais, os, escritores, que, viveram, depois, do, seculo, 'XX', ?],[]).
 % frase_dec_vivo_sec(['Camilo', 'Castelo Branco', viveu, antes, do, seculo, 'XX'],[]).
 % frase_dec_vivo_sec(['Camilo', 'Castelo Branco', viveu, antes, do, seculo, 'XIII'],[]).
 % frase_dec_vivo_sec(['Camilo', 'Castelo Branco', viveu, no, seculo, 'XX'],[]).
 % frase_dec_vivo_sec(['Camilo', 'Castelo Branco', viveu, no, seculo, 'XIX'],[]).
-% frase_dec_vivos(['Camilo', 'Castelo Branco', esta, vivo],[]).
-% frase_dec_vivos(['Isabel', 'Allende', esta, viva],[]).
 
-frase_dec_vivos --> [Primeiro], {autor(_,Primeiro,_,_,Ano,Genero,_,_)}, verbo(s,estar,presente), verbo_passiva(s-Genero, viver), {Ano < 0}.
-frase_dec_vivos --> [Ultimo], {autor(_,_,Ultimo,_,Ano,Genero,_,_)}, verbo(s,estar,presente), verbo_passiva(s-Genero, viver), {Ano < 0}.
-frase_dec_vivos --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,_,Ano,Genero,_,_)}, verbo(s,estar,presente), verbo_passiva(s-Genero, viver), {Ano < 0}.
-frase_dec_vivo_sec --> [Primeiro], {autor(_,Primeiro,_,Nasc,Morte,_,_,_)}, verbo(s,viver,passado), [no], [seculo], [Sec], {seculo_lim(Sec, First, Last)}, !, {Nasc >= First}, {Morte =< Last}.
+frase_dec_vivo_sec --> 
+	[Primeiro],
+	{autor(_,Primeiro,_,Nasc,Morte,_,_,_)},
+	verbo(s,viver,passado),
+	[no], [seculo], [Sec], 
+	{seculo_lim(Sec, First, Last)}, !, 
+	{Nasc >= First}, {Morte =< Last}.
+
 frase_dec_vivo_sec --> [Ultimo], {autor(_,_,Ultimo,Nasc,Morte,_,_,_)}, verbo(s,viver,passado), [no], [seculo], [Sec], {seculo_lim(Sec, First, Last)}, !, {Nasc >= First}, {Morte =< Last}.
 frase_dec_vivo_sec --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,Nasc,Morte,_,_,_)}, verbo(s,viver,passado), [no], [seculo], [Sec], {seculo_lim(Sec, First, Last)}, !, {Nasc >= First}, {Morte =< Last}.
 frase_dec_vivo_sec --> [Primeiro], {autor(_,Primeiro,_,_,Morte,_,_,_)}, verbo(s,viver,passado), [antes], [do], [seculo], [Sec], {seculo_lim(Sec, First, _)}, !, {Morte =< First}.
 frase_dec_vivo_sec --> [Ultimo], {autor(_,_,Ultimo,_,Morte,_,_,_)}, verbo(s,viver,passado), [antes], [do], [seculo], [Sec], {seculo_lim(Sec, First, _)}, !, {Morte =< First}.
 frase_dec_vivo_sec --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,_,Morte,_,_,_)}, verbo(s,viver,passado), [antes], [do], [seculo], [Sec], {seculo_lim(Sec, First, _)}, !, {Morte =< First}.
 
-                                                  %---------------------------------------------------------%
-                                                  %                          MORRER                         %
-                                                  %---------------------------------------------------------%
 
-% frase_dec_morrer_ano(['Camilo', morreu, em, 1890],[]).
-% frase_dec_morrer_ano(['Camilo', morreu, em, 1891],[]).
-% frase_dec_morrer_ano(['Castelo Branco', morreu, em, 1890],[]).
-% frase_dec_morrer_ano(['Castelo Branco', morreu, em, 1891],[]).
-% frase_dec_morrer_ano(['Camilo','Castelo Branco', morreu, em, 1890],[]).
-% frase_dec_morrer_ano(['Camilo','Castelo Branco', morreu, em, 1891],[]).
-% frase_dec_morto(['Camilo','Castelo Branco', esta, morto],[]).
-% frase_dec_morto(['Jane','Austen', esta, morta],[]).
-% frase_dec_morto(['Isabel','Allende', esta, morta],[]).
-% frase_dec_morto(['Haruki','Murakami', esta, morto],[]).
-% frase_dec_morrer_sec(['Camilo', morreu, no, seculo, 'XX'],[]).
-% frase_dec_morrer_sec(['Castelo Branco', morreu, no, seculo, 'XIX'],[]).
-% frase_dec_morrer_sec(['Camilo','Castelo Branco', morreu, antes, do, seculo, 'XX'],[]).
-% frase_dec_morrer_sec(['Camilo','Castelo Branco', morreu, depois, do, seculo, 'XX'],[]).
-% frase_dec_morrer_ord(['Camilo','Castelo Branco', morreu, antes, de, 'Jane', 'Austen'],[]).
-% frase_dec_morrer_ord(['Jane','Austen', morreu, antes, de, 'Camilo', 'Castelo Branco'],[]).
-% frase_dec_morrer_ord(['Camilo','Castelo Branco', morreu, depois, de, 'Jane', 'Austen'],[]).
-% frase_dec_morrer_ord(['Jane','Austen', morreu, depois, de, 'Camilo', 'Castelo Branco'],[]).
+			%---------------------------------------------------------%
+			%                          MORRER                         %
+			%---------------------------------------------------------%
 
-frase_dec_morrer_ano -->
-	[Primeiro], verbo(s, morrer,passado), [em], [Ano], {integer(Ano)},  {autor(_,Primeiro,_,_,Ano,_,_,_)}.
+% ?- declarativa_morrer(['Camilo', morreu, em, 1890], []).
+% yes
+% ?- declarativa_morrer(['Camilo', morreu, em, 1891], []).
+% no
+% ?- declarativa_morrer(['Castelo Branco', morreu, em, 1890], []).
+% yes
+% ?- declarativa_morrer(['Castelo Branco', morreu, em, 1891], []).
+% no
+% ?- declarativa_morrer(['Camilo','Castelo Branco', morreu, em, 1890], []).
+% yes
+% ?- declarativa_morrer(['Camilo','Castelo Branco', morreu, em, 1891], []).
+% no
+% ?- declarativa_morrer(['Castelo Branco', morreu, antes, de, 1890], []).
+% no
+% ?- declarativa_morrer(['Castelo Branco', morreu, antes, de, 1895], []).
+% yes
+% ?- declarativa_morrer(['Camilo', morreu, depois, de, 1891], []).
+% no
+% ?- declarativa_morrer(['Camilo', morreu, depois, de, 1791], []).
+% yes
+% ?- declarativa_morrer(['Camilo','Castelo Branco', esta, morto],[]).
+% yes
+% ?- declarativa_morrer(['Jane','Austen', esta, morta],[]).
+% yes
+% ?- declarativa_morrer(['Isabel','Allende', esta, morta],[]).
+% no
+% ?- declarativa_morrer(['Haruki','Murakami', esta, morto],[]).
+% no
+% ?- declarativa_morrer(['Camilo', morreu, no, seculo, 'XX'],[]).
+% no
+% ?- declarativa_morrer(['Castelo Branco', morreu, no, seculo, 'XIX'],[]).
+% yes
+% ?- declarativa_morrer(['Camilo','Castelo Branco', morreu, antes, do, seculo, 'XX'],[]).
+% yes
+% ?- declarativa_morrer(['Camilo','Castelo Branco', morreu, depois, do, seculo, 'XX'],[]).
+% no
+% ?- declarativa_morrer(['Camilo','Castelo Branco', morreu, antes, de, 'Jane', 'Austen'], []).
+% no
+% ?- declarativa_morrer(['Jane','Austen', morreu, antes, de, 'Camilo', 'Castelo Branco'], []).
+% yes
+% ?- declarativa_morrer(['Camilo','Castelo Branco', morreu, depois, de, 'Jane', 'Austen'], []).
+% yes
+% ?- declarativa_morrer(['Jane','Austen', morreu, depois, de, 'Camilo', 'Castelo Branco'], []).
+% no
 
-frase_dec_morrer_ano -->
-	[Ultimo], verbo(s, morrer,passado), [em], [Ano], {integer(Ano)},  {autor(_,_,Ultimo,_,Ano,_,_,_)}.
-frase_dec_morrer_ano -->
-	[Primeiro], [Ultimo], verbo(s, morrer,passado), [em], [Ano], {integer(Ano)},  {autor(_,Primeiro,Ultimo,_,Ano,_,_,_)}.
+declarativa_morrer -->
+	procurar_autor(autor(_, _, _, _, AnoMorte, Genero, _, _)), !,
+	declarativa_morrer1(AnoMorte, Genero),
+	interrogacao_opcional.
 
-frase_dec_morto --> [Primeiro], {autor(_,Primeiro,_,_,Ano,G,_,_)}, verbo(s, estar, presente), verbo_passiva(s-G, morrer), {Ano >= 0}.
-frase_dec_morto --> [Ultimo], {autor(_,_,Ultimo,_,Ano,G,_,_)}, verbo(s, estar, presente), verbo_passiva(s-G, morrer), {Ano >= 0}.
-frase_dec_morto --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,_,Ano,G,_,_)}, verbo(s, estar, presente), verbo_passiva(s-G, morrer), {Ano >= 0}.
-frase_dec_morrer_sec --> [Primeiro], {autor(_,Primeiro,_,_,Ano,_,_,_)}, verbo(s,morrer,passado), [depois], [do], [seculo], [Sec], {seculo_lim(Sec, _, Last)}, !, {Ano > Last}.
-frase_dec_morrer_sec --> [Primeiro], {autor(_,Primeiro,_,_,Ano,_,_,_)}, verbo(s,morrer,passado), [antes], [do], [seculo], [Sec], {seculo_lim(Sec, First, _)}, !, {Ano < First}.
-frase_dec_morrer_sec --> [Primeiro], {autor(_,Primeiro,_,_,Ano,_,_,_)}, verbo(s,morrer,passado), [no], [seculo], [Sec], {seculo_lim(Sec, First, Last)}, !, {Ano >= First}, {Ano =< Last}.
-frase_dec_morrer_sec --> [Ultimo], {autor(_,_,Ultimo,_,Ano,_,_,_)}, verbo(s,morrer,passado), [depois], [do], [seculo], [Sec], {seculo_lim(Sec, _, Last)}, !, {Ano > Last}.
-frase_dec_morrer_sec --> [Ultimo], {autor(_,_,Ultimo,_,Ano,_,_,_)}, verbo(s,morrer,passado), [antes], [do], [seculo], [Sec], {seculo_lim(Sec, First, _)}, !, {Ano < First}.
-frase_dec_morrer_sec --> [Ultimo], {autor(_,_,Ultimo,_,Ano,_,_,_)}, verbo(s,morrer,passado), [no], [seculo], [Sec], {seculo_lim(Sec, First, Last)}, !, {Ano >= First}, {Ano =< Last}.
-frase_dec_morrer_sec --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,_,Ano,_,_,_)}, verbo(s,morrer,passado), [depois], [do], [seculo], [Sec], {seculo_lim(Sec, _, Last)}, !, {Ano > Last}.
-frase_dec_morrer_sec --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,_,Ano,_,_,_)}, verbo(s,morrer,passado), [antes], [do], [seculo], [Sec], {seculo_lim(Sec, First, _)}, !, {Ano < First}.
-frase_dec_morrer_sec --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,_,Ano,_,_,_)}, verbo(s,morrer,passado), [no], [seculo], [Sec], {seculo_lim(Sec, First, Last)}, !, {Ano >= First}, {Ano =< Last}.
-frase_dec_morrer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [antes], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,_,Ano2,_,_,_)}, !, {Ano1 < Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [antes], [de], [Primeiro2], {autor(_,Primeiro2,_,_,Ano2,_,_,_)}, !, {Ano1 < Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [antes], [de], [Ultimo2], {autor(_,_,Ultimo2,_,Ano2,_,_,_)}, !, {Ano1 < Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Primeiro1], {autor(_,Primeiro1,_,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [antes], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,_,Ano2,_,_,_)}, !, {Ano1 < Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Primeiro1], {autor(_,Primeiro1,_,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [antes], [de], [Primeiro2], {autor(_,Primeiro2,_,_,Ano2,_,_,_)}, !, {Ano1 < Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Primeiro1], {autor(_,Primeiro1,_,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [antes], [de], [Ultimo2], {autor(_,_,Ultimo2,_,Ano2,_,_,_)}, !, {Ano1 < Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Ultimo1], {autor(_,_,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [antes], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,_,Ano2,_,_,_)}, !, {Ano1 < Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Ultimo1], {autor(_,_,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [antes], [de], [Primeiro2], {autor(_,Primeiro2,_,_,Ano2,_,_,_)}, !, {Ano1 < Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Ultimo1], {autor(_,_,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [antes], [de], [Ultimo2], {autor(_,_,Ultimo2,_,Ano2,_,_,_)}, !,{Ano1 < Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [depois], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,_,Ano2,_,_,_)}, !, {Ano1 > Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [depois], [de], [Primeiro2], {autor(_,Primeiro2,_,_,Ano2,_,_,_)}, !, {Ano1 > Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Primeiro1], [Ultimo1], {autor(_,Primeiro1,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [depois], [de], [Ultimo2], {autor(_,_,Ultimo2,_,Ano2,_,_,_)}, !, {Ano1 > Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Primeiro1], {autor(_,Primeiro1,_,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [depois], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,_,Ano2,_,_,_)}, !, {Ano1 > Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Primeiro1], {autor(_,Primeiro1,_,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [depois], [de], [Primeiro2], {autor(_,Primeiro2,_,_,Ano2,_,_,_)}, !, {Ano1 > Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Primeiro1], {autor(_,Primeiro1,_,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [depois], [de], [Ultimo2], {autor(_,_,Ultimo2,_,Ano2,_,_,_)}, !, {Ano1 > Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Ultimo1], {autor(_,_,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [depois], [de], [Primeiro2], [Ultimo2], {autor(_,Primeiro2,Ultimo2,_,Ano2,_,_,_)}, !, {Ano1 > Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Ultimo1], {autor(_,_,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [depois], [de], [Primeiro2], {autor(_,Primeiro2,_,_,Ano2,_,_,_)}, !, {Ano1 > Ano2}, {Ano1 > 0}, {Ano2 > 0}.
-frase_dec_morrer_ord --> [Ultimo1], {autor(_,_,Ultimo1,_,Ano1,_,_,_)}, verbo(s,morrer,passado), [depois], [de], [Ultimo2], {autor(_,_,Ultimo2,_,Ano2,_,_,_)}, !, {Ano1 > Ano2}, {Ano1 > 0}, {Ano2 > 0}.
+declarativa_morrer1(AnoMorte, Genero) -->
+	verbo(s, estar, presente),
+	verbo_passiva(s-Genero, morrer),
+	{AnoMorte >= 0}.
+declarativa_morrer1(AnoMorte, _) -->
+	verbo(s, morrer, passado),
+	declarativa_morrer2(AnoMorte).
+	
+declarativa_morrer2(AnoMorte) --> 
+	locucao_ano(Selector, Ano),
+	interrogacao_opcional, !,
+	{call(Selector, AnoMorte, Ano)}.
+declarativa_morrer2(AnoMorte) --> 
+	locucao_seculo(Selector, Seculo),
+	interrogacao_opcional, !,
+	{autor_verificar_seculo(Selector, AnoMorte, Seculo)}.
+declarativa_morrer2(AnoMorte) -->
+	comparar_idade_autores(Selector),
+	procurar_autor(autor(_ ,_ ,_ ,_ , AnoMorte1, _, _, _)),
+	{call(Selector, AnoMorte, AnoMorte1)}.
