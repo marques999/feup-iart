@@ -125,9 +125,9 @@ livro(mcou-vnoi, "Vozes Anoitecidas", mcou, 1986, conto, null).
 %---------------------------------------------------------%
 %               LISTA DE COLECÇÕES/VOLUMES                %
 %---------------------------------------------------------%
-coleccao(adum-mosq, "A Trilogia dos Mosqueteiros", adum).
-coleccao(cacb-lnpd, "Livro Negro de Padre Dinis", cacb).
-coleccao(cacb-misl, "Mistérios de Lisboa", cacb).
+coleccao(adum-mosq, 'A Trilogia dos Mosqueteiros', adum).
+coleccao(cacb-lnpd, 'Livro Negro de Padre Dinis', cacb).
+coleccao(cacb-misl, 'Mistérios de Lisboa', cacb).
 
 %---------------------------------------------------------%
 %            LISTA DE PSEUDÓNIMOS/HETERÓNIMOS             %

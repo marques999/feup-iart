@@ -22,6 +22,28 @@ seculo('XIX', 19).
 seculo('XX', 20).
 seculo('XXI', 21).
 
+seculo_lim('XXI', 2001, 2100).
+seculo_lim('XX', 1901,2000).
+seculo_lim('XIX', 1801, 1900).
+seculo_lim('XVIII', 1701, 1800).
+seculo_lim('XVII', 1601, 1700).
+seculo_lim('XVI', 1501, 1600).
+seculo_lim('XV', 1401, 1500).
+seculo_lim('XIV', 1301, 1400).
+seculo_lim('XIII', 1201, 1300).
+seculo_lim('XII', 1101, 1200).
+seculo_lim('XI', 1001, 1100).
+seculo_lim('XX', 901, 1000).
+seculo_lim('IX', 801, 900).
+seculo_lim('VIII', 701, 800).
+seculo_lim('VII', 601, 700).
+seculo_lim('VI', 501, 600).
+seculo_lim('V', 401, 500).
+seculo_lim('IV', 301, 400).
+seculo_lim('III', 201, 300).
+seculo_lim('II', 101, 200).
+seculo_lim('I', 1, 100).
+
 numero_ordinal(s-m, 1) --> [primeiro].
 numero_ordinal(s-f, 1) --> [primeira].
 numero_ordinal(p-m, 1) --> [primeiros].
@@ -215,6 +237,9 @@ subst_gen(conto, p-m) --> [contos].
 subst_gen(drama, s-m) --> [drama].
 subst_gen(drama, p-m) --> [dramas].
 
+subst_gen(ficcao-cientifica, s-m) --> [ficcao-cientifica].
+subst_gen(ficcao-cientifica, p-m) --> [ficcoes-cientificas].
+
 subst_gen(manga, s-m) --> [manga].
 subst_gen(manga, p-m) --> [mangas].
 
@@ -302,6 +327,20 @@ subst_nac(usa, s-f) --> [americana].
 subst_nac(usa, p-m) --> [americanos].
 subst_nac(usa, p-f) --> [americanas].
 
+nac_to_cont(ger, europa).
+nac_to_cont(chi, america_sul).
+nac_to_cont(col, america_sul).
+nac_to_cont(esp, espanha).
+nac_to_cont(fra, europa).
+nac_to_cont(gbr, europa).
+nac_to_cont(ind, asia).
+nac_to_cont(ire, europa).
+nac_to_cont(jpn, asia).
+nac_to_cont(moz, africa).
+nac_to_cont(por, europa).
+nac_to_cont(rus, europa).
+nac_to_cont(usa, america_norte).
+
 %---------------------------------------------------------%
 % Substantivos: Idiomas                                   %
 %---------------------------------------------------------%
@@ -357,8 +396,8 @@ subst_cont(p-f, america_sul) --> [sul-americanas].
 % Verbos: Presente                                        %
 %---------------------------------------------------------%
 
-% verbo(s, ser, presente) --> [é].
-% verbo(p, ser, presente) --> [são].
+verbo(s, ser, presente) --> [e].
+verbo(p, ser, presente) --> [sao].
 
 verbo(s, viver, presente) --> [vive].
 verbo(p, viver, presente) --> [vivem].
@@ -375,8 +414,8 @@ verbo(p, existir, presente) --> [existem].
 
 verbo(p, ser, passado) --> [era].
 verbo(s, ser, passado) --> [eram].
-verbo(p, ser, passado) --> [foi].
-verbo(s, ser, passado) --> [foram].
+verbo(s, ser, passado) --> [foi].
+verbo(p, ser, passado) --> [foram].
 
 verbo(s, viver, passado) --> [viveu].
 verbo(p, viver, passado) --> [viveram].
@@ -404,7 +443,7 @@ verbo(p, nascer, passado) --> [nasciam].
 % Verbos: Particípio Passado                              %
 %---------------------------------------------------------%
 
-ssiva(s-m, escrever) --> [escrito].
+verbo_passiva(s-m, escrever) --> [escrito].
 verbo_passiva(s-f, escrever) --> [escrita].
 verbo_passiva(p-m, escrever) --> [escritos].
 verbo_passiva(p-f, escrever) --> [escritas].
