@@ -142,12 +142,13 @@ frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, Prim, Ultim) --> sint_no
                                                   %                          VIVER                          %
                                                   %---------------------------------------------------------%
 
-procurar_autor(autor(IdAutor, Prim, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)) -->
-	[Prim], {autor(IdAutor, Prim, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}, [?].
-procurar_autor(autor(IdAutor, PrimeiroNome, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)) -->
-	[Ultim], {autor(IdAutor, PrimeiroNome, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}, [?].
 procurar_autor(autor(IdAutor, Prim, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)) -->
-	[Prim], [Ultim], {autor(IdAutor, Prim, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}, [?].
+	[Prim], [Ultim], {autor(IdAutor, Prim, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}.
+procurar_autor(autor(IdAutor, Prim, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)) -->
+	[Prim], {autor(IdAutor, Prim, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}.
+procurar_autor(autor(IdAutor, PrimeiroNome, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)) -->
+	[Ultim], {autor(IdAutor, PrimeiroNome, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}.
+
 
 locucao_ano(Selector, Ano) --> locucao_ano1(Selector), [Ano], {integer(Ano)}.
 locucao_ano1(=) --> [em].
@@ -226,7 +227,7 @@ frase_int_nascer1(Lista) -->
 	{autores_nascidos_seculo(Selector, Seculo, Lista)}.
 
 frase_int_nascer2(AnoNascimento) -->
-	procurar_autor(autor(_, _, _, AnoNascimento, _, _, _, _)).
+	procurar_autor(autor(_, _, _, AnoNascimento, _, _, _, _)), [?].
 
 
                                                   %---------------------------------------------------------%
@@ -262,7 +263,7 @@ frase_int_morrer2(N-G, =, -1, Lista) -->
 
 frase_int_morrer3(_, AnoMorte) -->
 	verbo(s, morrer, passado),
-	procurar_autor(autor(_, _, _, _, AnoMorte, _, _, _)).
+	procurar_autor(autor(_, _, _, _, AnoMorte, _, _, _)), [?].
 frase_int_morrer3(N, Lista) -->
 	verbo(N, morrer, passado),
 	locucao_seculo(Selector, Seculo), [?],
@@ -299,9 +300,29 @@ frase_int_morrer3(N, Lista) -->
 % frase_dec_autor_cont(['Camilo','Castelo Branco', e, europeu],[]).
 % frase_dec_autor_cont(['Camilo','Castelo Branco', e, africano],[]).
 
-frase_dec_autor --> [Primeiro], {autor(IdAutor, Primeiro, _, _, _, _, _, _)}, verbo(s,escrever,_), [Titulo], {livro(_, Titulo, IdAutor, _, _, _)}.
-frase_dec_autor --> [Ultimo], {autor(IdAutor, _, Ultimo, _, _, _, _, _)},  verbo(s,escrever,_), [Titulo], {livro(_, Titulo, IdAutor, _, _, _)}.
-frase_dec_autor --> [Primeiro], [Ultimo], {autor(IdAutor, Primeiro, Ultimo, _, _, _, _, _)}, verbo(s,escrever,_), [Titulo], {livro(_, Titulo, IdAutor, _, _, _)}.
+frase_dec_autor -->
+	[Primeiro],
+	{autor(IdAutor, Primeiro, _, _, _, _, _, _)},
+	verbo(s,escrever,_),
+	[Titulo],
+	{livro(_, Titulo, IdAutor, _, _, _)}.
+
+frase_dec_autor -->
+	[Ultimo],
+	{autor(IdAutor, _, Ultimo, _, _, _, _, _)},
+	verbo(s,escrever,_),
+	[Titulo],
+	{livro(_, Titulo, IdAutor, _, _, _)}.
+
+frase_dec_autor -->
+	[Primeiro], [Ultimo],
+	{autor(IdAutor, Primeiro, Ultimo, _, _, _, _, _)},
+	verbo(s,escrever,_),
+	[Titulo],
+	{livro(_, Titulo, IdAutor, _, _, _)}.
+
+interrogacao_opcional --> [?].
+interrogacao_opcional --> [].
 
 frase_dec_livro_lingua --> [Titulo], {livro(_, Titulo, IdAutor, _, _, _)}, verbo(s,ser,passado), verbo_passiva(s-_, escrever) , [em], subst_nac(Codigo, s-m), {autor(IdAutor,_,_,_,_,_,Codigo,_)}.
 frase_dec_livro_sec --> [Titulo], {livro(_, Titulo, _, Ano, _, _)}, verbo(s,ser,passado), verbo_passiva(s-_, escrever) , [depois], [do], [seculo], [Sec], {seculo_lim(Sec, _, Last)}, !, {Ano > Last}.
@@ -311,15 +332,26 @@ frase_dec_livro_ano --> [Titulo], {livro(_, Titulo, _, Ano, _, _)}, verbo(s,ser,
 frase_dec_livro_ano --> [Titulo], {livro(_, Titulo, _, Ano, _, _)}, verbo(s,ser,passado), verbo_passiva(s-_, escrever) , [antes], [de], [Data], !, {Ano < Data}.
 frase_dec_livro_ano --> [Titulo], {livro(_, Titulo, _, Ano, _, _)}, verbo(s,ser,passado), verbo_passiva(s-_, escrever) , [em], [Data], !, {Ano =:= Data}.
 frase_dec_livro_gen --> [Titulo], verbo(s,ser,presente), [um], [Genero],  {livro(_, Titulo, _, _, Genero, _)}.
-frase_dec_autor_gen --> [Primeiro], verbo(s,escrever,passado), subst_gen(Genero, p-_), {autor(IdAutor,Primeiro,_,_,_,_,_,_)}, !, {livro(_, _, IdAutor, _, Genero, _)}.
-frase_dec_autor_gen --> [Ultimo], verbo(s,escrever,passado), subst_gen(Genero, p-_), {autor(IdAutor,_,Ultimo,_,_,_,_,_)}, !, {livro(_, _, IdAutor, _, Genero, _)}.
-frase_dec_autor_gen --> [Primeiro], [Ultimo], verbo(s,escrever,passado), subst_gen(Genero, p-_), {autor(IdAutor,Primeiro,Ultimo,_,_,_,_,_)}, !, {livro(_, _, IdAutor, _, Genero, _)}.
-frase_dec_autor_nac --> [Ultimo], verbo(s,ser,presente), {autor(_, _, Ultimo, _, _, Genero, Pais, _)}, subst_nac(Pais, s-Genero).
-frase_dec_autor_nac --> [Primeiro], verbo(s,ser,presente), {autor(_, Primeiro, _, _, _, Genero, Pais, _)}, subst_nac(Pais, s-Genero).
-frase_dec_autor_nac --> [Primeiro], [Ultimo], verbo(s,ser,presente), {autor(_, Primeiro, Ultimo, _, _, Genero, Pais, _)}, subst_nac(Pais, s-Genero).
-frase_dec_autor_cont --> [Primeiro], verbo(s,ser,presente), {autor(_, Primeiro, _, _, _, Genero, Pais, _)}, {nac_to_cont(Pais, Cont)}, subst_cont(s-Genero, Cont).
-frase_dec_autor_cont --> [Ultimo], verbo(s,ser,presente), {autor(_, _, Ultimo, _, _, Genero, Pais, _)}, {nac_to_cont(Pais, Cont)}, subst_cont(s-Genero, Cont).
-frase_dec_autor_cont --> [Primeiro], [Ultimo], verbo(s,ser,presente), {autor(_, Primeiro, Ultimo, _, _, Genero, Pais, _)}, {nac_to_cont(Pais, Cont)}, subst_cont(s-Genero, Cont).
+
+frase_dec_autor_gen -->
+	procurar_autor(autor(IdAutor, _, _, _, _, _, _, _)),
+	verbo(s,escrever,passado),
+	subst_gen(Genero, p-_),
+	interrogacao_opcional, !,
+	{livro(_, _, IdAutor, _, Genero, _)}.
+
+frase_dec_autor_nac -->
+	procurar_autor(autor(_, _, _, _, _, Genero, Pais, _)),
+	verbo(s, ser, presente),
+	subst_nac(Pais, s-Genero),
+	interrogacao_opcional.
+
+frase_dec_autor_cont -->
+	procurar_autor(autor(_, _, _, _, _, Genero, Pais, _)),
+	verbo(s,ser,presente),
+	{nac_to_cont(Pais, Cont)},
+	subst_cont(s-Genero, Cont),
+	interrogacao_opcional.
 
                                                   %---------------------------------------------------------%
                                                   %                          NASCER                         %
@@ -416,9 +448,14 @@ frase_dec_vivo_sec --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,_,Morte,_,
 % frase_dec_morrer_ord(['Camilo','Castelo Branco', morreu, depois, de, 'Jane', 'Austen'],[]).
 % frase_dec_morrer_ord(['Jane','Austen', morreu, depois, de, 'Camilo', 'Castelo Branco'],[]).
 
-frase_dec_morrer_ano --> [Primeiro], verbo(s, morrer,passado), [em], [Ano], {integer(Ano)},  {autor(_,Primeiro,_,_,Ano,_,_,_)}.
-frase_dec_morrer_ano --> [Ultimo], verbo(s, morrer,passado), [em], [Ano], {integer(Ano)},  {autor(_,_,Ultimo,_,Ano,_,_,_)}.
-frase_dec_morrer_ano --> [Primeiro], [Ultimo], verbo(s, morrer,passado), [em], [Ano], {integer(Ano)},  {autor(_,Primeiro,Ultimo,_,Ano,_,_,_)}.
+frase_dec_morrer_ano -->
+	[Primeiro], verbo(s, morrer,passado), [em], [Ano], {integer(Ano)},  {autor(_,Primeiro,_,_,Ano,_,_,_)}.
+
+frase_dec_morrer_ano -->
+	[Ultimo], verbo(s, morrer,passado), [em], [Ano], {integer(Ano)},  {autor(_,_,Ultimo,_,Ano,_,_,_)}.
+frase_dec_morrer_ano -->
+	[Primeiro], [Ultimo], verbo(s, morrer,passado), [em], [Ano], {integer(Ano)},  {autor(_,Primeiro,Ultimo,_,Ano,_,_,_)}.
+
 frase_dec_morto --> [Primeiro], {autor(_,Primeiro,_,_,Ano,G,_,_)}, verbo(s, estar, presente), verbo_passiva(s-G, morrer), {Ano >= 0}.
 frase_dec_morto --> [Ultimo], {autor(_,_,Ultimo,_,Ano,G,_,_)}, verbo(s, estar, presente), verbo_passiva(s-G, morrer), {Ano >= 0}.
 frase_dec_morto --> [Primeiro], [Ultimo], {autor(_,Primeiro,Ultimo,_,Ano,G,_,_)}, verbo(s, estar, presente), verbo_passiva(s-G, morrer), {Ano >= 0}.
