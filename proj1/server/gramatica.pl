@@ -1,4 +1,4 @@
-% consult(['~/Desktop/feup-iart-master/proj1/server/gramatica.pl']).
+% consult(['~/feup-iart-master/proj1/server/gramatica.pl']).
 
 %---------------------------------------------------------%
 %                      PILHA DE TESTES                    %
@@ -117,39 +117,81 @@ sint_nom_int(_-_,_,_,_,_,_) --> [quando].                                       
                                                   %                          ESCREVER                       %
                                                   %---------------------------------------------------------%
 
-% frase_int_autor(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Titulo,[quem, escreveu, 'A Morgadinha dos Canaviais',?],[]).
-% frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[que, escritor, escreveu, 'A Morgadinha dos Canaviais',?],[]).
-% frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[que, comedias, e, dramas, escreveu, 'Camilo','Castelo Branco',?],[]).
-% frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[que, comedias, e, dramas, foram, escritas, por,'Camilo',?],[]).
-% frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Prim,Ultim,[que, livros, foram, escritos, por, 'Camilo','Castelo Branco',?],[]).
-% frase_int_livro_ano(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Titulo,Ano,[quando, foi, escrita, 'A Morgadinha dos Canaviais',?],[]).
+% procurar_livro(livro(_, Titulo, _, _, _, _),['Livro Negro de Padre Dinis'],[]). % DONE
+procurar_livro(livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)) -->
+  [IdAutor], {livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)}.
+procurar_livro(livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)) -->
+  [Nome], {livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)}.
+procurar_livro(livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)) -->
+  [AnoPub], {livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)}.
+procurar_livro(livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)) -->
+  [Genero], {livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)}.
+procurar_livro(livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)) -->
+  [NomColec], {coleccao(Colec, NomColec, _)}, {livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)}.
+procurar_livro(livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)) -->
+  [Lingua], {autor(IdAutor, _, _, _, _, _, Lingua, _)}, {livro(IdLivro, Nome, IdAutor, AnoPub, Genero, Colec)}.
 
-% frase_int_livro_ling(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Titulo,['A Morgadinha dos Canaviais', foi, escrita, em, portugues, ?],[]).
-frase_int_livro_ling(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Titulo) --> [Titulo], {livro(_,Titulo,IdAutor,_,_,_)}, {autor(IdAutor,_, _, _, _, _, Cod, _)}, verbo(_,ser,Temp), verbo_passiva(_-_,escrever), [em], subst_nac(Cod, s-m), [?].
-
-% frase_int_livros_ling(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Lingua,[que, livros, foram, escritos, em, portugues, ?],[]).
-frase_int_livros_ling(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Lingua) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(_,ser,Tem), verbo_passiva(_-_,escrever), [em], subst_nac(Lingua, s-m), [?].
-
-frase_int_livro_ano(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, Titulo, Ano) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(_,ser,Temp), verbo_passiva(_-_,escrever), [Titulo], {livro(_, Titulo, _, Ano,_,_)}, [?].
-frase_int_autor(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp,Titulo) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(N,escrever,Temp), [Titulo], {livro(_,Titulo,_,_,_,_)}, [?].
-frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, Prim, _) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,escrever,Temp), [Prim], {autor(_, Prim, _, _, _, _, _, _)}, [?].
-frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp,_, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,escrever,Temp), [Ultim], {autor(_,_, Ultim, _, _, _, _, _)}, [?].
-frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp,Prim, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(s,escrever,Temp), [Prim], [Ultim], {autor(_, Prim, Ultim, _, _, _, _, _)}, [?].
-frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, Prim, _) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(_,ser,Temp), verbo_passiva(_-_,escrever), [por], [Prim], {autor(_, Prim, _, _, _, _, _, _)}, [?].
-frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, _, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(_,ser,Temp), verbo_passiva(_-_,escrever), [por], [Ultim], {autor(_, _, Ultim, _, _, _, _, _)}, [?].
-frase_int_livro(N-G,Adj,Nom,Nac,Cont,Gen,escrever,Temp, Prim, Ultim) --> sint_nom_int(N-G,Adj,Nom,Nac,Cont,Gen), verbo(_,ser,Temp), verbo_passiva(_-_,escrever), [por], [Prim], [Ultim], {autor(_, Prim, Ultim, _, _, _, _, _)}, [?].
-
-
-                                                  %---------------------------------------------------------%
-                                                  %                          VIVER                          %
-                                                  %---------------------------------------------------------%
-
+% procurar_autor(autor(IdAutor, _, _, AnoNascimento, AnoMorte, _, Nacionalidade, Pseudonimos),['Fernando'],[]). % DONE
+procurar_autor(autor(IdAutor, Prim, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)) -->
+	[IdAutor], {autor(IdAutor, Prim, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}.
 procurar_autor(autor(IdAutor, Prim, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)) -->
 	[Prim], [Ultim], {autor(IdAutor, Prim, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}.
 procurar_autor(autor(IdAutor, Prim, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)) -->
 	[Prim], {autor(IdAutor, Prim, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}.
 procurar_autor(autor(IdAutor, PrimeiroNome, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)) -->
 	[Ultim], {autor(IdAutor, PrimeiroNome, Ultim, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos)}.
+
+% frase_int_autor(autor(_, Prim, Ultim, _, _, _, _, _),[quem, escreveu, 'A Morgadinha dos Canaviais',?],[]). % NOT WORKING
+% frase_int_autor(autor(_, Prim, Ultim, _, _, _, _, _),[que, escritor, portugues, escreveu, 'A Morgadinha dos Canaviais',?],[]).
+frase_int_autor(autor(IdAutor, Prim, Ultim, Nasc, Morte, Genero, Nacionalidade, Pseudonimos)) -->
+  sint_nom_int(_-_,_,autor,Nacionalidade,_,_),
+  verbo(_,escrever,passado),
+  procurar_livro(livro(_, Titulo, IdAutor, _, _, _)),
+  procurar_autor(autor(IdAutor, Prim, Ultim, Nasc, Morte, Genero, Nacionalidade, Pseudonimos)),
+  [?].
+
+% frase_int_livro(livro(_, Titulo, _, _, _, _),[que, romances, foram, escritos, por, 'Camilo','Castelo Branco',?],[]). % NOT WORKING
+% frase_int_livro(livro(_, Titulo, _, _, _, _),[que, romances, escreveu, 'Camilo','Castelo Branco',?],[]).
+frase_int_livro(livro(IdLivro, Titulo, IdAutor, AnoPub, Genero, Colec)) -->
+  sint_nom_int(N-_,_,_,_,_,Genero),
+  ( verbo(s,escrever,passado) ; verbo(N,ser,passado), verbo_passiva(), [por]),
+  procurar_autor(autor(IdAutor, Primeiro, Ultimo, _, _, _, _, _)),
+  {livro(_, Titulo, IdAutor, _, Genero, _)},
+  [?].
+
+% frase_int_livro_ano(livro(_, _, _, AnoPub, _, _),[quando, foi, escrita, 'A Morgadinha dos Canaviais',?],[]). % DONE
+frase_int_livro_ano(livro(IdLivro, Titulo, IdAutor, AnoPub, Genero, Colec)) -->
+  sint_nom_int(_,_,_,_,_,_),
+  verbo(_,ser,passado),
+  verbo_passiva(_-_,escrever),
+  procurar_livro(livro(IdLivro, Titulo, IdAutor, AnoPub, Genero, Colec)),
+  [?].
+
+% frase_int_livros_ling(livro(_, Titulo, _, _, _, _),[que, livros, foram, escritos, em, portugues, ?],[]). % NOT WORKING
+frase_int_livros_ling(livro(IdLivro, Titulo, IdAutor, AnoPub, Genero, Colec)) -->
+  sint_nom_int(N-G,_,_,_,_,Genero),
+  verbo(N,ser,passado),
+  verbo_passiva(N-G, escrever),
+  [em],
+  subst_nac(Lingua, s-m),
+  {autor(IdAutor, _, _, _, _, _, Lingua, _)},
+  procurar_livro(livro(IdLivro, Titulo, IdAutor, AnoPub, Genero, Colec)),
+  [?].
+
+  % frase_int_livro_ling(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Titulo,['A Morgadinha dos Canaviais', foi, escrita, em, portugues, ?],[]). % DONE
+  frase_int_livro_ling(N-G,Adj,Nom,Nac,Cont,Gen,Act,Tem,Titulo) -->
+  [Titulo],
+  {livro(_,Titulo,IdAutor,_,_,_)},
+  {autor(IdAutor,_, _, _, _, _, Cod, _)},
+   verbo(_,ser,Temp),
+   verbo_passiva(_-_,escrever),
+   [em],
+   subst_nac(Cod, s-m),
+   [?].
+
+                                                  %---------------------------------------------------------%
+                                                  %                          VIVER                          %
+                                                  %---------------------------------------------------------%
 
 locucao_ano(Selector, Ano) --> locucao_ano1(Selector), [Ano], {integer(Ano)}.
 locucao_ano1(=) --> [em].
@@ -333,7 +375,7 @@ declarativa_autor3(IdAutor) -->
 	subst_gen(Genero, p-_),
 	{livro(_, _, IdAutor, _, Genero, _)}.
 declarativa_autor3(IdAutor)  -->
-	[Titulo], 
+	[Titulo],
 	{livro(_, Titulo, IdAutor, _, _, _)}.
 
 % frase_dec_livro_lingua(['A Morgadinha dos Canaviais', foi, escrita, em, portugues],[]).
@@ -360,7 +402,7 @@ frase_dec_livro_gen --> [Titulo], verbo(s,ser,presente), [um], [Genero],  {livro
 			%---------------------------------------------------------%
 			%                          NASCER                         %
 			%---------------------------------------------------------%
-                                                  
+
 % ?- declarativa_nascer(['Camilo', nasceu, em, 1825],[]).
 % yes
 % ?- declarativa_nascer(['Camilo', nasceu, em, 1891],[]).
@@ -377,7 +419,7 @@ frase_dec_livro_gen --> [Titulo], verbo(s,ser,presente), [um], [Genero],  {livro
 % yes
 % ?- declarativa_nascer(['Camilo', nasceu, depois, do, ano, de, 1825],[]).
 % no
-% ?- declarativa_nascer(['Camilo', nasceu, antes, de, 1825],[]).   
+% ?- declarativa_nascer(['Camilo', nasceu, antes, de, 1825],[]).
 % no
 % ?- declarativa_nascer(['Camilo', nasceu, antes, de, 1826],[]).
 % yes
@@ -394,7 +436,7 @@ frase_dec_livro_gen --> [Titulo], verbo(s,ser,presente), [um], [Genero],  {livro
 % ?- declarativa_nascer(['Camilo','Castelo Branco', nasceu, depois, de, 'Jane', 'Austen'],[]).
 % yes
 
-declarativa_nascer --> 
+declarativa_nascer -->
 	procurar_autor(autor(_, _, _, AnoNascimento, _, _, _, _)), !,
 	verbo(s, nascer, passado),
 	declarativa_nascer1(AnoNascimento),
@@ -403,7 +445,7 @@ declarativa_nascer -->
 declarativa_nascer1(AnoNascimento) -->
 	locucao_ano(Selector, Ano),
 	{call(Selector, AnoNascimento, Ano)}.
-declarativa_nascer1(AnoNascimento) --> 
+declarativa_nascer1(AnoNascimento) -->
 	locucao_seculo(Selector, Seculo),
 	{autor_verificar_seculo(Selector, AnoNascimento, Seculo)}.
 declarativa_nascer1(AnoNascimento) -->
@@ -419,7 +461,7 @@ declarativa_nascer1(AnoNascimento) -->
 % frase_dec_vivos(['Camilo', 'Castelo Branco', esta, vivo],[]).
 % frase_dec_vivos(['Isabel', 'Allende', esta, viva],[]).
 
-frase_dec_vivos --> 
+frase_dec_vivos -->
 	procurar_autor(autor(_, _, _, AnoNascimento, _, Genero, _, _)),
 	verbo(s, estar, presente),
 	verbo_passiva(s-Genero, morrer),
@@ -431,12 +473,12 @@ frase_dec_vivos -->
 % frase_dec_vivo_sec(['Camilo', 'Castelo Branco', viveu, no, seculo, 'XX'],[]).
 % frase_dec_vivo_sec(['Camilo', 'Castelo Branco', viveu, no, seculo, 'XIX'],[]).
 
-frase_dec_vivo_sec --> 
+frase_dec_vivo_sec -->
 	[Primeiro],
 	{autor(_,Primeiro,_,Nasc,Morte,_,_,_)},
 	verbo(s,viver,passado),
-	[no], [seculo], [Sec], 
-	{seculo_lim(Sec, First, Last)}, !, 
+	[no], [seculo], [Sec],
+	{seculo_lim(Sec, First, Last)}, !,
 	{Nasc >= First}, {Morte =< Last}.
 
 frase_dec_vivo_sec --> [Ultimo], {autor(_,_,Ultimo,Nasc,Morte,_,_,_)}, verbo(s,viver,passado), [no], [seculo], [Sec], {seculo_lim(Sec, First, Last)}, !, {Nasc >= First}, {Morte =< Last}.
@@ -507,12 +549,12 @@ declarativa_morrer1(AnoMorte, Genero) -->
 declarativa_morrer1(AnoMorte, _) -->
 	verbo(s, morrer, passado),
 	declarativa_morrer2(AnoMorte).
-	
-declarativa_morrer2(AnoMorte) --> 
+
+declarativa_morrer2(AnoMorte) -->
 	locucao_ano(Selector, Ano),
 	interrogacao_opcional, !,
 	{call(Selector, AnoMorte, Ano)}.
-declarativa_morrer2(AnoMorte) --> 
+declarativa_morrer2(AnoMorte) -->
 	locucao_seculo(Selector, Seculo),
 	interrogacao_opcional, !,
 	{autor_verificar_seculo(Selector, AnoMorte, Seculo)}.
