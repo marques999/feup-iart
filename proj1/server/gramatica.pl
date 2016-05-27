@@ -23,7 +23,7 @@
 % nom(N-G,Adj,Nom, Nac, Cont, Gen, [livros,mais,recentes],[]).
 % nom(N-G,Adj,Nom, Nac, Cont, Gen, [escritores, europeus],[]).
 % nom(N-G,Adj,Nom, Nac, Cont, Gen, [autor, portugues],[]).
-% nom(N-G,Adj,Nom, Nac, Cont, Gen, [dramas, mais, recentes],[]).
+% nom(N-G,Adj,Nom, Nac, Cont, Gen, [dramas, mais, recentes],[]). 
 % --
 % nom(N-G,Adj,Nom, Nac, Cont, Gen, [as, comedias, mais, antigas],[]).
 
