@@ -1,14 +1,16 @@
 package iart.model;
 
+import java.util.ArrayList;
+
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class AutorTable extends AbstractTable
 {
-    public AutorTable(final String queryResponse)
+    public AutorTable(final ArrayList<String> paramQuery)
     {
-	super(queryResponse);
+	super(paramQuery);
     }
 
     @Override

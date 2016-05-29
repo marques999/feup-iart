@@ -1,9 +1,6 @@
 package iart.application;
 
 import iart.Bibliogenie;
-import iart.server.HttpRequest;
-import iart.server.PrologResponse;
-import iart.server.ResponseParser;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -21,8 +18,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.Normalizer;
+import java.util.ArrayList;
 
 import java.util.Enumeration;
+import java.util.HashMap;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
@@ -46,26 +46,16 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import se.sics.jasper.ConversionFailedException;
+import se.sics.jasper.IllegalTermException;
+import se.sics.jasper.Query;
+import se.sics.jasper.SICStus;
+import se.sics.jasper.SPTerm;
+
 public class GUIMain extends javax.swing.JFrame
 {
-
-    private final HttpRequest httpServer = new HttpRequest();
     private final FileNameExtensionFilter textExtensionFilter = new FileNameExtensionFilter("Ficheiros de texto (*.txt)", "txt");
-    private final ImageIcon iconConnect = new ImageIcon(getClass().getResource("/iart/resources/connect.png"));
-    private final ImageIcon iconDisconnect = new ImageIcon(getClass().getResource("/iart/resources/disconnect.png"));
     private final DefaultListModel<String> defaultListModel = new DefaultListModel<>();
-
-    private final String[] comandosExemplo =
-    {
-	"Quem escreveu Os Maias?",
-	"Quais são os livros mais conhecidos de Fernando Pessoa?",
-	"Quem são os escritores africanos?",
-	"E portugueses?",
-	"Quais os escritores portugueses e espanhóis do século XV?",
-	"Quantos livros de escritores africanos existem após o século XVI?",
-	"E qual é o mais recente?",
-	"Alberto Caeiro é heterónimo de Fernando Pessoa."
-    };
 
     public GUIMain()
     {
@@ -84,9 +74,7 @@ public class GUIMain extends javax.swing.JFrame
 	final JScrollPane tabOutput = new JScrollPane();
 	final JScrollPane tabInformation = new JScrollPane();
 	final JTextPane textInformation = new JTextPane();
-
 	GridBagConstraints gridBagConstraints;
-	buttonConnect = new JButton();
 	inputQuery = new JTextField();
 	guiTabs = new JTabbedPane();
 	listExamples = new JList<>();
@@ -99,12 +87,6 @@ public class GUIMain extends javax.swing.JFrame
 	guiToolbar.setFloatable(false);
 	guiToolbar.setRollover(true);
 	guiToolbar.setAlignmentY(0.5F);
-	buttonConnect.setIcon(iconConnect);
-	buttonConnect.setText("Ligar");
-	buttonConnect.setFocusable(false);
-	buttonConnect.setHorizontalTextPosition(SwingConstants.RIGHT);
-	buttonConnect.setVerticalTextPosition(SwingConstants.BOTTOM);
-	buttonConnect.addActionListener(this::buttonConnectActionPerformed);
 	buttonLoad.setIcon(new ImageIcon(getClass().getResource("/iart/resources/application_xp_terminal.png")));
 	buttonLoad.setText("Carregar");
 	buttonLoad.setFocusable(false);
@@ -135,7 +117,6 @@ public class GUIMain extends javax.swing.JFrame
 	buttonExit.setHorizontalTextPosition(SwingConstants.RIGHT);
 	buttonExit.setVerticalTextPosition(SwingConstants.BOTTOM);
 	buttonExit.addActionListener(this::buttonExitActionPerformed);
-	guiToolbar.add(buttonConnect);
 	guiToolbar.add(buttonLoad);
 	guiToolbar.add(buttonSave);
 	guiToolbar.add(buttonExecute);
@@ -146,7 +127,7 @@ public class GUIMain extends javax.swing.JFrame
 	guiSplit.setDividerSize(0);
 	guiSplit.setOrientation(JSplitPane.VERTICAL_SPLIT);
 	guiQuery.setLayout(new GridBagLayout());
-	labelQuery.setText("Fa�a uma pergunta:");
+	labelQuery.setText("Faça uma pergunta:");
 	gridBagConstraints = new GridBagConstraints();
 	gridBagConstraints.gridx = 0;
 	gridBagConstraints.gridy = 0;
@@ -174,6 +155,18 @@ public class GUIMain extends javax.swing.JFrame
 
 	listExamples.setModel(new AbstractListModel<String>()
 	{
+	    private final String[] comandosExemplo =
+	    {
+		"Quem escreveu Os Maias?",
+		"Quais são os livros mais conhecidos de Fernando Pessoa?",
+		"Quem são os escritores africanos?",
+		"E portugueses?",
+		"Quais os escritores portugueses e espanhóis do século XV?",
+		"Quantos livros de escritores africanos existem após o século XVI?",
+		"E qual é o mais recente?",
+		"Alberto Caeiro é heterónimo de Fernando Pessoa."
+	    };
+	    
 	    @Override
 	    public int getSize()
 	    {
@@ -249,30 +242,22 @@ public class GUIMain extends javax.swing.JFrame
     {
 	if (queryMessage == null || queryMessage.isEmpty())
 	{
-	    Bibliogenie.showWarning(this, "Por favor escreva uma pergunta antes de iniciar a pesquisa.");
+	    Bibliogenie.showWarning(this, "Por favor escreva uma pergunta antes de iniciar a pesquisa!");
 	}
 	else
 	{
 	    inputQuery.setText(queryMessage);
+	    listHistory.clearSelection();
+	    listExamples.clearSelection();
 
-	    if (httpServer.isConnected())
+	    if (defaultListModel.contains(queryMessage))
 	    {
-		listHistory.clearSelection();
-		listExamples.clearSelection();
-
-		if (defaultListModel.contains(queryMessage))
-		{
-		    defaultListModel.removeElement(queryMessage);
-		}
-
-		defaultListModel.addElement(queryMessage);
-		guiTabs.setSelectedIndex(OUTPUT_TAB);
-		query(queryMessage);
+		defaultListModel.removeElement(queryMessage);
 	    }
-	    else
-	    {
-		Bibliogenie.showError(this, "Não se encontra conectado a nenhum servidor!");
-	    }
+
+	    defaultListModel.addElement(queryMessage);
+	    guiTabs.setSelectedIndex(OUTPUT_TAB);
+	    query(queryMessage);
 	}
     }
 
@@ -282,22 +267,92 @@ public class GUIMain extends javax.swing.JFrame
     }
 
     private final String msgFormat = "\nQ: %s\nA: %s\n";
+    
+    public final PrologResponse parseResponse(final String queryMessage) throws InterruptedException, Exception
+    {
+	final HashMap queryResults = new HashMap();
+	final ArrayList<String> queryResult = new ArrayList<>();
+	final SICStus sp = SICStus.getInitializedSICStus();
+	final Query query = sp.openPrologQuery(queryMessage, queryResults);
+
+	PrologResponse myResponse = null;
+	String functorName = null;
+	
+	try
+	{
+	    if (query.nextSolution())
+	    {
+		SPTerm spTerm = (SPTerm) queryResults.get("Lista");
+
+		if (spTerm != null && spTerm.isList())
+		{
+		    SPTerm spTerm1 = new SPTerm(sp);
+		    spTerm.getList(spTerm1, spTerm);
+		    functorName = spTerm1.getFunctorName();
+
+		    while (spTerm1.isValid())
+		    {
+			queryResult.add(spTerm1.toString());
+			spTerm.getList(spTerm1, spTerm);
+		    }
+		}
+		else
+		{
+		    myResponse = new SimpleResponse(queryMessage, "True");
+		}
+	    }
+	    else
+	    {
+		myResponse = new SimpleResponse(queryMessage, "False");
+	    }
+	}
+	catch (final IllegalTermException | ConversionFailedException ex)
+	{
+	}
+	finally
+	{
+	    query.close();
+	}
+	
+	if (functorName == null)
+	{
+	    return myResponse;
+	}
+	
+	if (functorName.equals("autor"))
+	{
+	    myResponse = new AutorResponse(queryMessage, queryResult);
+	}
+	
+	if (functorName.equals("livro"))
+	{
+	    myResponse = new LivroResponse(queryMessage, queryResult);
+	}
+
+	return myResponse;
+    }
 
     private void query(final String queryMessage)
     {
-	final String serverResponse = httpServer.sendQuery(queryMessage);
-	final PrologResponse prologResponse = ResponseParser.getInstance().parse(queryMessage, serverResponse);
-
-	if (prologResponse == null)
+	try
 	{
-	    textOutput.append(String.format(msgFormat, queryMessage, httpServer.getError()));
-	    onDisconnect();
-	}
-	else
-	{
-	    prologResponse.writeOutput(textOutput);
-	    prologResponse.showDialog(this);
+	    final PrologResponse prologResponse = parseResponse("interrogativa_vida(Lista, [quais, os, escritores, que, nasceram, no, seculo, 'XX', ?], []).");
+	    
+	    if (prologResponse == null)
+	    {
+		textOutput.append(String.format(msgFormat, queryMessage, "Error"));
+	    }
+	    else
+	    {
+		prologResponse.writeOutput(textOutput);
+		prologResponse.showDialog(this);
+	    }
+	    
 	    guiTabs.setSelectedIndex(OUTPUT_TAB);
+	}
+	catch (final Exception ex)
+	{
+	    Bibliogenie.showError(this, ex);
 	}
     }
 
@@ -396,27 +451,20 @@ public class GUIMain extends javax.swing.JFrame
 
     private void buttonExecuteActionPerformed(final ActionEvent evt)
     {
-	if (httpServer.isConnected())
+	if (defaultListModel.isEmpty())
 	{
-	    if (defaultListModel.isEmpty())
-	    {
-		Bibliogenie.showWarning(this, "Não adicionou nenhuma pesquisa ao histórico.");
-	    }
-	    else
-	    {
-		final Enumeration<String> s = defaultListModel.elements();
-
-		while (s.hasMoreElements())
-		{
-		    query(s.nextElement());
-		}
-
-		guiTabs.setSelectedIndex(OUTPUT_TAB);
-	    }
+	    Bibliogenie.showWarning(this, "Não adicionou nenhuma pesquisa ao histórico!");
 	}
 	else
 	{
-	    Bibliogenie.showError(this, "Não se encontra conectado a nenhum servidor!");
+	    final Enumeration<String> s = defaultListModel.elements();
+
+	    while (s.hasMoreElements())
+	    {
+		query(s.nextElement());
+	    }
+
+	    guiTabs.setSelectedIndex(OUTPUT_TAB);
 	}
     }
 
@@ -439,45 +487,51 @@ public class GUIMain extends javax.swing.JFrame
     {
 	inputQuery.setText(listHistory.getSelectedValue());
     }
-
-    protected void connect(final String paramAddress, int paramPort)
+    
+    public static String generateRequest(String originalString)
     {
-	if (httpServer.connect(paramAddress, paramPort))
+	boolean questionForm = originalString.endsWith("?");
+
+	originalString = Normalizer.normalize(originalString, Normalizer.Form.NFD);
+	originalString = originalString.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+
+	final String[] words = originalString.split("\\s+");
+	final StringBuilder sb = new StringBuilder();
+
+	sb.append("query([");
+
+	for (int i = 0; i < words.length; i++)
 	{
-	    buttonConnect.setText("Desligar");
-	    buttonConnect.setIcon(iconDisconnect);
+	    sb.append("'").append(capitalCase(words[i].replaceAll("[^\\w]", ""))).append("'");
+
+	    if (i < words.length - 1)
+	    {
+		sb.append(", ");
+	    }
 	}
-	else
+
+	if (questionForm)
 	{
-	    Bibliogenie.showError(this, httpServer.getError());
+	    sb.append(", '?'");
 	}
+
+	sb.append("])");
+
+	return sb.toString();
     }
 
-    private void onDisconnect()
+    private static String capitalCase(final String originalString)
     {
-	if (httpServer.getError() != null)
+	char firstCharacter = originalString.charAt(0);
+
+	if (Character.isUpperCase(firstCharacter))
 	{
-	    Bibliogenie.showError(this, httpServer.getError());
+	    return originalString.charAt(0) + originalString.substring(1).toLowerCase();
 	}
 
-	httpServer.disconnect(null);
-	buttonConnect.setText("Ligar");
-	buttonConnect.setIcon(iconConnect);
+	return originalString.toLowerCase();
     }
 
-    private void buttonConnectActionPerformed(ActionEvent evt)
-    {
-	if (httpServer.isConnected())
-	{
-	    onDisconnect();
-	}
-	else
-	{
-	    new GUIConnect(this).setVisible(true);
-	}
-    }
-
-    private JButton buttonConnect;
     private JList<String> listExamples;
     private JList<String> listHistory;
     private JTabbedPane guiTabs;

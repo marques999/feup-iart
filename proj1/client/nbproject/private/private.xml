@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/application/GUIConnect.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/application/GUISelect.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/application/TableView.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/model/AbstractTable.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/model/Livro.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/model/LivroRenderer.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/model/AutorModel.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/model/LivroTable.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/model/AutorRenderer.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/server/LivroResponse.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/server/HttpRequest.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/model/LivroModel.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/Bibliogenie.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/model/AutorTable.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/server/SimpleResponse.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/server/ResponseParser.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/server/AutorResponse.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/application/GUIMain.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/server/PrologResponse.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/SimpleTest.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/model/Autor.java</file>
+            <file>file:/C:/Users/MARQUES/Documents/NetBeansProjects/iart_proj1/src/iart/model/StringUtils.java</file>
+        </group>
+    </open-files>
+</project-private>

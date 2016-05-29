@@ -13,21 +13,16 @@ public final class AutorModel extends AbstractTableModel
     private static final int IndexAnoMorte = 3;
     private static final int IndexNacionalidade = 4;
 
-    public AutorModel(final String serverResponse)
+    public AutorModel(final ArrayList<String> paramQuery)
     {
 	myAutores = new ArrayList<>();
 
-	final List<String> processedQuery = StringUtils.splitResponse(serverResponse.trim());
-
-	if (processedQuery != null)
+	for (final String queryResult : paramQuery)
 	{
-	    for (final String queryResult : processedQuery)
-	    {
-		myAutores.add(new Autor(queryResult));
-	    }
-
-	    fireTableRowsInserted(0, getRowCount() - 1);
+	    myAutores.add(new Autor(queryResult));
 	}
+
+	fireTableRowsInserted(0, getRowCount() - 1);
     }
 
     private final String[] myColumns =

@@ -1,12 +1,14 @@
 package iart.model;
 
+import java.util.ArrayList;
+
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class LivroTable extends AbstractTable
 {
-    public LivroTable(final String queryResponse)
+    public LivroTable(final ArrayList<String> queryResponse)
     {
 	super(queryResponse);
     }

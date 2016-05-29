@@ -13,21 +13,16 @@ public final class LivroModel extends AbstractTableModel
     private static final int IndexAno = 3;
     private static final int IndexGenero = 4;
 
-    public LivroModel(final String serverResponse)
+    public LivroModel(final ArrayList<String> paramQuery)
     {
 	mLivros = new ArrayList<>();
 
-	final List<String> processedQuery = StringUtils.splitResponse(serverResponse.trim());
-
-	if (processedQuery != null)
+	for (final String queryResult : paramQuery)
 	{
-	    for (final String queryResult : processedQuery)
-	    {
-		mLivros.add(new Livro(queryResult));
-	    }
-
-	    fireTableRowsInserted(0, getRowCount() - 1);
+	    mLivros.add(new Livro(queryResult));
 	}
+
+	fireTableRowsInserted(0, getRowCount() - 1);
     }
 
     private static final String[] myColumns =
@@ -66,6 +61,7 @@ public final class LivroModel extends AbstractTableModel
 	if (columnIndex == IndexAno)
 	{
 	    return Integer.class;
+
 	}
 
 	return String.class;
