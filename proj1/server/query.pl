@@ -41,7 +41,7 @@ filtrar_livros(Selector, Lista):-
 		livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
 		filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Selector)
 	), Lista).
-	
+
 filtrar_livros_ano(Selector, AnoLimite, Lista):-
 	findall(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
 	(
@@ -479,7 +479,7 @@ filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoM
 	AnoNascimento >= LimiteInferior,
 	AnoNascimento =< LimiteSuperior,
 	filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), Tail).
-	
+
 % selecciona autores que morreram antes de AnoLimite
 filtrar_autores_aux(autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos), [morreu<AnoLimite|Tail]):-
 	AnoMorte > 0,
@@ -568,18 +568,18 @@ autores_nascidos_seculo(=, Seculo, Lista):-
 	LimiteInferior is LimiteSuperior - 99,
 	filtrar_autores([nasceu=LimiteInferior-LimiteSuperior], Lista).
 
-autor_verificar_seculo(=, Ano, Seculo):-
+verificar_seculo(=, Ano, Seculo):-
 	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	Ano >= LimiteInferior,
 	Ano =< LimiteSuperior.
 
-autor_verificar_seculo(<, Ano, Seculo):-
+verificar_seculo(<, Ano, Seculo):-
 	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	Ano < LimiteInferior.
 
-autor_verificar_seculo(>, Ano, Seculo):-
+verificar_seculo(>, Ano, Seculo):-
 	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	Ano > LimiteSuperior.
@@ -591,14 +591,14 @@ autores_nascidos_seculo(<, Seculo, Lista):-
 	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	filtrar_autores([nasceu<LimiteInferior], Lista).
-	
+
 %-----------------------------------------------------------------------------%
 % -> Lista de autores que nasceram depois do século Seculo                    %
 %-----------------------------------------------------------------------------%
 autores_nascidos_seculo(>, Seculo, Lista):-
 	LimiteSuperior is (Seculo * 100),
 	filtrar_autores([nasceu>LimiteSuperior], Lista).
-	
+
 %-----------------------------------------------------------------------------%
 % -> Lista de autores que morreram no século Seculo                           %
 %-----------------------------------------------------------------------------%
@@ -637,25 +637,47 @@ autores_vivos_seculo(<, Seculo, Lista):-
 	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
 	filtrar_autores([viveu<LimiteInferior], Lista).
-	
+
+% verifica se determinado autor se encontrava vivo antes de AnoLimite
+verificar_autor_vivo(<, AnoNascimento, AnoMorte, AnoLimite):-
+	AnoMorte < AnoLimite ; AnoNascimento < AnoLimite.
+
+% verifica se determinado autor se encontrava vivo depois de AnoLimite
+verificar_autor_vivo(>, AnoNascimento, AnoMorte, AnoLimite):-
+	AnoNascimento > AnoLimite ; AnoMorte > AnoLimite.
+
+% verifica se determinado autor se encontrava vivo no AnoLimite
+verificar_autor_vivo(=, AnoNascimento, AnoMorte, AnoLimite):-
+	AnoMorte >= AnoLimite,
+	AnoNascimento =< AnoLimite.
+
+% verifica se determinado autor se encontrava viveu no tempo compreendido entre [LimiteInferior, LimiteSuperior]
+autor_vivo_intervalo(AnoNascimento, AnoMorte, LimiteInferior, LimiteSuperior):-
+	LimiteSuperior > LimiteInferior,
+	verificar_autor_vivo(>, AnoNascimento, AnoMorte, LimiteInferior),
+	verificar_autor_vivo(<, AnoNascimento, AnoMorte, LimiteSuperior).
+
+autor_vivo_seculo(=, AnoNascimento, AnoMorte, Seculo):-
+	LimiteSuperior is (Seculo * 100),
+	LimiteInferior is LimiteSuperior - 99,
+	autor_vivo_intervalo(AnoNascimento, AnoMorte, LimiteInferior, LimiteSuperior).
+
+autor_vivo_seculo(<, AnoNascimento, AnoMorte, Seculo):-
+	LimiteSuperior is (Seculo * 100),
+	LimiteInferior is LimiteSuperior - 99,
+	\+verificar_autor_vivo(>, AnoNascimento, AnioMorte, LimiteInferior).
+
+autor_vivo_seculo(<, AnoNascimento, AnoMorte, Seculo):-
+	LimiteSuperior is (Seculo * 100),
+	LimiteInferior is LimiteSuperior - 99,
+	\+verificar_autor_vivo(>, AnoNascimento, AnioMorte, LimiteInferior).
+
 %-----------------------------------------------------------------------------%
 % -> Lista de autores que viveram depois do século Seculo                     %
 %-----------------------------------------------------------------------------%
 autores_vivos_seculo(>, Seculo, Lista):-
 	LimiteSuperior is (Seculo * 100),
 	filtrar_autores([viveu>LimiteSuperior], Lista).
-
-verificar_nacionalidade(Nacionalidade, Nacionalidade ou _).
-verificar_nacionalidade(Nacionalidade, _ ou Nacionalidades):-
-	verificar_nacionalidade(Nacionalidade, Nacionalidades).
-verificar_nacionalidade(Nacionalidade, Nacionalidade).
-
-verificar_idioma(Nacionalidade, Idioma ou _):-
-	pais(Nacionalidade, _, Idioma, _, _).
-verificar_idioma(Nacionalidade, _ ou Idiomas):-
-	verificar_idioma(Nacionalidade, Idiomas).
-verificar_idioma(Nacionalidade, Idioma):-
-	pais(Nacionalidade, _, Idioma, _, _).
 
 %-----------------------------------------------------------------------------%
 % -> Lista de autores de determinada(s) nacionalidade(s)                      %
@@ -733,24 +755,12 @@ autores_mesmo_seculo(AnoNascimento1, AnoNascimento2):-
 	Seculo1 = Seculo.
 
 %-----------------------------------------------------------------------------%
-% -> Verificar se dois autores Autor1, Autor2 nasceram em séculos diferentes  %
-%-----------------------------------------------------------------------------%
-autores_seculos_diferentes(Autor1, Autor2):-
-	\+autores_mesmo_seculo(Autor1, Autor2).
-
-%-----------------------------------------------------------------------------%
 % -> Verificar se dois autores Autor1, Autor2 têm a mesma nacionalidade       %
 %-----------------------------------------------------------------------------%
 autores_mesma_nacionalidade(Autor1, Autor2):-
 	Autor1 \= Autor2, !,
 	autor(Autor1, _, _, _, _, _, Nacionalidade, _),
 	autor(Autor2, _, _, _, _, _, Nacionalidade, _).
-
-%-----------------------------------------------------------------------------%
-% -> Verificar se dois autores Autor1, Autor2 têm nacionalidades diferentes   %
-%-----------------------------------------------------------------------------%
-autores_nacionalidades_diferentes(Autor1, Autor2):-
-	\+autores_mesma_nacionalidade(Autor1, Autor2).
 
 %-----------------------------------------------------------------------------%
 % -> Verificar se dois autores Autor1, Autor2 são do mesmo continente         %
@@ -761,12 +771,6 @@ autores_mesmo_continente(Autor1, Autor2):-
 	autor(Autor2, _, _, _, _, _, Nacionalidade2, _),
 	pais_continente(Nacionalidade1, Continente),
 	pais_continente(Nacionalidade2, Continente).
-
-%-----------------------------------------------------------------------------%
-% -> Verificar se dois autores Autor1, Autor2 são de continentes diferentes   %
-%-----------------------------------------------------------------------------%
-autores_continentes_diferentes(Autor1, Autor2):-
-	\+autores_mesmo_continente(Autor1, Autor2).
 
 %-----------------------------------------------------------------------------%
 % -> Verificar se determinado Psuedónimo pertence a determinado Autor         %
@@ -783,12 +787,6 @@ livros_mesmo_ano(Livro1, Livro2):-
 	livro(Livro1, _, _, Ano, _, _),
 	livro(Livro2, _, _, Ano, _, _).
 
-%--------------------------------------------------------------------------------%
-% -> Verificar se dois livros Livro1, Livro2 foram publicados em anos diferentes %
-%--------------------------------------------------------------------------------%
-livros_anos_diferentes(Livro1, Livro2):-
-	\+livros_mesmo_ano(Livro1, Livro2).
-
 %-----------------------------------------------------------------------------%
 % -> Verificar se dois livros Livro1, Livro2 foram publicados no mesmo século %
 %-----------------------------------------------------------------------------%
@@ -798,9 +796,3 @@ livros_mesmo_seculo(Livro1, Livro2):-
 	livro(Livro2, _, _, Ano2, _, _),
 	Seculo2 is (Ano2 + 99) div 100,
 	Seculo1 = Seculo2.
-
-%-----------------------------------------------------------------------------------%
-% -> Verificar se dois livros Livro1, Livro2 foram publicados em séculos diferentes %
-%-----------------------------------------------------------------------------------%
-livros_seculos_diferentes(Livro1, Livro2):-
-	\+livros_mesmo_seculo(Livro1, Livro2).

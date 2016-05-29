@@ -86,4 +86,4 @@ check_end_of_header(_).
 
 parse_input(hello, ready).
 parse_input(quit, goodbye).
-parse_input(query(Sentence), yes):- serverQuery(Sentence, Result).
+parse_input(query(Sentence), yes):- declarativa(Sentence, []).
