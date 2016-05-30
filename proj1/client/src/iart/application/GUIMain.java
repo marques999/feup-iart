@@ -18,9 +18,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.Normalizer;
-import java.util.ArrayList;
 
+import java.text.Normalizer;
+
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 
@@ -268,12 +269,13 @@ public class GUIMain extends javax.swing.JFrame
 
     private final String msgFormat = "\nQ: %s\nA: %s\n";
     
-    public final PrologResponse parseResponse(final String queryMessage) throws InterruptedException, Exception
+    public final PrologResponse parseResponse(final String userRequest) throws InterruptedException, Exception
     {
 	final HashMap queryResults = new HashMap();
 	final ArrayList<String> queryResult = new ArrayList<>();
 	final SICStus sp = SICStus.getInitializedSICStus();
-	final Query query = sp.openPrologQuery(queryMessage, queryResults);
+	final String generatedRequest = generateRequest(userRequest);
+	final Query query = sp.openPrologQuery(generatedRequest, queryResults);
 
 	PrologResponse myResponse = null;
 	String functorName = null;
@@ -298,12 +300,15 @@ public class GUIMain extends javax.swing.JFrame
 		}
 		else
 		{
-		    myResponse = new SimpleResponse(queryMessage, "True");
+		    if (spTerm != null && spTerm.isAtomic())
+		    {
+			myResponse = new SimpleResponse(userRequest, spTerm.toString());
+		    }
 		}
 	    }
 	    else
 	    {
-		myResponse = new SimpleResponse(queryMessage, "False");
+		myResponse = new SimpleResponse(userRequest, "False");
 	    }
 	}
 	catch (final IllegalTermException | ConversionFailedException ex)
@@ -321,12 +326,12 @@ public class GUIMain extends javax.swing.JFrame
 	
 	if (functorName.equals("autor"))
 	{
-	    myResponse = new AutorResponse(queryMessage, queryResult);
+	    myResponse = new AutorResponse(userRequest, queryResult);
 	}
 	
 	if (functorName.equals("livro"))
 	{
-	    myResponse = new LivroResponse(queryMessage, queryResult);
+	    myResponse = new LivroResponse(userRequest, queryResult);
 	}
 
 	return myResponse;
@@ -336,7 +341,7 @@ public class GUIMain extends javax.swing.JFrame
     {
 	try
 	{
-	    final PrologResponse prologResponse = parseResponse("interrogativa_vida(Lista, [quais, os, escritores, que, nasceram, no, seculo, 'XX', ?], []).");
+	    final PrologResponse prologResponse = parseResponse(queryMessage);
 	    
 	    if (prologResponse == null)
 	    {
@@ -413,10 +418,8 @@ public class GUIMain extends javax.swing.JFrame
 
 	try (final BufferedWriter oout = new BufferedWriter(new FileWriter(buffer)))
 	{
-
 	    for (int i = 0; i < defaultListModel.getSize(); i++)
 	    {
-
 		oout.write(defaultListModel.elementAt(i));
 
 		if (i < defaultListModel.getSize() - 1)
@@ -498,11 +501,21 @@ public class GUIMain extends javax.swing.JFrame
 	final String[] words = originalString.split("\\s+");
 	final StringBuilder sb = new StringBuilder();
 
-	sb.append("query([");
+	sb.append("query(Lista, [");
 
 	for (int i = 0; i < words.length; i++)
 	{
-	    sb.append("'").append(capitalCase(words[i].replaceAll("[^\\w]", ""))).append("'");
+	    final String currentWord = words[i].replaceAll("[^\\w]", "");
+	    char firstCharacter = currentWord.charAt(0);
+
+	    if (Character.isUpperCase(firstCharacter))
+	    {
+		sb.append("'").append(currentWord).append("'");
+	    }
+	    else
+	    {
+		sb.append(currentWord);
+	    }
 
 	    if (i < words.length - 1)
 	    {
@@ -515,7 +528,7 @@ public class GUIMain extends javax.swing.JFrame
 	    sb.append(", '?'");
 	}
 
-	sb.append("])");
+	sb.append("],[]).");
 
 	return sb.toString();
     }

@@ -49,6 +49,12 @@ filtrar_livros_ano(Selector, AnoLimite, Lista):-
 		call(Selector, Ano, AnoLimite)
 	), Lista).
 
+filtrar_livros_genero(Generos, Lista):-
+	findall(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
+	(
+		livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
+		member(Genero, Generos)
+	), Lista).
 
 filtrar_livros_aux(_, []).
 
@@ -114,23 +120,14 @@ filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [com_co
 filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [coleccao=Coleccao|Tail]):-
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
-% seleccionar livros que pertencem a determinado género literário
-filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero=Genero|Tail]):-
-	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
-
 % seleccionar livros que pertencem a um dos géneros literários
-filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero=Genero1 ou Generos|Tail]):-
-	verificar_genero(Genero, Genero1 ou Generos),
-	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
-
-% seleccionar livros que não pertencem a determinado género literário
-filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero\=Genero1|Tail]):-
-	Genero \= Genero1,
+filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero=Generos|Tail]):-
+	member(Genero, Generos),
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
 % seleccionar livros que não pertencem a nenhum dos géneros literários
-filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero\=Genero1 ou Generos|Tail]):-
-	\+verificar_genero(Genero, Genero1 ou Generos),
+filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), [genero\=Generos|Tail]):-
+	\+member(Genero, Generos),
 	filtrar_livros_aux(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Tail).
 
 % seleccionar livros que foram publicados depois da morte do autor
@@ -249,11 +246,6 @@ livros_seculo_aux(Autor, [Seculo|TailSeculo], [Lista|TailLista]):-
 	livros_seculo_aux(Autor, TailSeculo, TailLista),
 	livros_publicados_entre(Autor, LimiteInferior, LimiteSuperior, Lista).
 
-verificar_genero(Genero, Genero ou _).
-verificar_genero(Genero, _ ou Generos):-
-	verificar_genero(Genero, Generos).
-verificar_genero(Genero, Genero).
-
 livros_autor(ListaAutores, ListaLivros):-
 	livros_autor_aux(ListaAutores, ListaTemporaria),
 	flatten(ListaTemporaria, ListaLivros).
@@ -266,18 +258,18 @@ livros_autor_aux([autor(IdAutor, _, _, _, _, _, _, _)|ListaAutores], [Livros|Tai
 %-----------------------------------------------------------------------------%
 % -> Livros (de determinado autor) que são de determinado(s) Género(s)        %
 %-----------------------------------------------------------------------------%
-livros_genero(Genero ou Generos, Lista):-
-	filtrar_livros([genero=Genero ou Generos], Lista).
+livros_genero([H|T], Lista):-
+	filtrar_livros([genero=[H|T]], Lista).
 livros_genero(Genero, Lista):-
-	filtrar_livros([genero=Genero], Lista).
+	filtrar_livros([genero=[Genero]], Lista).
 
 %-----------------------------------------------------------------------------%
 % -> Livros (de determinado autor) que não são de determinado Género          %
 %-----------------------------------------------------------------------------%
-livros_nao_genero(Genero ou Generos, Lista):-
-	filtrar_livros([genero\=Genero ou Generos], Lista).
+livros_nao_genero([H|T], Lista):-
+	filtrar_livros([genero\=[H|T]], Lista).
 livros_nao_genero(Genero, Lista):-
-	filtrar_livros([genero\=Genero], Lista).
+	filtrar_livros([genero\=[Genero]], Lista).
 
 %-----------------------------------------------------------------------------%
 % -> Livro mais antigo presente na base de dados                              %
@@ -300,8 +292,7 @@ livros_mais_antigos_aux(Numero, [_-Livro|Tail], [Livro|OutraTail]):-
 
 livros_mais_antigos(Livros):-
 	setof(Ano-livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
-    	Ano^livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
-    	Livros).
+	Ano^livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), Livros).
 
 %-----------------------------------------------------------------------------%
 % -> Livro mais recente presente na base de dados                             %
@@ -323,9 +314,8 @@ livros_mais_recentes_aux(Numero, [_-Livro|Tail], [Livro|OutraTail]):-
 	livros_mais_antigos_aux(NovoNumero, Tail, OutraTail).
 
 livros_mais_recentes(Livros):-
-    setof(NovoAno-livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
-    	Ano^(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), NovoAno is -Ano),
-    	Livros).
+	setof(NovoAno-livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao),
+		Ano^(livro(IdLivro, Titulo, Autor, Ano, Genero, Coleccao), NovoAno is -Ano), Livros).
 
 %-----------------------------------------------------------------------------%
 % -> Autor mais velho presente na base de dados                               %
@@ -347,7 +337,7 @@ autores_mais_velhos_aux(Numero, [_-Autor|Tail], [Autor|OutraTail]):-
 	autores_mais_velhos_aux(NovoNumero, Tail, OutraTail).
 
 autores_mais_velhos(Autores):-
-  setof(AnoNascimento-autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
+	setof(AnoNascimento-autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
   	AnoNascimento^autor(IdAutor, PrimeiroNome, UltimoNome, AnoNascimento, AnoMorte, Sexo, Nacionalidade, Pseudonimos),
  	Autores).
 
@@ -560,14 +550,6 @@ autores_com_pseudonimos(Lista):-
 autores_sem_pseudonimos(Lista):-
 	filtrar_autores([pseudonimos=0], Lista).
 
-%-----------------------------------------------------------------------------%
-% -> Lista de autores que nasceram no século Seculo                           %
-%-----------------------------------------------------------------------------%
-autores_nascidos_seculo(=, Seculo, Lista):-
-	LimiteSuperior is (Seculo * 100),
-	LimiteInferior is LimiteSuperior - 99,
-	filtrar_autores([nasceu=LimiteInferior-LimiteSuperior], Lista).
-
 verificar_seculo(=, Ano, Seculo):-
 	LimiteSuperior is (Seculo * 100),
 	LimiteInferior is LimiteSuperior - 99,
@@ -581,8 +563,15 @@ verificar_seculo(<, Ano, Seculo):-
 
 verificar_seculo(>, Ano, Seculo):-
 	LimiteSuperior is (Seculo * 100),
-	LimiteInferior is LimiteSuperior - 99,
 	Ano > LimiteSuperior.
+
+%-----------------------------------------------------------------------------%
+% -> Lista de autores que nasceram no século Seculo                           %
+%-----------------------------------------------------------------------------%
+autores_nascidos_seculo(=, Seculo, Lista):-
+	LimiteSuperior is (Seculo * 100),
+	LimiteInferior is LimiteSuperior - 99,
+	filtrar_autores([nasceu=LimiteInferior-LimiteSuperior], Lista).
 
 %-----------------------------------------------------------------------------%
 % -> Lista de autores que nasceram antes do século Seculo                     %
@@ -752,7 +741,7 @@ autores_anos_diferentes(Autor1, Autor2):-
 autores_mesmo_seculo(AnoNascimento1, AnoNascimento2):-
 	Seculo1 is (AnoNascimento1 + 99) div 100,
 	Seculo2 is (AnoNascimento2 + 99) div 100,
-	Seculo1 = Seculo.
+	Seculo1 = Seculo2.
 
 %-----------------------------------------------------------------------------%
 % -> Verificar se dois autores Autor1, Autor2 têm a mesma nacionalidade       %

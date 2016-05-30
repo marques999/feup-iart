@@ -20,7 +20,7 @@ public class TableView extends JDialog
 	final JTable jTable1 = new JTable();
 	setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	setMinimumSize(new Dimension(400, 300));
-	setTitle(abstractTable.getName() + " - Resultados (" + jTable1.getModel().getRowCount() + ")");
+	setTitle(abstractTable.getName() + " - Resultados");
 	setModal(true);
 	jTable1.setAutoCreateRowSorter(true);
 	jTable1.setFillsViewportHeight(true);

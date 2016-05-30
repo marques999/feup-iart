@@ -136,6 +136,9 @@ adverbio(inclusao) --> [ainda].
 adverbio(inclusao) --> [ate].
 adverbio(inclusao) --> [tambem].
 
+adverbio(antes) --> [antes].
+adverbio(depois) --> [depois].
+
 adverbio(s-m, algum) --> [algum].
 adverbio(s-f, algum) --> [alguma].
 adverbio(p-m, algum) --> [alguns].
@@ -194,9 +197,6 @@ subst(p-_, pseudonimo) --> [pseudonimos].
 subst(s-_, morte) --> [morte].
 subst(s-_, morte) --> [falecimento].
 subst(s-_, nascimento) --> [nascimento].
-
-adverbio(antes) --> [antes].
-adverbio(depois) --> [depois].
 
 subst(s-m, ano) --> [ano].
 subst(p-m, ano) --> [anos].
